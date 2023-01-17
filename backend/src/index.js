@@ -25,13 +25,10 @@ require("dotenv").config()
 mongoose.set('strictQuery', false)
 
 // set routes from here
+app.use(cors())
+
 app.use("/api", userRoutes)
 app.use("/api/admin", adminRoutes)
-
-
-
-app.use(cors({origin: ['http://127.0.0.1:5173', 'http://localhost:5173/sign-up']}));
-app.use(cors({origin: '*'}))
 
 
 
@@ -41,6 +38,7 @@ mongoose.connect(DB_URI, {
 }).then(()=> {
     app.listen(port, ()=> {
         console.log(`app is listenign on port  ${port}`);
+
     })
 }).catch((err)=> {
     console.log(err);

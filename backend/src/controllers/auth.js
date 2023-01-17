@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken');
 
 module.exports.postSignUp = async (req, res, next)=>{
         const {username, email, password} = req.body
-        
+        console.log("worked");
         try{
             const user  = UserModel.findOne({email})
             .exec((error, user) =>{
