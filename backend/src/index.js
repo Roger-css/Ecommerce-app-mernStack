@@ -2,8 +2,11 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
+const cors = require('cors');
 const UserModel = require('./models/User.js');
+
 const userRoutes = require('./routes/auth');
+const adminRoutes = require("./routes/admin/auth")
 
 
 
@@ -24,6 +27,8 @@ mongoose.set('strictQuery', false)
 
 // set routes from here
 app.use("/api", userRoutes)
+app.use("/api/admin", adminRoutes)
+app.use(cors())
 
 
 

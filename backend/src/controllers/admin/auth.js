@@ -1,46 +1,53 @@
-const express = require('express');
-const UserModel = require('../models/User');
+const UserModel = require('../../models/User');
 const bcryptjs = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
+
+
+// Sign up an Admin 
 module.exports.postSignUp = async (req, res, next)=>{
-        const {username, email, password} = req.body
-        
-        try{
-            const user  = UserModel.findOne({email})
-            .exec((error, user) =>{
-                if(user) return res.status(404).json({
-                    message: `email already used`
-                })
-                const createdUser = new UserModel ({
-                    username,
-                    email,
-                    password,
-                })
-                createdUser.save((error, data)=> {
-                    if(error){
-                        return res.status(400).json({
-                            message: `something wrong happened ${error}`
-                        })
-                    }
-                    if(data){
-                        return res.status(201).json({
-                            message: data
-                        })
-                    }
-                })
-            })
-        }
-        catch (err){
-            console.log(err);
-            res.status(404).json({
-                message: err
-            })
-        }
+    const {firstName, lastName, email, password} = req.body
     
+    try{
+        const user  = UserModel.findOne({email})
+        .exec((error, user) =>{
+            if(user) return res.status(404).json({
+                message: `admin already registerd`
+            })
+            const createdUser = new UserModel ({
+                firstName,
+                lastName,
+                email,
+                password,
+                username: Math.random().toString(),
+                role: `admin`
+            })
+
+            createdUser.save((error, data)=> {
+                if(error){
+                    return res.status(400).json({
+                        message: `something wrong happened ${error}`
+                    })
+                }
+                if(data){
+                    return res.status(201).json({
+                        succes: true,
+                        message: data
+                    })
+                }
+            })
+        })
+    }
+    catch (err){
+        console.log(err);
+        res.status(404).json({
+            message: err
+        })
+    }
+
 }
 
-// Sign In 
+// sign in 
 module.exports.postSignIn = async (req, res, next)=>{
     const {email, password} = req.body
     try{
@@ -102,5 +109,6 @@ module.exports.postSignIn = async (req, res, next)=>{
         console.log((err));
     }
 }
-// END Sign In 
+
+
 
