@@ -9,7 +9,6 @@ const userRoutes = require('./routes/auth');
 const adminRoutes = require("./routes/admin/auth")
 
 
-
 console.log(UserModel)
 const app = express()
 const port = 3000
@@ -28,7 +27,11 @@ mongoose.set('strictQuery', false)
 // set routes from here
 app.use("/api", userRoutes)
 app.use("/api/admin", adminRoutes)
-app.use(cors())
+
+
+
+app.use(cors({origin: ['http://127.0.0.1:5173', 'http://localhost:5173/sign-up']}));
+app.use(cors({origin: '*'}))
 
 
 
