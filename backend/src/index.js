@@ -3,7 +3,6 @@ const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const cors = require('cors');
-const bodyParser = require('body-parser');
 const UserModel = require('./models/User.js');
 const userRoutes = require('./routes/auth');
 const adminRoutes = require("./routes/admin/auth")
@@ -17,7 +16,6 @@ const port = 3000
 const DB_URI = `mongodb+srv://rayhons:fuckwolf@cluster0.vns9wl6.mongodb.net/?retryWrites=true&w=majority`
 
 
-app.use(cookieParser())
 
 // app config
 app.use(express.urlencoded({ extended: false }))
@@ -29,9 +27,10 @@ app.use(express.json())
 require("dotenv").config()
 
 mongoose.set('strictQuery', false)
+app.use(cookieParser())
 
 // set routes from here
-app.use(cors())
+app.use(cors({credentials: true, origin:true}))
 
 app.use("/api", userRoutes)
 app.use("/api/admin", adminRoutes)

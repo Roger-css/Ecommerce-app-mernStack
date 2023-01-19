@@ -9,14 +9,10 @@ router.route("/sign-in").post(validateSignIn, validateResult, authController.pos
 
 
 
-
-
 router.route("/secret").post(verifyJWT, (req, res)=> {
     console.log(req.role);
-    console.log(req.apiToken);
     console.log("it wokred");
-    console.log(req.bob);
-    res.send("hi")
+    res.status(200).json({work:"hi"})
 })
 
 

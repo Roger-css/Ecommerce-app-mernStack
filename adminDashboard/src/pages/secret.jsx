@@ -3,8 +3,9 @@ import { useSelector } from "react-redux";
 const Secret = () => {
   const token = useSelector((state) => state.token);
   const handleClick = async () => {
-    const req = await fetch("http://localhost3000/api/secret", {
+    const req = await fetch("http://localhost:3000/api/secret", {
       method: "POST",
+      credentials: "include",
       headers: {
         "Content-type": "application/json; charset=UTF-8",
         authorization: `Bearer ${token}`,
