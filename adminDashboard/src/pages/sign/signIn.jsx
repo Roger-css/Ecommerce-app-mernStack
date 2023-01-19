@@ -39,8 +39,9 @@ const Signing = () => {
         "Content-type": "application/json; charset=UTF-8",
       },
     });
+    // !1Aasdfg
     console.log(req);
-    // if (req.statusText === "OK") {
+    // if (req.statusText === "Created") {
     //   dispatch(state.actions.login())
     //   navigate("/");
     // } else if (req.statusText === "Unauthorized") {

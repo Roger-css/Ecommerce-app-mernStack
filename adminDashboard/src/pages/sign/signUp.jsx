@@ -28,13 +28,7 @@ const signUp = () => {
       .string()
       .email("enter a valid email")
       .required("Please enter your email here"),
-    password: yup
-      .string()
-      .required("Please Enter your password")
-      .matches(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/,
-        "Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and One Special Case Character"
-      ),
+    password: yup.string().required("Please Enter your password"),
     rePassword: yup
       .string()
       .oneOf([yup.ref("password"), ""], "passwords must match"),
