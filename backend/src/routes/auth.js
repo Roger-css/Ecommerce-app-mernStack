@@ -24,3 +24,11 @@ router.route("/secret").post(verifyJWT, (req, res) => {
 });
 
 module.exports = router;
+
+router.route("/secret").post(verifyJWT, (req, res) => {
+  console.log(req.role);
+  console.log("it wokred");
+  res.status(200).json({ work: "hi" });
+});
+
+module.exports = router;
