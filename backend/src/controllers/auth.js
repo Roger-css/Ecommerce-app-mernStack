@@ -61,7 +61,8 @@ module.exports.postSignIn = async (req, res, next)=>{
         }
         // compare the password and see if its Valid
         const isAuth = await bcryptjs.compare(password, foundUser.password)
-        console.log(`thats auth ${isAuth} line 67`);
+        
+
         if (!isAuth) return res.status(401).json({message: "invalid email or password"})
 
         // Create Acces Token 
@@ -92,7 +93,7 @@ module.exports.postSignIn = async (req, res, next)=>{
             sameSite:'None',
             maxAge: 7 * 24 * 60 * 60 * 1000
         })
-            return res.status(201).json({accessToken})
+            return res.status(201).json(accessToken)
 
     } catch  (err){
         console.log((err));

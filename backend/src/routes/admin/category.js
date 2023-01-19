@@ -6,21 +6,8 @@ const router = express.Router()
 
 
 router.route("/create").post((req, res, next)=> {
-    if(Array.isArray(req.body)){
-        req.body.map(category => {
-            const addedCategroy = new categoryModel ({
-                name: category.name,
-                parent: category.parent,
-                category: category.category
-            })
-
-            addedCategroy.save((err, data)=> {
-                if (err) return res.status(404).jsonp({message: err})
-                console.log(data);
-            })
-        })
-    }
-    res.send("sucess")
+        const {name, parentId} = req.body
+        const categoryObj = {}
 })
 
 
