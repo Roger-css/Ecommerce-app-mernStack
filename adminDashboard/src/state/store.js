@@ -9,11 +9,23 @@ import {
   PERSIST,
   PURGE,
 } from "redux-persist";
-
+import storage from "redux-persist/lib/storage";
 import rootReducer from "./index";
+const persistConfig = {
+  key: "root",
+  version: 1,
+  storage,
+};
+const persistedReducer = persistReducer(persistConfig, rootReducer.reducer);
 
 const store = configureStore({
-  reducer: rootReducer,
+  reducer: persistedReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
+    }),
 });
-
-export { store };
+const persistor = persistStore(store);
+export { store, persistor };

@@ -10,11 +10,11 @@ import Footer from "../../layout/Footer";
 const Signing = () => {
   const navigate = useNavigate();
   const auth = useSelector((state) => state.authenticated);
-  useEffect(() => {
-    if (auth) {
-      navigate("/home");
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (auth) {
+  //     navigate("/");
+  //   }
+  // }, []);
   const dispatch = useDispatch();
   const registerValues = {
     email: "",
@@ -27,6 +27,7 @@ const Signing = () => {
       .required("Please enter your email here"),
     password: yup.string().required("Required!"),
   });
+  const token = useSelector((sa) => sa.token);
   const submitHandler = async (e, a) => {
     const data = new Object();
     const { email, password } = e;
@@ -41,18 +42,20 @@ const Signing = () => {
     });
     // !1Aasdfg
     const json = await req.json();
-    const secret = await fetch("http://localhost:3000/api/secret", {
-      method: "POST",
-      headers: {
-        "Content-type": "application/json; charset=UTF-8",
-        authorization: `Bearer ${json}`,
+
+    const obb = {
+      token: json,
+      user: {
+        email,
+        password,
       },
-    });
-    console.log(secret);
-    // if (req.statusText === "Created") {
-    //   dispatch(state.actions.login())
-    //   navigate("/");
-    // } else if (req.statusText === "Unauthorized") {
+    };
+    const sa = dispatch(state.actions.login(obb));
+
+    console.log(req);
+    if (req.statusText === "Created") {
+      navigate("/secret");
+    } //else if (req.statusText === "Unauthorized") {
     //   a.setErrors({ password: "incorrect password" });
     // }
   };

@@ -10,11 +10,11 @@ import { useSelector } from "react-redux";
 const signUp = () => {
   const navigate = useNavigate();
   const auth = useSelector((state) => state.authenticated);
-  useEffect(() => {
-    if (auth) {
-      navigate("/");
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (auth) {
+  //     navigate("/");
+  //   }
+  // }, []);
 
   const registerValues = {
     Name: "",
