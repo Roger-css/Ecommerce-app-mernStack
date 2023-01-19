@@ -1,14 +1,12 @@
-import React, { useState, useLayoutEffect, useEffect } from "react";
-import { Box, Button, Icon, Typography, Chip } from "@mui/material";
+import React, { useEffect } from "react";
+import { Box, Button, Typography, Chip } from "@mui/material";
 import { Formik, Form } from "formik";
 import * as yup from "yup";
 import Control from "../../components/input";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import { Link, useNavigate } from "react-router-dom";
-import { Stack } from "@mui/system";
+import { useNavigate } from "react-router-dom";
+
 import Footer from "../../layout/Footer";
 import { useSelector } from "react-redux";
-
 const signUp = () => {
   const navigate = useNavigate();
   const auth = useSelector((state) => state.authenticated);
@@ -30,20 +28,35 @@ const signUp = () => {
       .string()
       .email("enter a valid email")
       .required("Please enter your email here"),
-    password: yup.string().required("minimum 8 characters required!").min(8),
+    password: yup
+      .string()
+      .required("Please Enter your password")
+      .matches(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/,
+        "Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and One Special Case Character"
+      ),
     rePassword: yup
       .string()
       .oneOf([yup.ref("password"), ""], "passwords must match"),
   });
-  const submitHandler = async (e) => {
-    console.log(e);
-    const data = await fetch("http://localhost:3000/api/sign-up", {
+  const submitHandler = async (e, a) => {
+    const data = new Object();
+    const { Name, email, password } = e;
+    data.username = Name;
+    data.password = password;
+    data.email = email;
+    const req = await fetch("http://localhost:3000/api/sign-up", {
       method: "POST",
-      body: e,
+      body: JSON.stringify(data),
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
     });
-    console.log(data);
-    if (false) {
-      navigate("/");
+
+    if (req.statusText === "Created") {
+      navigate("/sign-in");
+    } else {
+      a.setErrors({ email: "email already exist" });
     }
   };
 
@@ -57,6 +70,7 @@ const signUp = () => {
             initialValues={registerValues}
             validationSchema={registerSchema}
             onSubmit={submitHandler}
+            validateOnChange
           >
             {(formik) => {
               return (

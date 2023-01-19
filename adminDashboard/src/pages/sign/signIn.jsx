@@ -27,10 +27,25 @@ const Signing = () => {
       .required("Please enter your email here"),
     password: yup.string().required("Required!"),
   });
-  const submitHandler = (e, a) => {
-    console.log(e);
-    dispatch(state.actions.login({ user: e, token: "TOKEN" }));
-    navigate("/");
+  const submitHandler = async (e, a) => {
+    const data = new Object();
+    const { email, password } = e;
+    data.password = password;
+    data.email = email;
+    const req = await fetch("http://localhost:3000/api/sign-in", {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    });
+    console.log(req);
+    // if (req.statusText === "OK") {
+    //   dispatch(state.actions.login())
+    //   navigate("/");
+    // } else if (req.statusText === "Unauthorized") {
+    //   a.setErrors({ password: "incorrect password" });
+    // }
   };
   return (
     <>
