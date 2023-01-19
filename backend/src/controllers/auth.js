@@ -5,32 +5,29 @@ const jwt = require('jsonwebtoken');
 
 module.exports.postSignUp = async (req, res, next)=>{
         const {username, email, password} = req.body
-        console.log("worked");
         try{
-            const user  = UserModel.findOne({email})
-            .exec((error, user) =>{
-                if(user) return res.status(404).json({
-                    message: `email already used`
-                })
-                const createdUser = new UserModel ({
-                    username,
-                    email,
-                    password,
-                })
-                createdUser.save((error, data)=> {
-                    if(error){
-                        return res.status(400).json({
-                            message: `something wrong happened ${error}`
-                        })
-                    }
-                    if(data){
-                        return res.status(201).json({
-                            message: data
-                        })
-                    }
-                })
+            const user  = await UserModel.findOne({email}).exec()
+            if(user) return res.status(402).json({
+                message: `email already used`
             })
-        }
+            const createdUser = new UserModel ({
+                username,
+                email,
+                password,
+            })
+            createdUser.save((error, data)=> {
+                if(error){
+                    return res.status(400).json({
+                        message: `something wrong happened ${error}`
+                    })
+                }
+                if(data){
+                    return res.status(201).json({
+                        message: data
+                    })
+                }
+            })
+        }     
         catch (err){
             console.log(err);
             res.status(404).json({
@@ -64,7 +61,7 @@ module.exports.postSignIn = async (req, res, next)=>{
         }
         // compare the password and see if its Valid
         const isAuth = await bcryptjs.compare(password, foundUser.password)
-
+        console.log(`thats auth ${isAuth} line 67`);
         if (!isAuth) return res.status(401).json({message: "invalid email or password"})
 
         // Create Acces Token 
@@ -76,7 +73,7 @@ module.exports.postSignIn = async (req, res, next)=>{
                 }
             },
             process.env.JWT_ACCESS_TOKEN_KEY,
-            {expiresIn: `10s`}
+            {expiresIn: `1m`}
         )
         // Create Refresh Token
         const refreshToken = jwt.sign (
@@ -95,8 +92,7 @@ module.exports.postSignIn = async (req, res, next)=>{
             sameSite:'None',
             maxAge: 7 * 24 * 60 * 60 * 1000
         })
-            res.json({accessToken})
-            return 
+            return res.status(201).json({accessToken})
 
     } catch  (err){
         console.log((err));
