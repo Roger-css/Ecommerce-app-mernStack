@@ -40,7 +40,15 @@ const Signing = () => {
       },
     });
     // !1Aasdfg
-    console.log(req);
+    const json = await req.json();
+    const secret = await fetch("http://localhost:3000/api/secret", {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+        authorization: `Bearer ${json}`,
+      },
+    });
+    console.log(secret);
     // if (req.statusText === "Created") {
     //   dispatch(state.actions.login())
     //   navigate("/");
