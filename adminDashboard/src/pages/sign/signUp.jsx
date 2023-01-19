@@ -28,7 +28,7 @@ const signUp = () => {
       .string()
       .email("enter a valid email")
       .required("Please enter your email here"),
-    password: yup.string().required("Please Enter your password"),
+    password: yup.string().required("Please Enter your password").min(8),
     rePassword: yup
       .string()
       .oneOf([yup.ref("password"), ""], "passwords must match"),
