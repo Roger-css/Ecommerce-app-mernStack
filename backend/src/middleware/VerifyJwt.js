@@ -3,6 +3,10 @@ const UserModel = require('../models/User');
 
 const verifyJWT = (req , res, next )=> {
         // Check if there is a access token first 
+        console.log(req.headers.authorization )
+        console.log(`this is the  headers`)
+        console.log()
+        console.log(req.cookies)
         const authHeader = req.headers.authorization 
         if (!authHeader)
         if(!authHeader || !authHeader.startsWith('Bearer ')){

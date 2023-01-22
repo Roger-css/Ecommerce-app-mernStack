@@ -36,6 +36,7 @@ const Signing = () => {
     const req = await fetch("http://localhost:3000/api/sign-in", {
       method: "POST",
       body: JSON.stringify(data),
+      credentials: "include",
       headers: {
         "Content-type": "application/json; charset=UTF-8",
       },

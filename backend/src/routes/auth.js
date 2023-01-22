@@ -7,7 +7,10 @@ const {
   validateSignIn,
   validateResult,
 } = require(`../middleware/validator`);
+const cookieParser = require('cookie-Parser');
 
+
+router.use(cookieParser())
 router
   .route("/sign-up")
   .post(validateSignUp, validateResult, authController.postSignUp);
@@ -16,19 +19,13 @@ router
   .post(validateSignIn, validateResult, authController.postSignIn);
 
 router.route("/secret").post(verifyJWT, (req, res) => {
-  console.log(req.role);
-  console.log(req.apiToken);
-  console.log("it wokred");
-  console.log(req.bob);
-  res.send("I am a backend developer aaaah");
+  console.log("it wokred secret i mean")
+  res.json({woked: "hi"})
 });
 
-module.exports = router;
-
-router.route("/secret").post(verifyJWT, (req, res) => {
-  console.log(req.role);
-  console.log("it wokred");
-  res.status(200).json({ work: "hi" });
+router.route("/secret").get(verifyJWT, (req, res) => {
+  console.log("it wokred secret i mean")
+  res.json({woked: "hi"})
 });
 
-module.exports = router;
+module.exports = router
