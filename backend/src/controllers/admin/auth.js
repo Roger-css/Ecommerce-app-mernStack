@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken');
 
 // Sign up an Admin 
 module.exports.postSignUp = async (req, res, next)=>{
-    const {firstName, lastName, email, password} = req.body
+    const {username, email, password} = req.body
     
     try{
         const user  = UserModel.findOne({email})
@@ -15,8 +15,7 @@ module.exports.postSignUp = async (req, res, next)=>{
                 message: `admin already registerd`
             })
             const createdUser = new UserModel ({
-                firstName,
-                lastName,
+                username,
                 email,
                 password,
                 username: Math.random().toString(),

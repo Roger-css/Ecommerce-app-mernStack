@@ -4,10 +4,11 @@ const categoryController = require("../../controllers/category")
 const categoryModel = require("../../models/category")
 const verifyJWT = require('../../middleware/VerifyJwt')
 const router = express.Router()
+const adminChecker = require("../../middleware/userchecker")
 
 
-router.route("/create").post(verifyJWT, categoryController.addCtaegory)
-router.route("/get").post(categoryController.getCategories)
+router.route("/create").post(verifyJWT, adminChecker, categoryController.addCtaegory)
+router.route("/get").get(categoryController.getCategories)
 
 
 module.exports= router

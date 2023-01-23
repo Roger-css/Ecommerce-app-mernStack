@@ -88,7 +88,7 @@ module.exports.postSignIn = async (req, res, next)=>{
         )
         // set Secure http Cookie that have RrefreshToken
         console.log(`that is refresh token ${refreshToken}`)
-        res.cookie("auth_token",refreshToken, {   
+        res.cookie("jwt",refreshToken, {   
             sameSite:'none',
             secure: true,
             maxAge: 7 * 24 * 60 * 60 * 60 * 60 * 60 ,
