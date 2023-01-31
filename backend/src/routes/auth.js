@@ -20,15 +20,7 @@ router.route("/secret").post(verifyJWT, (req, res) => {
   console.log(req.apiToken);
   console.log("it wokred");
   console.log(req.bob);
-  res.send("I am a backend developer aaaah");
-});
-
-module.exports = router;
-
-router.route("/secret").post(verifyJWT, (req, res) => {
-  console.log(req.role);
-  console.log("it wokred");
-  res.status(200).json({ work: "hi" });
+  res.send("hi");
 });
 
 module.exports = router;

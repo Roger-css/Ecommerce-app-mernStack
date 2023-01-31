@@ -12,6 +12,7 @@ const input = (props) => {
         {(pp) => {
           return (
             <TextField
+              autoComplete="on"
               size="small"
               label={props.label}
               type={props.type}

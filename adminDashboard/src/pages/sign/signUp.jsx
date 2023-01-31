@@ -1,15 +1,16 @@
-import React, { useEffect } from "react";
 import { Box, Button, Typography, Chip } from "@mui/material";
 import { Formik, Form } from "formik";
 import * as yup from "yup";
 import Control from "../../components/input";
-import { useNavigate } from "react-router-dom";
-
+import { useLocation, useNavigate } from "react-router-dom";
 import Footer from "../../layout/Footer";
 import { useSelector } from "react-redux";
+import { useRegisterMutation } from "../../api/actions/auth";
+import { authenticated } from "../../state/reducers/auth";
 const signUp = () => {
   const navigate = useNavigate();
-  const auth = useSelector((state) => state.authenticated);
+  const auth = useSelector(authenticated);
+  // UNCOMMENT FOR PRODUCTION
   // useEffect(() => {
   //   if (auth) {
   //     navigate("/");
@@ -22,6 +23,7 @@ const signUp = () => {
     password: "",
     rePassword: "",
   };
+  const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9];
   const registerSchema = yup.object({
     Name: yup.string().required("Required!"),
     email: yup
@@ -33,27 +35,22 @@ const signUp = () => {
       .string()
       .oneOf([yup.ref("password"), ""], "passwords must match"),
   });
+  const [useRegister, register] = useRegisterMutation();
   const submitHandler = async (e, a) => {
     const data = new Object();
     const { Name, email, password } = e;
     data.username = Name;
     data.password = password;
     data.email = email;
-    const req = await fetch("http://localhost:3000/api/sign-up", {
-      method: "POST",
-      body: JSON.stringify(data),
-      headers: {
-        "Content-type": "application/json; charset=UTF-8",
-      },
-    });
-
-    if (req.statusText === "Created") {
-      navigate("/sign-in");
-    } else {
-      a.setErrors({ email: "email already exist" });
-    }
+    const req = await useRegister(data);
+    console.log(req);
+    // if (req.statusText === "Created") {
+    //   navigate("/sign-in");
+    // } else {
+    //   a.setErrors({ email: "email already exist" });
+    // }
   };
-
+  const location = useLocation();
   return (
     <>
       <Box display="flex" flexDirection="column" alignItems="center" mt="12px">

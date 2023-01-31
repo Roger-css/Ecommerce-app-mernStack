@@ -1,31 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
-import {
-  persistStore,
-  persistReducer,
-  FLUSH,
-  REGISTER,
-  REHYDRATE,
-  PAUSE,
-  PERSIST,
-  PURGE,
-} from "redux-persist";
-import storage from "redux-persist/lib/storage";
-import rootReducer from "./index";
-const persistConfig = {
-  key: "root",
-  version: 1,
-  storage,
-};
-const persistedReducer = persistReducer(persistConfig, rootReducer.reducer);
-
+import auth from "./reducers/auth";
+import { apiSlice } from "../api/baseQuery";
 const store = configureStore({
-  reducer: persistedReducer,
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({
-      serializableCheck: {
-        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-      },
-    }),
+  reducer: {
+    auth: auth.reducer,
+    [apiSlice.reducerPath]: apiSlice.reducer,
+  },
+  middleware: (def) => def().concat(apiSlice.middleware),
+  devTools: true,
 });
-const persistor = persistStore(store);
-export { store, persistor };
+export { store };
