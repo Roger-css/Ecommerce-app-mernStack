@@ -4,7 +4,6 @@ const UserModel = require('../models/User');
 const verifyJWT = (req , res, next )=> {
         // Check if there is a access token first 
         const authHeader = req.headers.authorization 
-        if (!authHeader)
         if(!authHeader || !authHeader.startsWith('Bearer ')){
             return res.status(401).json({message: "Unauthorized"})
         }
@@ -16,7 +15,6 @@ const verifyJWT = (req , res, next )=> {
                 if(err){
                     if (err.name === "TokenExpiredError"){
                         const cookies = req.cookies
-                        console.log(cookies)
                         if (!cookies.jwt) return res.status(401).json({message: `Unauthorized line19`})
                         const  refreshToken = cookies.jwt
                         jwt.verify(
@@ -25,7 +23,6 @@ const verifyJWT = (req , res, next )=> {
                                 async (err, decode) => {
                                     if (err) return res.json(403).json({message: `Forbidden`})
                                     const foundUser = await UserModel.findOne({username: decode.Userinfo.username})
-                                    console.log(foundUser);
                                     if (!foundUser) return res.status(401).json({message: `Unauthorized`})
                                     const accessToken = jwt.sign(
                                         {

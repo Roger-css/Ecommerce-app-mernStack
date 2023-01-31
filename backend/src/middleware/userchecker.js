@@ -1,23 +1,14 @@
-exports.checkUser = (req, res, next) => {
+const UserChecker = (req, res, next) => {
         try {
-            if (req.role === "user"){
-                next()
-            }else {
-                return res.status(401).json("Unauthorized")
-            }
-        } catch (error) {
-            return res.status(401).json("Unauthorized")
-        }
-}
-
-exports.checkAdmin = (req, res, next) => {
-    try {
             if (req.role === "admin"){
                 next()
             }else {
-                return res.status(401).json("Unauthorized")
+                return res.status(401).json({message : "Unauthorized"})
             }
-    } catch (error) {
-        return res.status(401).json("Unauthorized")
-    }
+
+        } catch (error) {
+            return res.status(401).json({message : "Unauthorized"})
+        }
 }
+
+module.exports = UserChecker

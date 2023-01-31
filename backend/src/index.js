@@ -34,19 +34,18 @@ app.use(cors({credentials: true, origin:true}))
 
 app.use("/api", userRoutes)
 app.use("/api/admin", adminRoutes)
-app.use("/api/admin/category", adminCategoryRoutes)
-app.use("/api/admin/product", adminProductRoutes)
+app.use("/api/category", adminCategoryRoutes)
+app.use("/api/product", adminProductRoutes)
+
 
 
 mongoose.connect(DB_URI, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
 }).then(()=> {
-    app.listen(port, ()=> {
-        console.log(`app is listenign on port  ${port}`);
-    })
-}).catch((err)=> {
-    console.log(err);
+app.listen(port, ()=> {
+    console.log(`app is listenign on port  ${port}`);
 })
-
-
+}).catch((err)=> {
+console.log(err);
+})

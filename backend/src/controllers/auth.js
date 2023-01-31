@@ -66,7 +66,7 @@ module.exports.postSignIn = async (req, res, next)=>{
         if (!isAuth) return res.status(401).json({message: "invalid email or password"})
 
         // Create Acces Token 
-        const accessToken  = jwt.sign (
+        const accessToken  =   jwt.sign (
             {
                 Userinfo: {
                     username: foundUser.username,
@@ -77,7 +77,7 @@ module.exports.postSignIn = async (req, res, next)=>{
             {expiresIn: `1m`}
         )
         // Create Refresh Token
-        const refreshToken = jwt.sign (
+        const refreshToken =   jwt.sign (
             {
                 Userinfo: {
                     username: foundUser.username,
@@ -87,11 +87,13 @@ module.exports.postSignIn = async (req, res, next)=>{
             {expiresIn: `1d`}
         )
         // set Secure http Cookie that have RrefreshToken
-        res.cookie('jwt', refreshToken, {   
-            httpOnly:true,
-            sameSite:'None',
-            maxAge: 7 * 24 * 60 * 60 * 1000})
-            return res.status(201).json(accessToken)
+        console.log(`that is refresh token ${refreshToken}`)
+        res.cookie("jwt",refreshToken, {   
+            sameSite:'none',
+            secure: true,
+            maxAge: 7 * 24 * 60 * 60 * 60 * 60 * 60 ,
+        })
+        res.status(201).json(accessToken)
 
     } catch  (err){
         console.log((err));
