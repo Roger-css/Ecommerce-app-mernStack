@@ -21,9 +21,9 @@ router
   .route("/sign-out")
   .post(verifyJWT, authController.postSignOut);
 
-router.route("/secret").get(verifyJWT, (req, res) => {
-  console.log("it wokred secret i mean")
-  res.json({woked: "hi"})
-});
+  router
+  .route("/refresh")
+  .post(verifyJWT, authController.getRefresh);
+
 
 module.exports = router;
