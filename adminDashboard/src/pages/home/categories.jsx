@@ -6,14 +6,12 @@ import {
   Box,
   IconButton,
   TextField,
-  FormControl,
   Select,
   MenuItem,
-  InputLabel,
-  Input,
   useTheme,
 } from "@mui/material";
 import { Stack } from "@mui/system";
+import DoneAllIcon from "@mui/icons-material/DoneAll";
 import CloseIcon from "@mui/icons-material/Close";
 import React, { useState } from "react";
 
@@ -43,7 +41,6 @@ const MainPage = () => {
       Category,
       Img,
     };
-
     console.log(data);
   };
   const categories = [
@@ -60,11 +57,11 @@ const MainPage = () => {
           ],
         },
         {
-          name: "iphones",
+          name: "IPhones",
           children: [],
         },
         {
-          name: "realme",
+          name: "Realme",
           children: [],
         },
       ],
@@ -115,28 +112,36 @@ const MainPage = () => {
               <MenuItem value="" disabled>
                 zero
               </MenuItem>
-              <MenuItem value={10}>Ten</MenuItem>
+              <MenuItem value={10}>ten</MenuItem>
               <MenuItem value={20}>Twenty</MenuItem>
               <MenuItem value={30}>Thirty</MenuItem>
             </Select>
-            <Button
-              className="files"
-              color="primary"
-              sx={{
-                display: "block",
-                position: "relative",
-                width: "200px",
-                marginTop: "10px",
-                border: `1px solid ${theme.palette.primary.main}`,
-              }}
+            <Stack
+              direction="row"
+              spacing={3}
+              display="flex"
+              alignContent="center"
             >
-              <input
-                style={{ width: "100%", height: "100%", opacity: "0" }}
-                id="upload"
-                type="file"
-                onChange={(e) => setImg(e.target.files[0])}
-              />
-            </Button>
+              <Button
+                className="files"
+                color="primary"
+                sx={{
+                  display: "block",
+                  position: "relative",
+                  width: "200px",
+                  marginTop: "10px",
+                  border: `1px solid ${theme.palette.primary.main}`,
+                }}
+              >
+                <input
+                  style={{ width: "100%", height: "100%", opacity: "0" }}
+                  id="upload"
+                  type="file"
+                  onChange={(e) => setImg(e.target.files[0])}
+                />
+              </Button>
+              {Img && <DoneAllIcon />}
+            </Stack>
             <Stack
               mt="30px"
               width="100%"

@@ -7,10 +7,9 @@ const {
   validateSignIn,
   validateResult,
 } = require(`../middleware/validator`);
-const cookieParser = require('cookie-Parser');
+const cookieParser = require("cookie-Parser");
 
-
-router.use(cookieParser())
+router.use(cookieParser());
 router
   .route("/sign-up")
   .post(validateSignUp, validateResult, authController.postSignUp);
@@ -22,5 +21,9 @@ router
   .route("/sign-out")
   .post(verifyJWT, authController.postSignOut);
 
+router.route("/secret").get(verifyJWT, (req, res) => {
+  console.log("it wokred secret i mean")
+  res.json({woked: "hi"})
+});
 
-module.exports = router
+module.exports = router;

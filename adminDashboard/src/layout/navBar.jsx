@@ -11,13 +11,15 @@ import {
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import auth from "../state";
+import auth, { authenticated } from "../state/reducers/auth";
+
 const navBar = () => {
   const theme = useTheme();
-  const logged = useSelector((state) => state.authenticated);
+  const logged = useSelector(authenticated);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const NavForNoneLogged = (props) => {
+  console.log(logged);
+  const NavForNoneLogged = () => {
     return (
       <Stack direction="row" spacing={2}>
         <Button onClick={() => navigate("/sign-in")}>
@@ -72,7 +74,7 @@ const navBar = () => {
           <Typography variant="h5" sx={{ flexGrow: "1" }}>
             Admin dashboard
           </Typography>
-          {logged ? <NavForLogged color="" /> : <NavForNoneLogged color="" />}
+          {logged ? <NavForLogged /> : <NavForNoneLogged />}
         </Container>
       </Toolbar>
     </AppBar>

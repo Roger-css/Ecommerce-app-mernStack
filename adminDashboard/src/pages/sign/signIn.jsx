@@ -1,21 +1,29 @@
-import React, { useEffect } from "react";
-import { Box, Button, Typography } from "@mui/material";
-import state from "../../state";
+import { Box, Button, Typography, useTheme } from "@mui/material";
+import state from "../../state/reducers/auth";
 import { Formik, Form } from "formik";
 import * as yup from "yup";
 import Control from "../../components/input";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import Footer from "../../layout/Footer";
+import { useLoginMutation } from "../../api/actions/auth";
+import decode from "jwt-decode";
+import { useEffect, useState } from "react";
+import { authenticated } from "../../state/reducers/auth";
+
 const Signing = () => {
+  const theme = useTheme();
   const navigate = useNavigate();
-  const auth = useSelector((state) => state.authenticated);
+  const [Err, setErr] = useState(null);
+  const auth = useSelector(authenticated);
+  // UNCOMMENT FOR PRODUCTION
   // useEffect(() => {
   //   if (auth) {
   //     navigate("/");
   //   }
   // }, []);
   const dispatch = useDispatch();
+  const [useLogin, login] = useLoginMutation();
   const registerValues = {
     email: "",
     password: "",
@@ -33,32 +41,27 @@ const Signing = () => {
     const { email, password } = e;
     data.password = password;
     data.email = email;
-    const req = await fetch("http://localhost:3000/api/sign-in", {
-      method: "POST",
-      body: JSON.stringify(data),
-      credentials: "include",
-      headers: {
-        "Content-type": "application/json; charset=UTF-8",
-      },
-    });
+    try {
+      const fetching = await useLogin(data).unwrap();
+      const decoded = decode(fetching);
+      const token = fetching.data;
+      const obb = {
+        token,
+        user: {
+          userName: decoded.Userinfo.username,
+        },
+      };
+      dispatch(state.actions.login(obb));
+      navigate("/");
+    } catch (err) {
+      console.log(err);
+      if (err?.status == 401) {
+        a.setErrors({ password: "incorrect password" });
+      } else {
+        setErr("Oops something went wrong");
+      }
+    }
     // !1Aasdfg
-    const json = await req.json();
-
-    const obb = {
-      token: json,
-      user: {
-        email,
-        password,
-      },
-    };
-    const sa = dispatch(state.actions.login(obb));
-
-    console.log(req);
-    if (req.statusText === "Created") {
-      navigate("/secret");
-    } //else if (req.statusText === "Unauthorized") {
-    //   a.setErrors({ password: "incorrect password" });
-    // }
   };
   return (
     <>
@@ -89,6 +92,17 @@ const Signing = () => {
                       }}
                     >
                       <Typography variant="h5">Sign in</Typography>
+                      {Err ? (
+                        <span
+                          style={{
+                            marginTop: "15px",
+                            color: theme.palette.error.main,
+                            fontSize: "14px",
+                          }}
+                        >
+                          {Err}
+                        </span>
+                      ) : null}
                       <Control name="email" label="Email" type="email" />
                       <Control
                         name="password"
