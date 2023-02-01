@@ -70,7 +70,6 @@ module.exports.postSignIn = async (req, res, next)=>{
             {
                 Userinfo: {
                     username: foundUser.username,
-                    role: foundUser.role
                 }
             },
             process.env.JWT_ACCESS_TOKEN_KEY,
@@ -90,8 +89,8 @@ module.exports.postSignIn = async (req, res, next)=>{
         console.log(`that is refresh token ${refreshToken}`)
         res.cookie("jwt",refreshToken, {   
             sameSite:'none',
-            secure: true,
-            maxAge: 7 * 24 * 60 * 60 * 60 * 60 * 60 ,
+            secure: process.env.NODE_ENV === "production",
+            maxAge: 7 * 24 * 60 * 60 * 60 * 60 * 60 *1000 ,
         })
         res.status(201).json(accessToken)
 
@@ -101,3 +100,8 @@ module.exports.postSignIn = async (req, res, next)=>{
 }
 // END Sign In 
 
+// start of sign-out 
+module.exports.postSignOut = async(req, res,next) => {
+    res.cookie("jwt"," ", {maxAge: -9999})
+    res.status(200).json({message: "deleted succesfully"})
+}

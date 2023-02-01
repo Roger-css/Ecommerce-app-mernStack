@@ -70,6 +70,7 @@ module.exports.getCategories = async (req, res, next)=> {
 
 module.exports.addCtaegory = (req, res, next)=> {
     try {
+        
         if(req.role === "admin"){
             const {name, parentId} = req.body
             const categoryObj = {
@@ -77,8 +78,12 @@ module.exports.addCtaegory = (req, res, next)=> {
             slug: slugify(name)
             }
             if(parentId) {
-            categoryObj.parentId = parentId
+                categoryObj.parentId = parentId
             }
+            if(req.file){
+                categoryObj.categoryPic = process.env.API + '/uploads/' + req.file.filename
+            }
+
             const category = new categoryModel(categoryObj)
 
             category.save((err, category)=> {

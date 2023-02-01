@@ -7,42 +7,37 @@ const jwt = require('jsonwebtoken');
 // Sign up an Admin 
 module.exports.postSignUp = async (req, res, next)=>{
     const {username, email, password} = req.body
-    
     try{
-        const user  = UserModel.findOne({email})
-        .exec((error, user) =>{
-            if(user) return res.status(404).json({
-                message: `admin already registerd`
-            })
-            const createdUser = new UserModel ({
-                username,
-                email,
-                password,
-                username: Math.random().toString(),
-                role: `admin`
-            })
-
-            createdUser.save((error, data)=> {
-                if(error){
-                    return res.status(400).json({
-                        message: `something wrong happened ${error}`
-                    })
-                }
-                if(data){
-                    return res.status(201).json({
-                        succes: true,
-                        message: data
-                    })
-                }
-            })
+        const user  = await UserModel.findOne({email}).exec()
+        if(user) return res.status(402).json({
+            message: `email already used`
         })
-    }
+        const createdUser = new UserModel ({
+            username,
+            email,
+            password,
+            role: "admin"
+        })
+        createdUser.save((error, data)=> {
+            if(error){
+                return res.status(400).json({
+                    message: `something wrong happened ${error}`
+                })
+            }
+            if(data){
+                return res.status(201).json({
+                    message: data
+                })
+            }
+        })
+    }     
     catch (err){
         console.log(err);
         res.status(404).json({
             message: err
         })
     }
+
 
 }
 
@@ -64,7 +59,7 @@ module.exports.postSignIn = async (req, res, next)=>{
 
         // check if the user dosent exisit in the DB
         if (!foundUser){
-                res.status(401).json({
+                return res.status(401).json({
                     message: "invalid email or password"
                 })
         }
@@ -97,9 +92,9 @@ module.exports.postSignIn = async (req, res, next)=>{
         // set Secure http Cookie that have RrefreshToken
         res.cookie('jwt',
             refreshToken, {
-            // secure: true,
+            secure: process.env.NODE_ENV === "production",
             sameSite:'None',
-            maxAge: 7 * 24 * 60 * 60 * 1000
+            maxAge: 7 * 24 * 60 * 60 * 60 * 60 * 60 *1000 
         })
             res.json({accessToken})
             return 

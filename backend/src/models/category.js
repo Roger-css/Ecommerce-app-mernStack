@@ -8,6 +8,7 @@ const categorySchema = new Schema({
         required: true,
         trim: true
     },
+    categoryPic: {type: String},
     slug: {
         type: String,
         required: true,
@@ -18,7 +19,7 @@ const categorySchema = new Schema({
     }
 },{timestamps: true})
 
-const categoryModel = mongoose.model("category", categorySchema)
+const categoryModel = mongoose.model("Category", categorySchema)
 
 
 module.exports = categoryModel

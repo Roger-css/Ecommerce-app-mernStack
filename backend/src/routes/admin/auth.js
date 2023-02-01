@@ -8,12 +8,6 @@ router.route("/sign-up").post(validateSignUp, validateResult, authController.pos
 router.route("/sign-in").post(validateSignIn, validateResult, authController.postSignIn)
 
 
-router.route("/secret").post(verifyJWT, (req, res)=> {
-    console.log(req.role);
-    console.log(req.apiToken);
-    console.log("it wokred");
-    res.send("hi")
-})
 
 
 module.exports = router

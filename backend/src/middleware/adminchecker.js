@@ -9,4 +9,4 @@ const checkAdmin = (req, res, next) => {
         return res.status(401).json("Unauthorized")
     }
 }
-export default checkAdmin
+module.exports =  checkAdmin

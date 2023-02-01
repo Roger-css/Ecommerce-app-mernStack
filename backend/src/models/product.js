@@ -4,17 +4,41 @@ const Schema = mongoose.Schema
 const productSchema = new Schema ({
     name: {
         type: String,
-        required:true
+        required:true,
+        trim: true
     },
-    cost: {
-        type: Number,
-        required: true
+    slug: {
+        type: String,
+        required: true,
+        unique: true
     },
-    catiegories:{
-        type: Array
-    }
-})
+    price: {type: Number,required: true},
+    quantity: {type: Number , required : true},
+    description: {
+        type: String,
+        required: true,
+        trim: true
+    },
+    offer: {type: Number},
+    productPictures: [{
+        img: {type: String}
+    }],
+    reviews: [
+        {
+            userId: {type: mongoose.Schema.Types.ObjectId, ref: "User"},
+            review: {type : String}
+        }
+    ],
+    category: {type: mongoose.Schema.Types.ObjectId, ref: "Category", required: true},
+    createdBy: {type: mongoose.Schema.Types.ObjectId, ref: "User", required: true},
+    updatedAt: {Date}
 
-const productModel = mongoose.model("product", productSchema)
+
+    // catiegories:{
+    //     type: Array
+    // }
+}, {timestamps: true})
+
+const productModel = mongoose.model("Product", productSchema)
 
 module.exports = productModel

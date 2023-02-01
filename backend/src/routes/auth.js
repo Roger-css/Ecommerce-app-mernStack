@@ -18,14 +18,9 @@ router
   .route("/sign-in")
   .post(validateSignIn, validateResult, authController.postSignIn);
 
-router.route("/secret").post(verifyJWT, (req, res) => {
-  console.log("it wokred secret i mean")
-  res.json({woked: "hi"})
-});
+router
+  .route("/sign-out")
+  .post(verifyJWT, authController.postSignOut);
 
-router.route("/secret").get(verifyJWT, (req, res) => {
-  console.log("it wokred secret i mean")
-  res.json({woked: "hi"})
-});
 
 module.exports = router

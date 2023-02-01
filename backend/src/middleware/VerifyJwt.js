@@ -21,9 +21,12 @@ const verifyJWT = (req , res, next )=> {
                             refreshToken,
                             process.env.JWT_REFRESH_TOKEN_KEY,
                                 async (err, decode) => {
-                                    if (err) return res.json(403).json({message: `Forbidden`})
+                                    if (err){
+                                        return res.status(403).json({message: `Forbidden`})
+                                    } 
                                     const foundUser = await UserModel.findOne({username: decode.Userinfo.username})
-                                    if (!foundUser) return res.status(401).json({message: `Unauthorized`})
+                                    if (!foundUser) return res.status(401).json({message: `Unauthorized `})
+                                    // this line shoube be moved
                                     const accessToken = jwt.sign(
                                         {
                                             Userinfo: {
@@ -34,7 +37,7 @@ const verifyJWT = (req , res, next )=> {
                                         process.env.JWT_ACCESS_TOKEN_KEY,
                                         {expiresIn: `1m`}
                                     )
-                                    req.apiToken = accessToken
+                                    req.id = foundUser._id
                                     req.user = foundUser.username 
                                     req.role = foundUser.role 
                                     next()
@@ -42,15 +45,12 @@ const verifyJWT = (req , res, next )=> {
                     }
                 }
                 else if(err){
-                    return res.status(401).json({message: "Unauthorized"})
+                    return res.status(401).json({message: "Unauthorized ss"})
                 } else {
                     req.user = decode.Userinfo.username 
                     req.role = decode.Userinfo.role 
                     next()
                 } 
-                // req.user = decode.username 
-                // req.role = decode.role 
-                // next()
             }
         )
 }

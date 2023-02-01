@@ -6,8 +6,11 @@ const cors = require('cors');
 const UserModel = require('./models/User.js');
 const userRoutes = require('./routes/auth');
 const adminRoutes = require("./routes/admin/auth")
-const adminCategoryRoutes = require("./routes/admin/category")
-const adminProductRoutes = require("./routes/admin/product")
+const adminInitialData = require("./routes/admin/initailData")
+const CategoryRoutes = require("./routes/category")
+const adminProductRoutes = require("./routes/product")
+const cartRoutes = require("./routes/cart")
+const path = require('path');
 
 
 
@@ -32,10 +35,17 @@ app.use(cookieParser())
 // set routes from here
 app.use(cors({credentials: true, origin:true}))
 
+express.static.mime.define({
+    'image/avif': ['avif']
+});
+
+app.use(express.static(path.join(__dirname, 'public')))
 app.use("/api", userRoutes)
 app.use("/api/admin", adminRoutes)
-app.use("/api/category", adminCategoryRoutes)
+app.use("/api/admin", adminInitialData)
+app.use("/api/category", CategoryRoutes)
 app.use("/api/product", adminProductRoutes)
+app.use("/api/cart", cartRoutes)
 
 
 
@@ -49,3 +59,4 @@ app.listen(port, ()=> {
 }).catch((err)=> {
 console.log(err);
 })
+
