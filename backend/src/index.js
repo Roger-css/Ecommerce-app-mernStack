@@ -12,6 +12,7 @@ const adminProductRoutes = require("./routes/product")
 const cartRoutes = require("./routes/cart")
 const path = require('path');
 
+const refreshRoot = require("./routes/refresh")
 
 
 const app = express()
@@ -41,6 +42,7 @@ express.static.mime.define({
 
 app.use(express.static(path.join(__dirname, 'public')))
 app.use("/api", userRoutes)
+app.use("/api", refreshRoot)
 app.use("/api/admin", adminRoutes)
 app.use("/api/admin", adminInitialData)
 app.use("/api/category", CategoryRoutes)
