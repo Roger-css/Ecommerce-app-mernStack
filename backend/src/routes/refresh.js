@@ -7,6 +7,7 @@ const jwt = require("jsonwebtoken");
 const UserModel = require("../models/User");
 
 router.use(cookieParser());
+
 router.route("/refresh").get((req, res, next) => {
   const jwtcookie = req.cookies.jwt;
   if (!jwtcookie) return res.status(401).json({ message: "Unauthorized" });
@@ -15,7 +16,6 @@ router.route("/refresh").get((req, res, next) => {
     const foundUser = await UserModel.findOne({
       username: decode.Userinfo.username,
     });
-    console.log("worked before user");
     if (!foundUser) return res.status(401).json({ message: `Unauthorized ` });
     // this line shoube be moved
     const accessToken = jwt.sign(
