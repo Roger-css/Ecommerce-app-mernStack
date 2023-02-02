@@ -8,11 +8,10 @@ const UserModel = require("../models/User");
 
 router.use(cookieParser());
 router.route("/refresh").get((req, res, next) => {
-  console.log("it worked");
   const jwt = req.cookies.jwt;
   if (!jwt) return res.status(401).json({ message: "Unauthorized" });
   JWT.verify(jwt, process.env.JWT_REFRESH_TOKEN_KEY, async (err, decode) => {
-    if (err) return res.status(403).json({ message: "Unauthorized" });
+    if (err) return res.status(403).json({ message: "unauthorized" });
     const foundUser = await UserModel.findOne({
       username: decode.Userinfo.username,
     });
