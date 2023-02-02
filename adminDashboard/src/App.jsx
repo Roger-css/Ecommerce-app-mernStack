@@ -14,13 +14,13 @@ function App() {
     <div className="App">
       <CssBaseline />
       <Routes>
-        {/* <PersistLogin> */}
-        <Route path="/" element={<Home />}>
-          <Route index element={<Categories />} />
-          <Route path="products" element={<Products />} />
-          <Route path="orders" element={<Orders />} />
+        <Route element={<PersistLogin />}>
+          <Route path="/" element={<Home />}>
+            <Route index element={<Categories />} />
+            <Route path="products" element={<Products />} />
+            <Route path="orders" element={<Orders />} />
+          </Route>
         </Route>
-        {/* </PersistLogin> */}
         <Route path="fuck" element={<PersistLogin />} />
         <Route path="sign-in" element={<SignIn />} />
         <Route path="sign-up" element={<SignUp />} />

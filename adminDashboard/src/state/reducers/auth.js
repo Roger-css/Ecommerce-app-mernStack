@@ -20,7 +20,7 @@ const auth = createSlice({
       state.token = null;
       state.user = {};
       state.authenticated = false;
-      state.error = action.payload.error;
+      state.error = action.payload?.error || "";
     },
   },
 });

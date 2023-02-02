@@ -19,11 +19,12 @@ const navBar = () => {
   const navigate = useNavigate();
   const handleLogOut = async () => {
     try {
-      const req = await axios.get("/sign-out");
+      const req = await axios.post("/sign-out");
+      console.log(req);
       dispatch(logout());
     } catch (error) {
       console.log(error);
-      dispatch(logout(error));
+      dispatch(logout({ error: error.message }));
     }
   };
   const NavForNoneLogged = () => {

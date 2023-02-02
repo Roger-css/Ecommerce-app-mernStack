@@ -13,13 +13,14 @@ const PersistLogin = () => {
     const Check = async () => {
       try {
         const req = await axios.get("refresh");
-        // const userName = jwtDecode(req.data)
-        // dispatch(login({ token: req.data, user: { userName } }));
-        console.log(req);
+        const {
+          Userinfo: { username },
+        } = jwtDecode(req.data.accessToken);
+        dispatch(login({ token: req.data.accessToken, user: { username } }));
       } catch (err) {
         console.log(err);
-        // logout({ error: err });
-        // Navigate({ to: "sign-in" });
+        logout({ error: err });
+        Navigate({ to: "sign-in" });
       } finally {
         isMounted && setLoading(false);
       }
@@ -28,15 +29,7 @@ const PersistLogin = () => {
     return () => (isMounted = false);
   }, []);
   const content = (
-    <>
-      {!persistent ? (
-        /*<Outlet />*/ <h1>fuck u</h1>
-      ) : Loading ? (
-        <>loading...</>
-      ) : (
-        /*<Outlet />*/ <h1>failed</h1>
-      )}
-    </>
+    <>{!persistent ? <Outlet /> : Loading ? <>loading...</> : <Outlet />}</>
   );
   return content;
 };
