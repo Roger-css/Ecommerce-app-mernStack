@@ -86,10 +86,9 @@ module.exports.postSignIn = async (req, res, next)=>{
             {expiresIn: `1d`}
         )
         // set Secure http Cookie that have RrefreshToken
-        console.log(`that is refresh token ${refreshToken}`)
         res.cookie("jwt",refreshToken, {   
-            sameSite:'none',
-            secure: process.env.NODE_ENV === "production",
+            sameSite:'None',
+            secure: true,
             maxAge: 7 * 24 * 60 * 60 * 60 * 60 * 60 *1000 ,
         })
         res.status(201).json(accessToken)
