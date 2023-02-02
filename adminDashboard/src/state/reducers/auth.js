@@ -3,7 +3,7 @@ const initialState = {
   token: null,
   user: {},
   authenticated: false,
-  authenticating: false,
+  persistent: localStorage.getItem("persist") || false,
   error: "",
 };
 const auth = createSlice({
@@ -13,12 +13,14 @@ const auth = createSlice({
     login(state, action) {
       state.authenticated = true;
       state.token = action.payload.token;
-      state.user.userName = action.payload.user.userName;
+      state.user.userName = action.payload.user?.userName;
     },
-    logout(state) {
+
+    logout(state, action) {
       state.token = null;
       state.user = {};
       state.authenticated = false;
+      state.error = action.payload.error;
     },
   },
 });

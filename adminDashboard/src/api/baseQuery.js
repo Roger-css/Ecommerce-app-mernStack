@@ -16,5 +16,5 @@ const baseQuery = fetchBaseQuery({
 export const apiSlice = createApi({
   baseQuery: baseQuery,
   endpoints: (builder) => ({}),
-  keepUnusedDataFor: 9999999999999,
+  keepUnusedDataFor: 300,
 });

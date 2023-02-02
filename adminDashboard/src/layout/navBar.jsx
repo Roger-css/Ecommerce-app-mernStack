@@ -1,6 +1,5 @@
 import {
   AppBar,
-  Box,
   Button,
   Container,
   Stack,
@@ -11,14 +10,22 @@ import {
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import auth, { authenticated } from "../state/reducers/auth";
-
+import auth, { authenticated, logout } from "../state/reducers/auth";
+import axios from "../api/axios";
 const navBar = () => {
   const theme = useTheme();
   const logged = useSelector(authenticated);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  console.log(logged);
+  const handleLogOut = async () => {
+    try {
+      const req = await axios.get("/sign-out");
+      dispatch(logout());
+    } catch (error) {
+      console.log(error);
+      dispatch(logout(error));
+    }
+  };
   const NavForNoneLogged = () => {
     return (
       <Stack direction="row" spacing={2}>
@@ -44,7 +51,12 @@ const navBar = () => {
   const NavForLogged = (props) => {
     return (
       <Stack direction="row">
-        <Button onClick={() => dispatch(auth.actions.logout())}>
+        <Button
+          onClick={() => {
+            dispatch(auth.actions.logout());
+            handleLogOut();
+          }}
+        >
           <Typography
             variant="body2"
             sx={{ color: theme.palette.common.white }}

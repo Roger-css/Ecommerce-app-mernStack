@@ -1,4 +1,12 @@
-import { Box, Button, Typography, useTheme } from "@mui/material";
+import {
+  Box,
+  Button,
+  Typography,
+  useTheme,
+  Checkbox,
+  FormControlLabel,
+  Tooltip,
+} from "@mui/material";
 import state from "../../state/reducers/auth";
 import { Formik, Form } from "formik";
 import * as yup from "yup";
@@ -16,6 +24,10 @@ const Signing = () => {
   const navigate = useNavigate();
   const [Err, setErr] = useState(null);
   const auth = useSelector(authenticated);
+  const [Trusted, setTrusted] = useState(false);
+  useEffect(() => {
+    localStorage.setItem("persist", Trusted);
+  }, [Trusted]);
   // UNCOMMENT FOR PRODUCTION
   // useEffect(() => {
   //   if (auth) {
@@ -109,6 +121,23 @@ const Signing = () => {
                         label="Password"
                         type="password"
                       />
+                      <Tooltip
+                        title="if you checked this you will be logged to this account even after exiting or refreshing the page"
+                        arrow
+                        placement="right"
+                      >
+                        <FormControlLabel
+                          sx={{ m: " 5px auto 0" }}
+                          control={
+                            <Checkbox
+                              size="small"
+                              checked={Trusted}
+                              onChange={() => setTrusted((prev) => !prev)}
+                            />
+                          }
+                          label="Trust this device"
+                        />
+                      </Tooltip>
                       <Button
                         size="small"
                         variant="contained"

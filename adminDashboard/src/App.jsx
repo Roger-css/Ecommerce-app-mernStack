@@ -7,16 +7,21 @@ import Home from "./pages/home/index";
 import Categories from "./pages/home/categories";
 import Products from "./pages/home/Products";
 import Orders from "./pages/home/orders";
+import PersistLogin from "./components/PersistLogin";
+
 function App() {
   return (
     <div className="App">
       <CssBaseline />
       <Routes>
+        {/* <PersistLogin> */}
         <Route path="/" element={<Home />}>
           <Route index element={<Categories />} />
           <Route path="products" element={<Products />} />
           <Route path="orders" element={<Orders />} />
         </Route>
+        {/* </PersistLogin> */}
+        <Route path="fuck" element={<PersistLogin />} />
         <Route path="sign-in" element={<SignIn />} />
         <Route path="sign-up" element={<SignUp />} />
       </Routes>
