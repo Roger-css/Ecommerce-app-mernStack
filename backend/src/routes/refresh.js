@@ -7,6 +7,7 @@ const jwt = require("jsonwebtoken");
 const UserModel = require("../models/User");
 
 router.use(cookieParser());
+
 router.route("/refresh").get((req, res, next) => {
   const jwtcookie = req.cookies.jwt;
   if (!jwtcookie) return res.status(401).json({ message: "Unauthorized" });
