@@ -21,9 +21,6 @@ router
   .route("/sign-out")
   .post(verifyJWT, authController.postSignOut);
 
-  router
-  .route("/refresh")
-  .post(verifyJWT, authController.getRefresh);
 
 
 module.exports = router;

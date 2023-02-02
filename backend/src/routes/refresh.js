@@ -4,6 +4,7 @@ const verifyJWT = require("../middleware/VerifyJwt");
 const router = express.Router();
 const cookieParser = require("cookie-Parser");
 const JWT = require('jsonwebtoken');
+const UserModel = require('../models/User');
 
 router.use(cookieParser());
 router
