@@ -5,6 +5,7 @@ import {
   Container,
   Box,
   IconButton,
+  Alert,
   TextField,
   Select,
   MenuItem,
@@ -13,14 +14,29 @@ import {
 import { Stack } from "@mui/system";
 import DoneAllIcon from "@mui/icons-material/DoneAll";
 import CloseIcon from "@mui/icons-material/Close";
-import React, { useState } from "react";
-
+import { useState } from "react";
+import {
+  useCreateCatMutation,
+  useGetAllCatsQuery,
+} from "../../api/actions/category";
+import React from "react";
 const MainPage = () => {
+  const [Cat, setCat] = useState(0);
   const [Open, setOpen] = useState(false);
   const [Name, setName] = useState("");
-  const [Category, setCategory] = useState([]);
+  const [Category, setCategory] = useState(0);
   const [Img, setImg] = useState(null);
-  const handleClose = () => setOpen(false);
+  const ImgName = Img ? Img.name.slice(0, 9) : false;
+  const handleClose = () => {
+    setOpen(false);
+    setCategory(0);
+    setError("");
+    setImg(null);
+    setName("");
+  };
+  const [error, setError] = useState("");
+  // const allCats = useGetAllCatsQuery();
+  const [createCat] = useCreateCatMutation();
   const style = {
     position: "absolute",
     top: "40%",
@@ -33,15 +49,33 @@ const MainPage = () => {
     p: 4,
   };
   const theme = useTheme();
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const form = new FormData();
-    const data = {
-      Name,
-      Category,
-      Img,
-    };
-    console.log(data);
+    const Pic = Img?.type?.split("/")[0] == "image" ? true : false;
+    if (Name && Category && Pic) {
+      const form = new FormData();
+      const data = {
+        Name,
+        Category,
+        Img,
+      };
+      try {
+        const req = await createCat(data);
+        console.log(req);
+      } catch (error) {
+        console.log(error);
+        setError(error);
+      }
+      setCategory(0);
+      setError("");
+      setImg(null);
+      setName("");
+      setCat((p) => ++p);
+    } else if (Img && !Pic && Category && Name) {
+      setError("enter a valid image please");
+    } else {
+      setError("All fields are required");
+    }
   };
   const categories = [
     {
@@ -99,33 +133,47 @@ const MainPage = () => {
             <TextField
               label="Category Name"
               value={Name}
-              onChange={(e) => setName(e.target.value)}
+              onChange={(e) => {
+                setName(e.target.value);
+                setError("");
+              }}
             ></TextField>
-
             <Select
-              multiple
+              defaultValue={0}
               sx={{ width: "200px", mt: "10px" }}
-              id="demo-simple-select"
+              id="cats-select"
               value={Category}
-              onChange={(e) => setCategory(e.target.value)}
+              renderValue={(selected) => {
+                if (selected === 0) {
+                  return <em>select a category</em>;
+                }
+
+                return selected;
+              }}
+              onChange={(e) => {
+                setCategory(e.target.value);
+                setError("");
+              }}
             >
-              <MenuItem value="" disabled>
-                zero
+              <MenuItem value={0} disabled>
+                select a category
               </MenuItem>
               <MenuItem value={10}>ten</MenuItem>
               <MenuItem value={20}>Twenty</MenuItem>
               <MenuItem value={30}>Thirty</MenuItem>
             </Select>
+            <></>
             <Stack
               direction="row"
               spacing={3}
               display="flex"
-              alignContent="center"
+              alignItems="center"
             >
               <Button
                 className="files"
                 color="primary"
                 sx={{
+                  padding: "0",
                   display: "block",
                   position: "relative",
                   width: "200px",
@@ -134,14 +182,33 @@ const MainPage = () => {
                 }}
               >
                 <input
-                  style={{ width: "100%", height: "100%", opacity: "0" }}
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    opacity: "0",
+                    padding: "10px 8px",
+                  }}
                   id="upload"
                   type="file"
-                  onChange={(e) => setImg(e.target.files[0])}
+                  onChange={(e) => {
+                    setImg(e.target.files[0]);
+                    setError("");
+                  }}
                 />
               </Button>
-              {Img && <DoneAllIcon />}
+              {Img && (
+                <Stack sx={{ mt: "10px" }} direction="row" spacing={3}>
+                  <DoneAllIcon color="success" />
+                  <Typography>{ImgName}</Typography>
+                </Stack>
+              )}
             </Stack>
+            {error && (
+              <Alert sx={{ mt: "10px" }} severity="error">
+                {error}
+              </Alert>
+            )}
+
             <Stack
               mt="30px"
               width="100%"

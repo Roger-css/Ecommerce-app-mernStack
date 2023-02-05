@@ -1,1 +1,0 @@
-you haven't done the authentication and thunk functions

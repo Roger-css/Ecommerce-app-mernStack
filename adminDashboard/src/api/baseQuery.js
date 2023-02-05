@@ -6,15 +6,15 @@ const baseQuery = fetchBaseQuery({
   prepareHeaders: (headers, { getState }) => {
     const token = getState().auth?.token;
     if (token) {
-      console.log(token);
       headers.set("authorization", `Bearer ${token}`);
     }
     return headers;
   },
 });
 
-export const apiSlice = createApi({
+const apiSlice = createApi({
   baseQuery: baseQuery,
   endpoints: (builder) => ({}),
   keepUnusedDataFor: 300,
 });
+export default apiSlice;

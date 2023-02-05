@@ -20,6 +20,7 @@ import { useEffect, useState } from "react";
 import { authenticated } from "../../state/reducers/auth";
 
 const Signing = () => {
+  const [Disabled, setDisabled] = useState(false);
   const theme = useTheme();
   const navigate = useNavigate();
   const [Err, setErr] = useState(null);
@@ -49,6 +50,7 @@ const Signing = () => {
   });
   const token = useSelector((sa) => sa.token);
   const submitHandler = async (e, a) => {
+    setDisabled(true);
     const data = new Object();
     const { email, password } = e;
     data.password = password;
@@ -66,6 +68,7 @@ const Signing = () => {
       dispatch(state.actions.login(obb));
       navigate("/");
     } catch (err) {
+      setDisabled(false);
       console.log(err);
       if (err?.status == 401) {
         a.setErrors({ password: "incorrect password" });
@@ -78,7 +81,7 @@ const Signing = () => {
   return (
     <>
       <Box display="flex" flexDirection="column" alignItems="center" mt="12px">
-        <img src="../../../public/logo.png" />
+        <img src="./logo.png" />
         <Box>
           <Formik
             initialValues={registerValues}
@@ -145,6 +148,7 @@ const Signing = () => {
                         color="primary"
                         sx={{ width: "100%" }}
                         type="submit"
+                        disabled={Disabled}
                       >
                         continue
                       </Button>

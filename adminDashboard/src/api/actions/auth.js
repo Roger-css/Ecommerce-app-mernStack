@@ -1,4 +1,4 @@
-import { apiSlice } from "../baseQuery";
+import apiSlice from "../baseQuery";
 
 const authActions = apiSlice.injectEndpoints({
   endpoints: (builder) => ({

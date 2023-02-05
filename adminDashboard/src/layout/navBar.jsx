@@ -10,23 +10,15 @@ import {
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import auth, { authenticated, logout } from "../state/reducers/auth";
-import axios from "../api/axios";
+import useLogOut from "../hooks/useLogOut";
+import auth, { authenticated } from "../state/reducers/auth";
+
 const navBar = () => {
   const theme = useTheme();
   const logged = useSelector(authenticated);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const handleLogOut = async () => {
-    try {
-      const req = await axios.post("/sign-out");
-      console.log(req);
-      dispatch(logout());
-    } catch (error) {
-      console.log(error);
-      dispatch(logout({ error: error.message }));
-    }
-  };
+  const logOut = useLogOut();
   const NavForNoneLogged = () => {
     return (
       <Stack direction="row" spacing={2}>
@@ -55,7 +47,7 @@ const navBar = () => {
         <Button
           onClick={() => {
             dispatch(auth.actions.logout());
-            handleLogOut();
+            logOut();
           }}
         >
           <Typography

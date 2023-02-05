@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Navigate, Outlet } from "react-router-dom";
+import { useNavigate, Outlet } from "react-router-dom";
 import { logout, login } from "../state/reducers/auth";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "../api/axios";
@@ -8,6 +8,7 @@ const PersistLogin = () => {
   const [Loading, setLoading] = useState(true);
   const persistent = useSelector((state) => state.auth.persistent);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   useEffect(() => {
     let isMounted = true;
     const Check = async () => {
@@ -18,9 +19,8 @@ const PersistLogin = () => {
         } = jwtDecode(req.data.accessToken);
         dispatch(login({ token: req.data.accessToken, user: { username } }));
       } catch (err) {
-        console.log(err);
         logout({ error: err });
-        Navigate({ to: "sign-in" });
+        // navigate("sign-in");
       } finally {
         isMounted && setLoading(false);
       }
