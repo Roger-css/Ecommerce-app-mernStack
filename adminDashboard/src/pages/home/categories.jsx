@@ -52,12 +52,12 @@ const MainPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const Pic = Img?.type?.split("/")[0] == "image" ? true : false;
-    if (Name && Category && Pic) {
+    if (Name) {
       const form = new FormData();
       const data = {
-        Name,
-        Category,
-        Img,
+        name: Name,
+        parentId: Category,
+        categoryImage: Img,
       };
       try {
         const req = await createCat(data);
@@ -71,10 +71,10 @@ const MainPage = () => {
       setImg(null);
       setName("");
       setCat((p) => ++p);
-    } else if (Img && !Pic && Category && Name) {
+    } else if (Name && Img && !Pic) {
       setError("enter a valid image please");
     } else {
-      setError("All fields are required");
+      setError("please enter a category name");
     }
   };
   const categories = [

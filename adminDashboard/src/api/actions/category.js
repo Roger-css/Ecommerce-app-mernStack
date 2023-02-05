@@ -7,7 +7,7 @@ const categoriesEndPoints = apiSlice.injectEndpoints({
     }),
     createCat: builder.mutation({
       query: (credential) => ({
-        url: "/category/createCategory",
+        url: "/category/create",
         method: "POST",
         body: { ...credential },
       }),
