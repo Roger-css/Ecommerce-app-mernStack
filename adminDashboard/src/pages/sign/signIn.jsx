@@ -73,7 +73,7 @@ const Signing = () => {
       if (err?.status == 401) {
         a.setErrors({ password: "incorrect password" });
       } else {
-        setErr("Oops something went wrong");
+        setErr(err ? err.data.error : "Oops something went wrong");
       }
     }
     // !1Aasdfg

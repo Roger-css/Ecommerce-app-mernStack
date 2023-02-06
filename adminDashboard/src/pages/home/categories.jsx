@@ -14,13 +14,16 @@ import {
 import { Stack } from "@mui/system";
 import DoneAllIcon from "@mui/icons-material/DoneAll";
 import CloseIcon from "@mui/icons-material/Close";
-import { useState } from "react";
-import {
-  useCreateCatMutation,
-  useGetAllCatsQuery,
-} from "../../api/actions/category";
+import { useState, useEffect } from "react";
+import useAxios from "../../hooks/usePrivate";
+import { useCreateCatMutation } from "../../api/actions/category";
 import React from "react";
+import { addAllCategories } from "../../state/reducers/category";
+import { useDispatch, useSelector } from "react-redux";
 const MainPage = () => {
+  const allCategories = useSelector((state) => state.category.categories);
+  const axios = useAxios();
+  const dispatch = useDispatch();
   const [Cat, setCat] = useState(0);
   const [Open, setOpen] = useState(false);
   const [Name, setName] = useState("");
@@ -35,7 +38,17 @@ const MainPage = () => {
     setName("");
   };
   const [error, setError] = useState("");
-  // const allCats = useGetAllCatsQuery();
+  useEffect(() => {
+    const fetching = async () => {
+      try {
+        const req = await axios.get("category/get");
+        dispatch(addAllCategories(req.data.ordeCtegories));
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetching();
+  }, []);
   const [createCat] = useCreateCatMutation();
   const style = {
     position: "absolute",
@@ -77,43 +90,27 @@ const MainPage = () => {
       setError("please enter a category name");
     }
   };
-  const categories = [
-    {
-      name: "phones",
-      children: [
-        {
-          name: "electronics",
-          children: [
-            {
-              name: "laptops",
-              children: [],
-            },
-          ],
-        },
-        {
-          name: "IPhones",
-          children: [],
-        },
-        {
-          name: "Realme",
-          children: [],
-        },
-      ],
-    },
-    {
-      name: "watches",
-      children: [],
-    },
-  ];
+
   const catsDeploy = (param) => {
     return param.map((p) => {
       return (
-        <React.Fragment key={p.name}>
+        <React.Fragment key={p._id}>
           <li>{p.name}</li>
           {p.children.length > 0 && <ul>{catsDeploy(p.children)}</ul>}
         </React.Fragment>
       );
     });
+  };
+  const renderCats = (cats, option = []) => {
+    for (let cat of cats) {
+      if (cat.children.length > 0) {
+        option.push({ _id: cat._id, value: cat.name });
+        renderCats(cat.children, option);
+      } else {
+        option.push({ _id: cat._id, value: cat.name });
+      }
+    }
+    return option;
   };
   return (
     <Container sx={{ ml: "133px" }}>
@@ -158,11 +155,12 @@ const MainPage = () => {
               <MenuItem value={0} disabled>
                 select a category
               </MenuItem>
-              <MenuItem value={10}>ten</MenuItem>
-              <MenuItem value={20}>Twenty</MenuItem>
-              <MenuItem value={30}>Thirty</MenuItem>
+              {renderCats(allCategories).map((m) => (
+                <MenuItem value={m.value} key={m._id}>
+                  {m.value}
+                </MenuItem>
+              ))}
             </Select>
-            <></>
             <Stack
               direction="row"
               spacing={3}
@@ -222,7 +220,7 @@ const MainPage = () => {
           </form>
         </Box>
       </Modal>
-      {categories && <ul>{catsDeploy(categories)}</ul>}
+      {allCategories && <ul>{catsDeploy(allCategories)}</ul>}
     </Container>
   );
 };

@@ -2,9 +2,6 @@ import apiSlice from "../baseQuery";
 
 const categoriesEndPoints = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    getAllCats: builder.query({
-      query: () => "/category/getAllCategories",
-    }),
     createCat: builder.mutation({
       query: (credential) => ({
         url: "/category/create",
@@ -14,4 +11,4 @@ const categoriesEndPoints = apiSlice.injectEndpoints({
     }),
   }),
 });
-export const { useGetAllCatsQuery, useCreateCatMutation } = categoriesEndPoints;
+export const { useCreateCatMutation } = categoriesEndPoints;

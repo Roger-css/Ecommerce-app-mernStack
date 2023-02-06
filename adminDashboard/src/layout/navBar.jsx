@@ -63,7 +63,7 @@ const navBar = () => {
   return (
     <AppBar
       sx={{
-        position: "relative",
+        position: "sticky",
         color: theme.palette.common.white,
         backgroundColor: "#212121",
       }}
