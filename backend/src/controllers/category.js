@@ -68,10 +68,10 @@ module.exports.getCategories = async (req, res, next)=> {
 }
 
 
-module.exports.addCtaegory = (req, res, next)=> {
+module.exports.addCategory = (req, res, next)=> {
     try {
-        
-        if(req.role === "admin"){
+        console.log(req.role);
+        // if(req.role === "admin"){
             const {name, parentId} = req.body
             const categoryObj = {
             name,
@@ -90,9 +90,12 @@ module.exports.addCtaegory = (req, res, next)=> {
                 if(err) return res.status(400).json({message: err})
                 if(category) return res.status(201).json({category}) 
             }) 
-        } else {
-            res.status(400).json({message: "access denaied"})
-        }
+
+        // } 
+        // else {
+        //     res.status(400).json({message: "access denaied"})
+        // }
+        return res.status(400).json({message: "access denaied"})
         
     } catch (error) {
         console.log(error)

@@ -80,6 +80,7 @@ module.exports.postSignIn = async (req, res, next)=>{
             {
                 Userinfo: {
                     username: foundUser.username,
+                    role: foundUser.role
                 }
             },
             process.env.JWT_REFRESH_TOKEN_KEY,
