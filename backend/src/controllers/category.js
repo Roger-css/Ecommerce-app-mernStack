@@ -94,9 +94,7 @@ module.exports.addCategory = (req, res, next)=> {
         // } 
         // else {
         //     res.status(400).json({message: "access denaied"})
-        // }
-        return res.status(400).json({message: "access denaied"})
-        
+        // }        
     } catch (error) {
         console.log(error)
         return res.status(400).json({error})
