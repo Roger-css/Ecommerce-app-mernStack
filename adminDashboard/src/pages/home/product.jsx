@@ -10,9 +10,11 @@ import {
   Select,
   MenuItem,
   useTheme,
+  Menu,
 } from "@mui/material";
 import { Stack } from "@mui/system";
 import DoneAllIcon from "@mui/icons-material/DoneAll";
+import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import CloseIcon from "@mui/icons-material/Close";
 import React, { useState, useEffect } from "react";
 import useAxios from "../../hooks/usePrivate";
@@ -21,6 +23,7 @@ import { useDispatch, useSelector } from "react-redux";
 const products = () => {
   const allCategories = useSelector((state) => state.category.categories);
   const axios = useAxios();
+  const [anchorEl, setAnchorEl] = useState(null);
   const dispatch = useDispatch();
   const [Open, setOpen] = useState(false);
   const [Name, setName] = useState("");
@@ -29,12 +32,21 @@ const products = () => {
   const [Img, setImg] = useState([]);
   const [Price, setPrice] = useState(0);
   const [Quantity, setQuantity] = useState(0);
+  const menuItemStyling = {
+    height: "20px",
+    fontSize: "14px",
+    width: "130px",
+    position: "relative",
+  };
   const handleClose = () => {
     setOpen(false);
     setCategory(0);
     setError("");
     setImg(null);
     setName("");
+  };
+  const closing = () => {
+    setAnchorEl(null);
   };
   const [error, setError] = useState("");
   useEffect(() => {
@@ -63,8 +75,8 @@ const products = () => {
   const theme = useTheme();
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const Pic = Img.every((img) => {
-      return img?.type?.split("/")[0] == "image";
+    const Pic = Img?.every((p) => {
+      return p.type?.split("/")[0] == "image";
     })
       ? true
       : false;
@@ -111,6 +123,7 @@ const products = () => {
       setImg((p) => [...p, img]);
     }
   };
+  console.log(Img);
   return (
     <Container sx={{ ml: "133px" }}>
       <Button onClick={() => setOpen(true)}>Open model</Button>
@@ -234,8 +247,65 @@ const products = () => {
                 />
               </Button>
               {Img?.length > 0 && (
-                <Stack sx={{ mt: "10px" }} direction="row" spacing={3}>
+                <Stack
+                  sx={{ mt: "10px", alignItems: "center" }}
+                  direction="row"
+                  spacing={3}
+                >
                   <DoneAllIcon color="success" />
+                  <Button
+                    sx={{ width: "120px", height: "50px", fontSize: "14px" }}
+                    endIcon={<KeyboardArrowUpIcon />}
+                    onClick={(e) => setAnchorEl(e.currentTarget)}
+                  >
+                    UPLOADED IMAGES
+                  </Button>
+                  <Menu
+                    id="basic-menu"
+                    anchorEl={anchorEl}
+                    open={Boolean(anchorEl)}
+                    onClose={closing}
+                    anchorOrigin={{
+                      vertical: "top",
+                      horizontal: "left",
+                    }}
+                    transformOrigin={{
+                      vertical: "bottom",
+                      horizontal: "left",
+                    }}
+                  >
+                    {Img.map((p) => {
+                      return (
+                        <MenuItem
+                          key={p.name}
+                          sx={menuItemStyling}
+                          onClick={() => null}
+                        >
+                          <Typography fontSize="inherit">
+                            {p.name.length > 10
+                              ? `${p.name.slice(0, 10).toLowerCase()}...`
+                              : p.name.toLowerCase()}
+                          </Typography>
+                          <IconButton
+                            size="small"
+                            sx={{
+                              position: "absolute",
+                              top: "0",
+                              right: "0",
+                              width: "5px",
+                              height: "5px",
+                              transform: "translate(-50%, 50%)",
+                            }}
+                            onClick={() => {
+                              setImg((prev) => prev.filter((i) => i != p));
+                            }}
+                          >
+                            <CloseIcon sx={{ width: "20px" }} />
+                          </IconButton>
+                        </MenuItem>
+                      );
+                    })}
+                  </Menu>
                 </Stack>
               )}
             </Stack>
