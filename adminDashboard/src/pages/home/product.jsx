@@ -81,23 +81,28 @@ const products = () => {
       ? true
       : false;
     if (boolean) {
-      const data = {
-        name: Name,
-        quantity: Quantity,
-        price: Price,
-        category: Category,
-        productPictures: Img,
-        description: Description,
-      };
-      console.log(data);
-      try {
-        const req = await axios.post("product/create", data);
-        console.log(req);
-      } catch (error) {
-        console.log(error);
-        setError(error);
+      const myData = new FormData();
+      myData.append("name", Name);
+      myData.append("quantity", Quantity);
+      myData.append("price", Price);
+      myData.append("category", Category);
+      myData.append("description", Description);
+      for (let img of Img) {
+        myData.append("productPictures", img);
       }
-      handleClose();
+
+      console.log(myData);
+      try {
+        const req = await axios.post("product/create", myData, {
+          headers: {
+            "content-type": "multipart/form-data",
+          },
+        });
+        handleClose();
+      } catch (err) {
+        console.log(err);
+        setError(err.message);
+      }
     } else if (!Pic) {
       setError("please make sure all the images are valid");
     } else {
