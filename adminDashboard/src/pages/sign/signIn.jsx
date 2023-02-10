@@ -57,7 +57,7 @@ const Signing = () => {
     data.email = email;
     try {
       const fetching = await useLogin(data).unwrap();
-      const decoded = decode(fetching);
+      const decoded = decode(fetching.accessToken);
       const token = fetching.data;
       const obb = {
         token,
@@ -73,7 +73,7 @@ const Signing = () => {
       if (err?.status == 401) {
         a.setErrors({ password: "incorrect password" });
       } else {
-        setErr(err ? err.data.error : "Oops something went wrong");
+        setErr(err ? err.message : "Oops something went wrong");
       }
     }
     // !1Aasdfg

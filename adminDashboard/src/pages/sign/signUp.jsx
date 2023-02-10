@@ -42,12 +42,11 @@ const signUp = () => {
     data.username = Name;
     data.password = password;
     data.email = email;
-    const req = await useRegister(data);
-    console.log(req);
-    if (req.statusText === "Created") {
+    try {
+      const req = await useRegister(data);
       navigate("/sign-in");
-    } else {
-      a.setErrors({ email: "email already exist" });
+    } catch (er) {
+      a.setErrors({ email: "email or username already exist" });
     }
   };
   const location = useLocation();
