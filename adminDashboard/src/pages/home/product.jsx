@@ -42,7 +42,7 @@ const products = () => {
     setOpen(false);
     setCategory(0);
     setError("");
-    setImg(null);
+    setImg([]);
     setName("");
   };
   const closing = () => {
@@ -97,10 +97,7 @@ const products = () => {
         console.log(error);
         setError(error);
       }
-      setCategory("");
-      setError("");
-      setImg(null);
-      setName("");
+      handleClose();
     } else if (!Pic) {
       setError("please make sure all the images are valid");
     } else {
@@ -119,11 +116,14 @@ const products = () => {
     return option;
   };
   const newImagesHandler = (e) => {
-    for (let img of e) {
-      setImg((p) => [...p, img]);
+    if (e.length > 1) {
+      for (let img of e) {
+        setImg((p) => [...p, img]);
+      }
+    } else {
+      setImg((p) => [...p, e[0]]);
     }
   };
-  console.log(Img);
   return (
     <Container sx={{ ml: "133px" }}>
       <Button onClick={() => setOpen(true)}>Open model</Button>
@@ -275,6 +275,7 @@ const products = () => {
                     }}
                   >
                     {Img.map((p) => {
+                      console.log(p);
                       return (
                         <MenuItem
                           key={p.name}
