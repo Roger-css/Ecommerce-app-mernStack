@@ -15,10 +15,12 @@ module.exports.createProduct = (req, res , next) => {
                 } = req.body
         
                 let productPictures = []
-                if(req.files.length > 0){
-                    productPictures = req.files.map(file => {
-                        return {img : file.filename}
-                    })
+                if(req.files){
+                    if(req.files.length > 0){
+                        productPictures = req.files.map(file => {
+                            return {img : file.filename}
+                        })
+                    }
                 }
             const product = new productModel ({
                 name,
