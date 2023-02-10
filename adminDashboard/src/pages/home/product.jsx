@@ -275,7 +275,6 @@ const products = () => {
                     }}
                   >
                     {Img.map((p) => {
-                      console.log(p);
                       return (
                         <MenuItem
                           key={p.name}
