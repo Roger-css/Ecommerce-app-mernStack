@@ -86,7 +86,7 @@ const products = () => {
         quantity: Quantity,
         price: Price,
         category: Category,
-        productPicture: Img,
+        productPictures: Img,
         description: Description,
       };
       console.log(data);

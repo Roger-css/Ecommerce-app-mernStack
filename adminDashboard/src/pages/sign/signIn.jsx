@@ -58,7 +58,7 @@ const Signing = () => {
     try {
       const fetching = await useLogin(data).unwrap();
       const decoded = decode(fetching.accessToken);
-      const token = fetching.data;
+      const token = fetching.accessToken;
       const obb = {
         token,
         user: {
