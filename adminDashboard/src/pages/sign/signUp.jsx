@@ -44,11 +44,11 @@ const signUp = () => {
     data.email = email;
     const req = await useRegister(data);
     console.log(req);
-    // if (req.statusText === "Created") {
-    //   navigate("/sign-in");
-    // } else {
-    //   a.setErrors({ email: "email already exist" });
-    // }
+    if (req.statusText === "Created") {
+      navigate("/sign-in");
+    } else {
+      a.setErrors({ email: "email already exist" });
+    }
   };
   const location = useLocation();
   return (
