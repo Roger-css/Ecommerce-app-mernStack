@@ -2,7 +2,7 @@ const express = require('express');
 const productController = require('../controllers/product');
 const productyModel = require("../models/product")
 const verifyJWT = require('../middleware/VerifyJwt')
-const adminChecker = require("../middleware/adminchecker")
+const checkAdmin = require("../middleware/adminChecker")
 
 const path = require("path")
 const multer = require('multer');
@@ -25,7 +25,7 @@ const upload = multer({storage: storage})
 router.route("/create")
     .post(
         verifyJWT, 
-        adminChecker,
+        checkAdmin,
         upload.array("productPictures"), 
         productController.createProduct
         )

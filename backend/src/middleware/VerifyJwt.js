@@ -25,13 +25,13 @@ const verifyJWT = (req , res, next )=> {
                                         return res.status(403).json({message: `Forbidden`})
                                     } 
                                     const foundUser = await UserModel.findOne({username: decode.Userinfo.username})
-                                    if (!foundUser) return res.status(401).json({message: `Unauthorized `})
+                                    if (!foundUser) return res.status(401).json({message: `Unauthorized line 28 `})
                                     // this line shoube be moved
                                     const accessToken = jwt.sign(
                                         {
                                             Userinfo: {
                                                 username: foundUser.username,
-                                                roles: foundUser.role
+                                                role: foundUser.role
                                             }
                                         },
                                         process.env.JWT_ACCESS_TOKEN_KEY,
@@ -46,9 +46,10 @@ const verifyJWT = (req , res, next )=> {
                 }
                 else if(err){
                     return res.status(401).json({message: "Unauthorized ss"})
-                } else {
-                    req.user = decode.Userinfo.username 
-                    req.role = decode.Userinfo.role 
+                } else if (decode) {
+                    console.log(`thats i decode.roles ${decode.Userinfo.roles} ${decode.Userinfo.username}`)
+                    req.role = decode.Userinfo.roles
+                    req.user = decode.Userinfo.username
                     next()
                 } 
             }
