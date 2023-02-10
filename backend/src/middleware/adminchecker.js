@@ -1,5 +1,6 @@
 const checkAdmin = (req, res, next) => {
     try {
+            console.log(`admin middlewareworked ${req.role}`);
             if (req.role === "admin"){
                 next()
             }else {

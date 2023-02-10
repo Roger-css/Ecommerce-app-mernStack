@@ -70,6 +70,7 @@ module.exports.postSignIn = async (req, res, next)=>{
             {
                 Userinfo: {
                     username: foundUser.username,
+                    role: foundUser.role
                 }
             },
             process.env.JWT_ACCESS_TOKEN_KEY,
