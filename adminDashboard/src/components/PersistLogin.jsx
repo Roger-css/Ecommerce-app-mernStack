@@ -14,13 +14,15 @@ const PersistLogin = () => {
     const Check = async () => {
       try {
         const req = await axios.get("refresh");
+
         const {
           Userinfo: { username },
         } = jwtDecode(req.data.accessToken);
         dispatch(login({ token: req.data.accessToken, user: { username } }));
       } catch (err) {
+        console.log(err.response.data.message);
         logout({ error: err });
-        // navigate("sign-in");
+        navigate("sign-in");
       } finally {
         isMounted && setLoading(false);
       }

@@ -43,6 +43,7 @@ const MainPage = () => {
       try {
         const req = await axios.get("category/get");
         dispatch(addAllCategories(req.data.ordeCtegories));
+        console.log(req);
       } catch (error) {
         console.log(error);
       }

@@ -98,6 +98,7 @@ const products = () => {
             "content-type": "multipart/form-data",
           },
         });
+        console.log(req);
         handleClose();
       } catch (err) {
         console.log(err);
