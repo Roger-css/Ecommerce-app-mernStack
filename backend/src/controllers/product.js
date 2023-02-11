@@ -5,6 +5,7 @@ const productModel = require("../models/product")
 
 module.exports.createProduct = (req, res , next) => {
         try {
+            console.log("create product worked");
             const {
                 name,
                 price,
@@ -34,6 +35,7 @@ module.exports.createProduct = (req, res , next) => {
                 createdBy: req.id
             })
                 product.save((err, result) => {
+                    console.log(err);
                     if (err) return res.status(400).json({err})
                     if (result) return res.status(201).json(result)
                 })

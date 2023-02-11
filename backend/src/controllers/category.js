@@ -56,7 +56,7 @@ module.exports.getCategories = async (req, res, next)=> {
         const categories = await categoryModel.find({}).exec()
         if(categories){
                 const ordeCtegories = categoriesOrder(categories)
-
+                console.log(ordeCtegories);
                 return res.status(200).json({ordeCtegories})
         } else {
             res.status(400).json({message:"something went wrong"})
@@ -68,7 +68,7 @@ module.exports.getCategories = async (req, res, next)=> {
 }
 
 
-module.exports.addCategory = (req, res, next)=> {
+module.exports.addCategory = async (req, res, next)=> {
     try {
         console.log(req.role);
         // if(req.role === "admin"){
@@ -78,7 +78,8 @@ module.exports.addCategory = (req, res, next)=> {
             slug: slugify(name)
             }
             if(parentId) {
-                categoryObj.parentId = parentId
+                const theIdNum =   await categoryModel.findOne({name: parentId})
+                categoryObj.parentId = theIdNum._id
             }
             if(req.file){
                 categoryObj.categoryPic = process.env.API + '/uploads/' + req.file.filename
@@ -88,7 +89,7 @@ module.exports.addCategory = (req, res, next)=> {
 
             category.save((err, category)=> {
                 if(err) return res.status(400).json({message: err})
-                if(category) return res.status(201).json({category}) 
+                if(category) return res.status(201).json(category) 
             }) 
 
         // } 
