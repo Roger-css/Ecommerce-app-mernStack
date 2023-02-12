@@ -56,7 +56,6 @@ module.exports.getCategories = async (req, res, next)=> {
         const categories = await categoryModel.find({}).exec()
         if(categories){
                 const ordeCtegories = categoriesOrder(categories)
-                console.log(ordeCtegories);
                 return res.status(200).json({ordeCtegories})
         } else {
             res.status(400).json({message:"something went wrong"})

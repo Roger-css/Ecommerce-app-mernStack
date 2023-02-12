@@ -19,7 +19,7 @@ router
 
 router
   .route("/sign-out")
-  .post((req, res , next) => {console.log("hi");},verifyJWT, authController.postSignOut);
+  .post(verifyJWT, authController.postSignOut);
 
 
 
