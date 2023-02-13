@@ -101,7 +101,6 @@ module.exports.postSignIn = async (req, res, next) => {
 
 // start of sign-out
 module.exports.postSignOut = async (req, res, next) => {
-  console.log("rasheed don't know how to write successfully");
   res.cookie("jwt", " ", { maxAge: -9999 });
   res.status(200).json({ message: "deleted succesfully" });
 };

@@ -34,6 +34,7 @@ module.exports.createProduct = (req, res , next) => {
                 createdBy: req.id
             })
                 product.save((err, result) => {
+                    console.log(err);
                     if (err) return res.status(400).json({err})
                     if (result) return res.status(201).json(result)
                 })
@@ -44,4 +45,19 @@ module.exports.createProduct = (req, res , next) => {
                 res.status(400).json({error})
         }
 
+}
+
+module.exports.getProducts = async (req ,res ,next ) => {
+    try {
+        const products =  await productModel.find({}).exec()
+        if (products){
+            return res.status(200).json({products})
+        } else {
+            return res.status(400).json({message: "error you nab"})
+        }
+        
+    } catch (error) {
+        console.log(err);
+        return res.status(400).json({message: "error you nab"})
+    }
 }

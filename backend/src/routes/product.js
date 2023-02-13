@@ -27,5 +27,7 @@ router
     upload.array("productPictures"),
     productController.createProduct
   );
-
+router
+  .route("/get")
+  .get(productController.getProducts)
 module.exports = router;
