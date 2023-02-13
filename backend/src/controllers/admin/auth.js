@@ -76,6 +76,7 @@ module.exports.postSignIn = async (req, res, next) => {
       process.env.JWT_ACCESS_TOKEN_KEY,
       { expiresIn: `10s` }
     );
+    console.log(foundUser.role);
     // Create Refresh Token
     const refreshToken = jwt.sign(
       {

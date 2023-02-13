@@ -40,7 +40,6 @@ const verifyJWT = (req , res, next )=> {
                                     req.id = foundUser._id
                                     req.user = foundUser.username 
                                     req.role = foundUser.role 
-                                    console.log(req.role);
                                     next()
                             })
                     }
