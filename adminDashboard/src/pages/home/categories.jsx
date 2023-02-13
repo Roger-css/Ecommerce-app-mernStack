@@ -43,7 +43,6 @@ const MainPage = () => {
       try {
         const req = await axios.get("category/get");
         dispatch(addAllCategories(req.data.ordeCtegories));
-        console.log(req);
       } catch (error) {
         console.log(error);
       }
@@ -67,7 +66,6 @@ const MainPage = () => {
     e.preventDefault();
     const Pic = Img?.type?.split("/")[0] == "image" ? true : false;
     if (Name) {
-      const form = new FormData();
       const data = {
         name: Name,
         parentId: Category,

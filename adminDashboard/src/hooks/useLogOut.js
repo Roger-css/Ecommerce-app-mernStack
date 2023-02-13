@@ -12,9 +12,12 @@ const useLogOut = () => {
           authorization: token ? `Bearer ${token}` : "",
         },
       });
+      console.log(req);
       localStorage.removeItem("persist");
       dispatch(logout());
     } catch (error) {
+      console.log(error);
+      console.log("wtf");
       dispatch(logout({ error: error.message }));
     }
   };

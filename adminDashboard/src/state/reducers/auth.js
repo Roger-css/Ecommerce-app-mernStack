@@ -3,7 +3,7 @@ const initialState = {
   token: null,
   user: {},
   authenticated: false,
-  persistent: localStorage.getItem("persist") || false,
+  persistent: JSON.parse(localStorage.getItem("persist")) || false,
   error: "",
 };
 const auth = createSlice({
