@@ -10,6 +10,7 @@ module.exports.getInitialData =  async (req, res, next)=> {
             const Products = await Product.find(
                                     {}, 
                                     "_id name price quantity slug description productPictures category")
+                                    .populate("category")
                                     .exec()
             return res.status(200).json({
             Categories,

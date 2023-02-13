@@ -10,6 +10,7 @@ const adminInitialData = require("./routes/admin/initailData")
 const CategoryRoutes = require("./routes/category")
 const adminProductRoutes = require("./routes/product")
 const cartRoutes = require("./routes/cart")
+const initialDataRoutes = require("./routes/admin/initailData")
 const path = require('path');
 
 const refreshRoot = require("./routes/refresh")
@@ -48,6 +49,7 @@ app.use("/api/admin", adminInitialData)
 app.use("/api/category", CategoryRoutes)
 app.use("/api/product", adminProductRoutes)
 app.use("/api/cart", cartRoutes)
+app.use("/api", initialDataRoutes)
 
 
 

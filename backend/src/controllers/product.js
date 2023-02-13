@@ -5,7 +5,6 @@ const productModel = require("../models/product")
 
 module.exports.createProduct = (req, res , next) => {
         try {
-            console.log("create product worked");
             const {
                 name,
                 price,
@@ -46,4 +45,19 @@ module.exports.createProduct = (req, res , next) => {
                 res.status(400).json({error})
         }
 
+}
+
+module.exports.getProducts = async (req ,res ,next ) => {
+    try {
+        const products =  await productModel.find({}).exec()
+        if (products){
+            return res.status(200).json({products})
+        } else {
+            return res.status(400).json({message: "error you nab"})
+        }
+        
+    } catch (error) {
+        console.log(err);
+        return res.status(400).json({message: "error you nab"})
+    }
 }
