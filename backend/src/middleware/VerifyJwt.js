@@ -15,7 +15,6 @@ const verifyJWT = (req , res, next )=> {
                 if(err){
                     if (err.name === "TokenExpiredError"){
                         const cookies = req.cookies
-                        console.log(cookies.jwt)
                         if (!cookies.jwt) return res.status(401).json({message: `Unauthorized line19`})
                         const  refreshToken = cookies.jwt
                         jwt.verify(
@@ -41,6 +40,7 @@ const verifyJWT = (req , res, next )=> {
                                     req.id = foundUser._id
                                     req.user = foundUser.username 
                                     req.role = foundUser.role 
+                                    console.log(req.role);
                                     next()
                             })
                     }
