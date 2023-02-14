@@ -42,14 +42,16 @@ const verifyJWT = (req , res, next )=> {
                                     req.role = foundUser.role 
                                     next()
                             })
+                    } else {
+                        return res.status(401).json({message: "Unauthorized ss"})
                     }
-                }
-                else if(err){
-                    return res.status(401).json({message: "Unauthorized ss"})
                 } else if (decode) {
-                    console.log(`decode user name is ${decode.Userinfo.username}`);
+                    console.log(decode);
                     req.role = decode.Userinfo.roles
                     req.user = decode.Userinfo.username
+                    req.id = decode.Userinfo.id
+                    console.log(decode.Userinfo.id)
+                    console.log(decode.Userinfo._id)
                     next()
                 } 
             }

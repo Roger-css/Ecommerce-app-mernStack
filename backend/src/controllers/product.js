@@ -22,6 +22,8 @@ module.exports.createProduct = async (req, res , next) => {
                         })
                     }
                 }
+                console.log(`###############################`);
+                console.log(req.id)
                 // this  peace of code should be modified later
             let categoryId = await categoryModel.findOne({name: category})
             const product = new productModel ({
@@ -33,7 +35,7 @@ module.exports.createProduct = async (req, res , next) => {
                 description,
                 productPictures,
                 reviews,
-                createdBy: req.username
+                createdBy: req.id
             })
                 product.save((err, result) => {
                     console.log(err);

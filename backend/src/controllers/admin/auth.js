@@ -66,23 +66,25 @@ module.exports.postSignIn = async (req, res, next) => {
       return res.status(401).json({ message: "invalid email or password" });
 
     // Create Acces Token
+
     const accessToken = jwt.sign(
       {
         Userinfo: {
           username: foundUser.username,
           role: foundUser.role,
+          id: foundUser._id
         },
       },
       process.env.JWT_ACCESS_TOKEN_KEY,
       { expiresIn: `10s` }
     );
-    console.log(foundUser.role);
     // Create Refresh Token
     const refreshToken = jwt.sign(
       {
         Userinfo: {
           username: foundUser.username,
           role: foundUser.role,
+          id: foundUser._id
         },
       },
       process.env.JWT_REFRESH_TOKEN_KEY,

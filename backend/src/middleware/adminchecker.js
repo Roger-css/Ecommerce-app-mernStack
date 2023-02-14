@@ -1,7 +1,8 @@
 const checkAdmin = (req, res, next) => {
     try {
-            console.log(req.role);
-            if (req.role === "admin"){
+            console.log(req.id);
+            console.log("end of admin");
+            if (req.role == "admin"){
                 next()
             }else {
                 return res.status(401).json({message : `"Unauthorized from admin"`})

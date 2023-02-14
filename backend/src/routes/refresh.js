@@ -26,6 +26,7 @@ router.route("/refresh").get((req, res, next) => {
           Userinfo: {
             username: foundUser.username,
             roles: foundUser.role,
+            id : foundUser._id
           },
         },
         process.env.JWT_ACCESS_TOKEN_KEY,
