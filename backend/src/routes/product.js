@@ -30,4 +30,9 @@ router
 router
   .route("/get")
   .get(productController.getProducts)
+
+  
+/// start of public roots 
+    router.route("/:categoryName").get(productController.getProductsByCategory)
+/// end of public roots 
 module.exports = router;

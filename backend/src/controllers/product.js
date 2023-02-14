@@ -33,7 +33,7 @@ module.exports.createProduct = async (req, res , next) => {
                 description,
                 productPictures,
                 reviews,
-                createdBy: req.id
+                createdBy: req.user
             })
                 product.save((err, result) => {
                     console.log(err);
@@ -63,3 +63,21 @@ module.exports.getProducts = async (req ,res ,next ) => {
         return res.status(400).json({message: "error you nab"})
     }
 }
+
+
+// start of public routes 
+module.exports.getProductsByCategory = async (req , res, next) => {
+    try {
+        const {categoryName} = req.params
+        const category = await categoryModel.findOne({name: categoryName})
+        if(category){
+            const products = await productModel.find({category})
+            console.log(products);
+            return res.status(200).json({products})
+        }
+    } catch (error) {
+        console.log(error);
+        return res.status(400).json({message : error})
+    }
+}
+// end of public routes 

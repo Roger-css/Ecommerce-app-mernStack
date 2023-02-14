@@ -47,6 +47,7 @@ const verifyJWT = (req , res, next )=> {
                 else if(err){
                     return res.status(401).json({message: "Unauthorized ss"})
                 } else if (decode) {
+                    console.log(`decode user name is ${decode.Userinfo.username}`);
                     req.role = decode.Userinfo.roles
                     req.user = decode.Userinfo.username
                     next()

@@ -12,6 +12,7 @@ module.exports.getInitialData =  async (req, res, next)=> {
                                     .exec()
                                     
         console.log("worked");
+        console.log(req.username)
             return res.status(200).json({
             Categories,
             Products
