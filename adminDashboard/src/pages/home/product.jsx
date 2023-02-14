@@ -12,9 +12,10 @@ import {
   useTheme,
   Menu,
 } from "@mui/material";
+import { styled } from "@mui/material/styles";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
+import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
@@ -67,6 +68,25 @@ const products = () => {
     boxShadow: 24,
     p: 4,
   };
+  const StyledTableCell = styled(TableCell)(({ theme }) => ({
+    [`&.${tableCellClasses.head}`]: {
+      backgroundColor: theme.palette.common.black,
+      color: theme.palette.common.white,
+    },
+    [`&.${tableCellClasses.body}`]: {
+      fontSize: 14,
+    },
+  }));
+
+  const StyledTableRow = styled(TableRow)(({ theme }) => ({
+    "&:nth-of-type(odd)": {
+      backgroundColor: theme.palette.action.hover,
+    },
+    // hide last border
+    "&:last-child td, &:last-child th": {
+      border: 0,
+    },
+  }));
   const boolean = Quantity > 0 && Price > 0 && Name && Category ? true : false;
   const theme = useTheme();
   const handleSubmit = async (e) => {
@@ -126,20 +146,24 @@ const products = () => {
   };
   const renderProducts = (table) => {
     return (
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+      <TableContainer sx={{ maxHeight: "450px" }} component={Paper}>
+        <Table
+          stickyHeader={true}
+          sx={{ minWidth: 650 }}
+          aria-label="simple table"
+        >
           <TableHead>
-            <TableRow>
-              <TableCell>Name</TableCell>
-              <TableCell>Price</TableCell>
-              <TableCell>Quantity</TableCell>
-              <TableCell>Description</TableCell>
-              <TableCell>Category</TableCell>
+            <TableRow sx={{ color: theme.palette.common.white }}>
+              <StyledTableCell>Name</StyledTableCell>
+              <StyledTableCell>Price</StyledTableCell>
+              <StyledTableCell>Quantity</StyledTableCell>
+              <StyledTableCell>Description</StyledTableCell>
+              <StyledTableCell>Category</StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {table.map((row) => (
-              <TableRow
+              <StyledTableRow
                 key={row._id}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
@@ -150,7 +174,7 @@ const products = () => {
                 <TableCell>{row.quantity || "--"}</TableCell>
                 <TableCell>{row.description || "--"}</TableCell>
                 <TableCell>{row.category?.name || "--"}</TableCell>
-              </TableRow>
+              </StyledTableRow>
             ))}
           </TableBody>
         </Table>
