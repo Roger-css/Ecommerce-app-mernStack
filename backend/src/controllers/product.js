@@ -33,7 +33,7 @@ module.exports.createProduct = async (req, res , next) => {
                 description,
                 productPictures,
                 reviews,
-                createdBy: req.user
+                createdBy: req.username
             })
                 product.save((err, result) => {
                     console.log(err);
