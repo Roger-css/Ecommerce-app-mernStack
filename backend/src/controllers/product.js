@@ -1,9 +1,10 @@
 const slugify = require("slugify")
+const categoryModel = require("../models/category")
 const productModel = require("../models/product")
 
 
 
-module.exports.createProduct = (req, res , next) => {
+module.exports.createProduct = async (req, res , next) => {
         try {
             const {
                 name,
@@ -13,7 +14,6 @@ module.exports.createProduct = (req, res , next) => {
                 description,
                 reviews,
                 } = req.body
-        
                 let productPictures = []
                 if(req.files){
                     if(req.files.length > 0){
@@ -22,12 +22,14 @@ module.exports.createProduct = (req, res , next) => {
                         })
                     }
                 }
+                // this  peace of code should be modified later
+            let categoryId = await categoryModel.findOne({name: category})
             const product = new productModel ({
                 name,
                 slug: slugify(name),
                 price,
                 quantity,
-                category,
+                category: categoryId,
                 description,
                 productPictures,
                 reviews,
