@@ -40,6 +40,11 @@ const products = () => {
   const [Price, setPrice] = useState(0);
   const [Quantity, setQuantity] = useState(0);
   const products = useSelector((state) => state.product.products);
+  const [productsModel, setProductsModel] = useState(false);
+  const [CurrentProduct, setCurrentProduct] = useState(null);
+  const closingProductsModel = () => {
+    setProductsModel(false);
+  };
   const menuItemStyling = {
     height: "20px",
     fontSize: "14px",
@@ -68,6 +73,17 @@ const products = () => {
     boxShadow: 24,
     p: 4,
   };
+  const customStyle = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: "700px",
+    bgcolor: "background.paper",
+    border: "2px solid #000",
+    boxShadow: 24,
+    p: 4,
+  };
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
       backgroundColor: theme.palette.common.black,
@@ -77,7 +93,14 @@ const products = () => {
       fontSize: 14,
     },
   }));
-
+  const handleSubModel = (product) => {
+    setCurrentProduct(product);
+    setProductsModel(true);
+  };
+  const handleCloseSubModel = () => {
+    setCurrentProduct(null);
+    setProductsModel(false);
+  };
   const StyledTableRow = styled(TableRow)(({ theme }) => ({
     "&:nth-of-type(odd)": {
       backgroundColor: theme.palette.action.hover,
@@ -147,13 +170,10 @@ const products = () => {
   const renderProducts = (table) => {
     return (
       <TableContainer sx={{ maxHeight: "450px" }} component={Paper}>
-        <Table
-          stickyHeader={true}
-          sx={{ minWidth: 650 }}
-          aria-label="simple table"
-        >
+        <Table stickyHeader={true} sx={{ minWidth: 650 }} aria-label="products">
           <TableHead>
             <TableRow sx={{ color: theme.palette.common.white }}>
+              <StyledTableCell>#</StyledTableCell>
               <StyledTableCell>Name</StyledTableCell>
               <StyledTableCell>Price</StyledTableCell>
               <StyledTableCell>Quantity</StyledTableCell>
@@ -162,23 +182,84 @@ const products = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {table.map((row) => (
-              <StyledTableRow
-                key={row._id}
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
-                <TableCell component="th" scope="row">
-                  {row.name}
-                </TableCell>
-                <TableCell>{row.price || "--"}</TableCell>
-                <TableCell>{row.quantity || "--"}</TableCell>
-                <TableCell>{row.description || "--"}</TableCell>
-                <TableCell>{row.category?.name || "--"}</TableCell>
-              </StyledTableRow>
-            ))}
+            {table.map((e, i) => {
+              return (
+                <StyledTableRow
+                  onClick={() => handleSubModel(e)}
+                  key={e._id}
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                >
+                  <TableCell>{i + 1}</TableCell>
+                  <TableCell component="th" scope="row">
+                    {e.name}
+                  </TableCell>
+                  <TableCell>{e.price || "--"}</TableCell>
+                  <TableCell>{e.quantity || "--"}</TableCell>
+                  <TableCell>{e.description || "--"}</TableCell>
+                  <TableCell>{e.category?.name || "--"}</TableCell>
+                </StyledTableRow>
+              );
+            })}
           </TableBody>
         </Table>
       </TableContainer>
+    );
+  };
+
+  const renderProductModel = (e) => {
+    console.log(e);
+    return (
+      <Modal open={productsModel} onClose={handleCloseSubModel}>
+        <Box sx={customStyle}>
+          <Stack direction="row" display="flex" justifyContent="space-between">
+            <Typography variant="h6">Product details</Typography>
+            <IconButton onClick={handleCloseSubModel} size="small">
+              <CloseIcon />
+            </IconButton>
+          </Stack>
+          <Box sx={{ mt: "20px" }}>
+            <div className="flexy">
+              <div className="width50">
+                <label>name</label>
+                <p>{e.name || "--"}</p>
+              </div>
+              <div className="width50">
+                <label>price</label>
+                <p>{e.price || "--"}</p>
+              </div>
+            </div>
+            <div className="flexy">
+              <div className="width50">
+                <label>quantity</label>
+                <p>{e.quantity || "--"}</p>
+              </div>
+              <div className="width50">
+                <label>category</label>
+                <p>{e.category?.name || "--"}</p>
+              </div>
+            </div>
+            <div className="flexy">
+              <div className="width50">
+                <label>description</label>
+                <p>{e.description || "--"}</p>
+              </div>
+            </div>
+            <div className="flexy">
+              <div className="width50">
+                <label>product Pictures</label>
+                <div>
+                  {e.productPictures?.map((ele) => (
+                    <img
+                      key={ele._id}
+                      src={`http://localhost:3000/public/${ele.img}`}
+                    />
+                  ))}
+                </div>
+              </div>
+            </div>
+          </Box>
+        </Box>
+      </Modal>
     );
   };
   return (
@@ -386,6 +467,7 @@ const products = () => {
         </Box>
       </Modal>
       <Box mt="10px">{products.length > 0 && renderProducts(products)}</Box>
+      {CurrentProduct && productsModel && renderProductModel(CurrentProduct)}
     </Container>
   );
 };
