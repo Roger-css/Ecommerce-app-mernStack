@@ -38,17 +38,6 @@ const MainPage = () => {
     setName("");
   };
   const [error, setError] = useState("");
-  useEffect(() => {
-    const fetching = async () => {
-      try {
-        const req = await axios.get("category/get");
-        dispatch(addAllCategories(req.data.ordeCtegories));
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetching();
-  }, []);
   const [createCat] = useCreateCatMutation();
   const style = {
     position: "absolute",
@@ -95,14 +84,14 @@ const MainPage = () => {
       return (
         <React.Fragment key={p._id}>
           <li>{p.name}</li>
-          {p.children.length > 0 && <ul>{catsDeploy(p.children)}</ul>}
+          {p.children?.length > 0 && <ul>{catsDeploy(p.children)}</ul>}
         </React.Fragment>
       );
     });
   };
   const renderCats = (cats, option = []) => {
     for (let cat of cats) {
-      if (cat.children.length > 0) {
+      if (cat.children?.length > 0) {
         option.push({ _id: cat._id, value: cat.name });
         renderCats(cat.children, option);
       } else {

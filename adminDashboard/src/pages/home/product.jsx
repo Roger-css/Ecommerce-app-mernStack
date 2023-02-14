@@ -12,13 +12,19 @@ import {
   useTheme,
   Menu,
 } from "@mui/material";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
 import { Stack } from "@mui/system";
 import DoneAllIcon from "@mui/icons-material/DoneAll";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import CloseIcon from "@mui/icons-material/Close";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import useAxios from "../../hooks/usePrivate";
-import { addAllCategories } from "../../state/reducers/category";
 import { useDispatch, useSelector } from "react-redux";
 const products = () => {
   const allCategories = useSelector((state) => state.category.categories);
@@ -32,6 +38,7 @@ const products = () => {
   const [Img, setImg] = useState([]);
   const [Price, setPrice] = useState(0);
   const [Quantity, setQuantity] = useState(0);
+  const products = useSelector((state) => state.product.products);
   const menuItemStyling = {
     height: "20px",
     fontSize: "14px",
@@ -49,20 +56,9 @@ const products = () => {
     setAnchorEl(null);
   };
   const [error, setError] = useState("");
-  useEffect(() => {
-    const fetching = async () => {
-      try {
-        const req = await axios.get("category/get");
-        dispatch(addAllCategories(req.data.ordeCtegories));
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetching();
-  }, []);
   const style = {
     position: "absolute",
-    top: "40%",
+    top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
     width: "500px",
@@ -90,8 +86,6 @@ const products = () => {
       for (let img of Img) {
         myData.append("productPictures", img);
       }
-
-      console.log(myData);
       try {
         const req = await axios.post("product/create", myData, {
           headers: {
@@ -112,7 +106,7 @@ const products = () => {
   };
   const renderCats = (cats, option = []) => {
     for (let cat of cats) {
-      if (cat.children.length > 0) {
+      if (cat.children?.length > 0) {
         option.push({ _id: cat._id, value: cat.name });
         renderCats(cat.children, option);
       } else {
@@ -130,13 +124,46 @@ const products = () => {
       setImg((p) => [...p, e[0]]);
     }
   };
+  const renderProducts = (table) => {
+    return (
+      <TableContainer component={Paper}>
+        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              <TableCell>Name</TableCell>
+              <TableCell>Price</TableCell>
+              <TableCell>Quantity</TableCell>
+              <TableCell>Description</TableCell>
+              <TableCell>Category</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {table.map((row) => (
+              <TableRow
+                key={row._id}
+                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+              >
+                <TableCell component="th" scope="row">
+                  {row.name}
+                </TableCell>
+                <TableCell>{row.price || "--"}</TableCell>
+                <TableCell>{row.quantity || "--"}</TableCell>
+                <TableCell>{row.description || "--"}</TableCell>
+                <TableCell>{row.category?.name || "--"}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    );
+  };
   return (
-    <Container sx={{ ml: "133px" }}>
+    <Container sx={{ ml: "133px", maxWidth: "100%", overflow: "hidden" }}>
       <Button onClick={() => setOpen(true)}>Open model</Button>
       <Modal open={Open} onClose={handleClose}>
         <Box sx={style}>
           <Stack direction="row" display="flex" justifyContent="space-between">
-            <Typography variant="h6">Add new asss</Typography>
+            <Typography variant="h6">Add new product</Typography>
             <IconButton onClick={handleClose} size="small">
               <CloseIcon />
             </IconButton>
@@ -149,7 +176,7 @@ const products = () => {
               className="mt-10"
               size="small"
               required
-              label="Category Name"
+              label="Product Name"
               value={Name}
               onChange={(e) => {
                 setName(e.target.value);
@@ -161,7 +188,7 @@ const products = () => {
               size="small"
               type="number"
               required
-              label="Category Quantity"
+              label="Product Quantity"
               value={Quantity}
               onChange={(e) => {
                 setQuantity(e.target.value);
@@ -173,7 +200,7 @@ const products = () => {
               size="small"
               required
               type="number"
-              label="Category Price"
+              label="Product Price"
               value={Price}
               onChange={(e) => {
                 setPrice(e.target.value);
@@ -183,7 +210,7 @@ const products = () => {
             <TextField
               className="mt-10"
               size="small"
-              label="Category Description"
+              label="product Description"
               value={Description}
               onChange={(e) => {
                 setDescription(e.target.value);
@@ -334,6 +361,7 @@ const products = () => {
           </form>
         </Box>
       </Modal>
+      <Box mt="10px">{products.length > 0 && renderProducts(products)}</Box>
     </Container>
   );
 };
