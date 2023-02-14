@@ -77,8 +77,8 @@ module.exports.addCategory = async (req, res, next)=> {
             slug: slugify(name)
             }
             if(parentId) {
-                // const theIdNum =   await categoryModel.findOne({name: parentId})
-                categoryObj.parentId = parentId
+                const theIdNum =   await categoryModel.findOne({name: parentId})
+                categoryObj.parentId = theIdNum._id
             }
             if(req.file){
                 categoryObj.categoryPic = process.env.API + '/uploads/' + req.file.filename
