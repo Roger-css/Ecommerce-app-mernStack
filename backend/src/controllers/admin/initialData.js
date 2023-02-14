@@ -1,6 +1,26 @@
 const Product = require("../../models/product")
 const Category = require("../../models/category")
 
+function categoriesOrder(categories,  parentId = null) {
+    const catList = []
+    let filtredCategories; 
+    if(parentId == null){ 
+        filtredCategories = categories.filter((singleCat) => singleCat.parentId == undefined);
+    } else {
+        filtredCategories =  categories.filter((singleCat) => singleCat.parentId == parentId);
+    }
+
+    for(let cat of filtredCategories) {
+        catList.push({
+            _id: cat._id,
+            name: cat.name,
+            slug: cat.slug,
+            parentId: cat.parentId,
+            children: categoriesOrder(categories, cat._id)
+        });
+    }
+    return catList;
+}
 
 
 module.exports.getInitialData =  async (req, res, next)=> {
@@ -14,7 +34,7 @@ module.exports.getInitialData =  async (req, res, next)=> {
         console.log("worked");
         console.log(req.username)
             return res.status(200).json({
-            Categories,
+            Categories : categoriesOrder(Categories),
             Products
             })
         } catch (error) {
