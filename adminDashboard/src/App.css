@@ -76,3 +76,21 @@ div:has(> a.active) {
 .mt-10 {
   margin-top: 10px !important;
 }
+.flexy {
+  display: flex;
+  padding: 10px 20px 0;
+}
+.width50 {
+  width: 50%;
+}
+.flexy:nth-child(odd) {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+.flexy label {
+  font-size: 20px;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+.flexy p {
+  font-size: 16px;
+}
