@@ -83,7 +83,7 @@ div:has(> a.active) {
 .width50 {
   width: 50%;
 }
-.flexy:nth-child(odd) {
+.flexy:nth-child(even) {
   background-color: rgba(0, 0, 0, 0.04);
 }
 .flexy label {
@@ -93,4 +93,21 @@ div:has(> a.active) {
 }
 .flexy p {
   font-size: 16px;
+}
+.img-container img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+.img-container {
+  width: 100px;
+  height: 100px;
+  overflow: hidden;
+  /* margin-right: 10px; */
+}
+.width50 > div {
+  display: flex;
+}
+.mf {
+  display: flex;
 }
