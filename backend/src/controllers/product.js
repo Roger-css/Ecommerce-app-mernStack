@@ -22,8 +22,6 @@ module.exports.createProduct = async (req, res , next) => {
                         })
                     }
                 }
-                console.log(`###############################`);
-                console.log(req.id)
                 // this  peace of code should be modified later
             let categoryId = await categoryModel.findOne({name: category})
             const product = new productModel ({
@@ -74,7 +72,6 @@ module.exports.getProductsByCategory = async (req , res, next) => {
         const category = await categoryModel.findOne({name: categoryName})
         if(category){
             const products = await productModel.find({category})
-            console.log(products);
             return res.status(200).json({products})
         }
     } catch (error) {
