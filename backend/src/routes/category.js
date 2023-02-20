@@ -25,6 +25,10 @@ router
   .post(upload.single("categoryImage"),
     verifyJWT,
     categoryController.addCategory);
+// get ALL CAtegories
 router.route("/get").get(categoryController.getCategories);
+
+// Update Category/ies 
+router.route("/update").post(upload.array("categoryImages"), categoryController.updateCategory)
 
 module.exports = router;

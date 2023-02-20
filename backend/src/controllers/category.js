@@ -23,32 +23,6 @@ function categoriesOrder(categories,  parentId = null) {
 }
 
 
-
-// function categoriesOrder(categories,  parentId = null) {
-//     const catList = [];
-//     let filtredCats;
-//     if (parentId == null) {
-//         filtredCats = categories.filter((singleCat) => singleCat.parentId == undefined)
-//     } else {
-//         filtredCats = categories.filter((singleCat) => singleCat.parentId == parentId)
-//     }
-//     for (let cat of filtredCats) {
-//         catList.push({
-//             _id: cat._id,
-//             name: cat.name,
-//             slug: cat.slug,
-//             parentId: cat.parentId,
-//             children: categoriesOrder(categories, cat._id)
-//         });
-//     }
-//     return catList
-// }
-
-
-
-
-
-
 // get category
 module.exports.getCategories = async (req, res, next)=> {
 
@@ -98,5 +72,55 @@ module.exports.addCategory = async (req, res, next)=> {
     } catch (error) {
         console.log(error)
         return res.status(400).json({error})
+    }
+}
+
+// update Category
+module.exports.updateCategory = async (req, res , next ) => {
+    const {_id, name, parentId, type} =  req.body
+    try {
+    let updatedCategoryList = []
+    if (name.length > 0){
+        for(let i=0 ; i<name.length; i ++){
+            const updatedCategoryObject = {
+                name : name[i],
+                type: type [i]
+            }
+            if (parentId !== ""){
+                updatedCategoryObject.parentId = parentId[i]
+            }
+            const updatedCategory = await categoryModel.findOneAndUpdate({_id: _id[0]}, updatedCategoryObject)
+            updatedCategoryList.push(updatedCategory)
+        }
+        return res.status(200).json({message: updatedCategoryList})
+    } else {
+        const updatedCategoryObject = {
+            name: name,
+            type: type,
+            parentId: parentId
+        }
+        const updatedCategory = await categoryModel.findOneAndUpdate({_id: _id[0]},  updatedCategoryObject)
+        return res.status(200).json({message: updatedCategory})
+    }
+    
+    } catch (error) {
+        console.log(error);
+        return res.status(400).json({error})
+    }
+}
+
+module.exports.deleteCategory = async (req, res ,next) => {
+    try {
+        const {ids} = req.body.payload
+        const deletedCategories = [];
+        for (let i = 0; i < deletedCategories.length; i++) {
+            const deletedSingleCategory = await categoryModel.findOneAndDelete({_id: ids[i]._id})
+            deletedCategories.push(deletedSingleCategory)
+        }
+        res.status(200).json({deletedCategories})
+    } catch (error) {
+        console.log(error);
+        res.status(400).json({error})
+
     }
 }

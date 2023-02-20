@@ -72,7 +72,19 @@ module.exports.getProductsByCategory = async (req , res, next) => {
         const category = await categoryModel.findOne({name: categoryName})
         if(category){
             const products = await productModel.find({category})
-            return res.status(200).json({products})
+            return res.status(200).json({
+                products,
+                productsByPrice:{
+                    under5k: products.filter((singleProduct) => {singleProduct.price < 5000}),
+                    under10k: products.filter((singleProduct) => {5000 <= singleProduct < 10000}),
+                    under15k: products.filter((singleProduct) => {10000 <= singleProduct < 15000}),
+                    under20k: products.filter((singleProduct) => {15000 <= singleProduct < 20000}),
+                    under25k: products.filter((singleProduct) => {20000 <= singleProduct < 25000}),
+                    under30k: products.filter((singleProduct) => {25000 <= singleProduct < 30000})
+                }
+            })
+        } else {
+            return res.status(404).json({message : " no such category"})
         }
     } catch (error) {
         console.log(error);
