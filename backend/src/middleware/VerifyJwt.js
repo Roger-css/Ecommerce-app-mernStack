@@ -50,8 +50,6 @@ const verifyJWT = (req , res, next )=> {
                     req.role = decode.Userinfo.roles
                     req.user = decode.Userinfo.username
                     req.id = decode.Userinfo.id
-                    console.log(decode.Userinfo.id)
-                    console.log(decode.Userinfo._id)
                     next()
                 } 
             }
