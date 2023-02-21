@@ -21,6 +21,8 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { Stack } from "@mui/system";
+import ImageList from "@mui/material/ImageList";
+import ImageListItem from "@mui/material/ImageListItem";
 import DoneAllIcon from "@mui/icons-material/DoneAll";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import CloseIcon from "@mui/icons-material/Close";
@@ -83,6 +85,8 @@ const products = () => {
     border: "2px solid #000",
     boxShadow: 24,
     p: 4,
+    maxHeight: "500px",
+    overflowY: "scroll",
   };
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -207,9 +211,12 @@ const products = () => {
   };
 
   const renderProductModel = (e) => {
-    console.log(e);
     return (
-      <Modal open={productsModel} onClose={handleCloseSubModel}>
+      <Modal
+        sx={{ overflow: "hidden" }}
+        open={productsModel}
+        onClose={handleCloseSubModel}
+      >
         <Box sx={customStyle}>
           <Stack direction="row" display="flex" justifyContent="space-between">
             <Typography variant="h6">Product details</Typography>
@@ -239,21 +246,29 @@ const products = () => {
               </div>
             </div>
             <div className="flexy">
-              <div className="width50">
+              <div>
                 <label>description</label>
                 <p>{e.description || "--"}</p>
               </div>
             </div>
             <div className="flexy">
-              <div className="width50">
+              <div>
                 <label>product Pictures</label>
-                <div>
-                  {e.productPictures?.map((ele) => (
-                    <img
-                      key={ele._id}
-                      src={`http://localhost:3000/public/${ele.img}`}
-                    />
-                  ))}
+                <div className="mf">
+                  <ImageList sx={{ width: "575px" }} cols={3} rowHeight={164}>
+                    {e.productPictures.length > 0
+                      ? e.productPictures.map((item) => (
+                          <ImageListItem key={item.img}>
+                            <img
+                              src={`http://localhost:3000/uploads/${item.img}?w=164&h=164&fit=crop&auto=format`}
+                              srcSet={`http://localhost:3000/uploads/${item.img}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
+                              alt="image"
+                              loading="lazy"
+                            />
+                          </ImageListItem>
+                        ))
+                      : "--"}
+                  </ImageList>
                 </div>
               </div>
             </div>

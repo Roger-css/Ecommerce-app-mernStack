@@ -14,20 +14,18 @@ import {
 import { Stack } from "@mui/system";
 import DoneAllIcon from "@mui/icons-material/DoneAll";
 import CloseIcon from "@mui/icons-material/Close";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import useAxios from "../../hooks/usePrivate";
 import { useCreateCatMutation } from "../../api/actions/category";
 import React from "react";
-import { addAllCategories } from "../../state/reducers/category";
 import { useDispatch, useSelector } from "react-redux";
 const MainPage = () => {
   const allCategories = useSelector((state) => state.category.categories);
-  const axios = useAxios();
-  const dispatch = useDispatch();
   const [Cat, setCat] = useState(0);
   const [Open, setOpen] = useState(false);
   const [Name, setName] = useState("");
   const [Category, setCategory] = useState(0);
+  const [Disable, setDisable] = useState(false);
   const [Img, setImg] = useState(null);
   const ImgName = Img ? Img.name.slice(0, 9) : false;
   const handleClose = () => {
@@ -53,16 +51,16 @@ const MainPage = () => {
   const theme = useTheme();
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setDisable(true);
     const Pic = Img?.type?.split("/")[0] == "image" ? true : false;
     if (Name) {
       const data = {
-        name: Name,
+        name: `${Name[0].toUpperCase()}${Name.slice(1)}`,
         parentId: Category,
         categoryImage: Img,
       };
       try {
         const req = await createCat(data);
-        console.log(req);
       } catch (error) {
         console.log(error);
         setError(error);
@@ -72,6 +70,7 @@ const MainPage = () => {
       setImg(null);
       setName("");
       setCat((p) => ++p);
+      setDisable(false);
     } else if (Name && Img && !Pic) {
       setError("enter a valid image please");
     } else {
@@ -201,7 +200,7 @@ const MainPage = () => {
               direction="row"
               justifyContent="flex-end"
             >
-              <Button variant="contained" type="submit">
+              <Button disabled={Disable} variant="contained" type="submit">
                 save changes
               </Button>
             </Stack>

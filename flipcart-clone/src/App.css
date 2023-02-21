@@ -1,0 +1,84 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap");
+*,
+*::after,
+*::before {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+header {
+  background-color: #2874f0;
+  width: 100%;
+  height: 56px;
+}
+.menuHeader {
+  width: 100%;
+  height: 40px;
+  background-color: #fff;
+  box-shadow: 0 1px 1px 0 rgb(0 0 0 / 16%);
+}
+.menuHeader ul {
+  list-style: none;
+  font-family: "Roboto", Arial, sans-serif;
+  font-size: 14px;
+  position: relative;
+}
+.menuHeader > ul {
+  display: flex;
+  height: 40px;
+  width: 100%;
+  justify-content: space-evenly;
+  text-transform: capitalize;
+}
+.menuHeader > ul > li > span {
+  line-height: 40px;
+  display: block;
+  cursor: pointer;
+  padding: 0;
+  font-weight: 500;
+  font-size: 14px;
+  height: 100%;
+  position: relative;
+}
+.menuHeader > ul > li > span::after {
+  position: absolute;
+  content: "";
+  top: -50%;
+  right: 0;
+}
+.menuHeader > ul > li > span:hover {
+  color: #2874f0;
+}
+.menuHeader > ul > li > ul {
+  position: absolute;
+  left: 0;
+  right: 0;
+  display: none;
+  margin: 0 20px;
+  background-color: #f9f9f9;
+  min-height: 500px;
+}
+.menuHeader > ul > li:hover > span + ul {
+  display: block;
+}
+.menuHeader > ul > li > ul > li {
+  padding: 0 25px;
+  float: left;
+  min-width: 248px;
+}
+
+.menuHeader > ul > li > ul > li a {
+  text-decoration: none;
+  color: black;
+  display: block;
+  font-size: 13px;
+  padding: 5px 0;
+  color: #707070;
+}
+.menuHeader > ul > li > ul > li > a {
+  font-weight: bold;
+  color: black;
+}
+.menuHeader > ul > li > ul > li:first-child {
+  margin-top: 10px;
+}
