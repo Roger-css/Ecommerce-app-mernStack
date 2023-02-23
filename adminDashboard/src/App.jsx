@@ -7,7 +7,6 @@ import Categories from "./pages/home/categories";
 import Products from "./pages/home/product";
 import Orders from "./pages/home/orders";
 import PersistLogin from "./components/PersistLogin";
-
 function App() {
   return (
     <div className="App">

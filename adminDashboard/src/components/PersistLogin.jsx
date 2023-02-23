@@ -4,6 +4,7 @@ import { logout, login } from "../state/reducers/auth";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "../api/axios";
 import jwtDecode from "jwt-decode";
+import { InfinitySpin } from "react-loader-spinner";
 const PersistLogin = () => {
   const [Loading, setLoading] = useState(true);
   const persistent = useSelector((state) => state.auth.persistent);
@@ -30,7 +31,24 @@ const PersistLogin = () => {
     return () => (isMounted = false);
   }, []);
   const content = (
-    <>{!persistent ? <Outlet /> : Loading ? <>loading...</> : <Outlet />}</>
+    <>
+      {!persistent ? (
+        <Outlet />
+      ) : Loading ? (
+        <div
+          style={{
+            width: "100%",
+            height: "100%",
+            display: "grid",
+            placeContent: "center",
+          }}
+        >
+          <InfinitySpin width="200" color="black" />
+        </div>
+      ) : (
+        <Outlet />
+      )}
+    </>
   );
   return content;
 };

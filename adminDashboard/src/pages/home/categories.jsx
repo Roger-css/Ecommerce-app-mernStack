@@ -12,13 +12,23 @@ import {
   useTheme,
 } from "@mui/material";
 import { Stack } from "@mui/system";
+import {
+  IoCheckbox,
+  IoSquareOutline,
+  IoArrowDown,
+  IoArrowForward,
+} from "react-icons/io5";
+import { FcFolder, FcOpenedFolder } from "react-icons/fc";
+
 import DoneAllIcon from "@mui/icons-material/DoneAll";
+import "react-checkbox-tree/lib/react-checkbox-tree.css";
+
 import CloseIcon from "@mui/icons-material/Close";
 import { useState } from "react";
-import useAxios from "../../hooks/usePrivate";
+import CheckboxTree from "react-checkbox-tree";
 import { useCreateCatMutation } from "../../api/actions/category";
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 const MainPage = () => {
   const allCategories = useSelector((state) => state.category.categories);
   const [Cat, setCat] = useState(0);
@@ -27,6 +37,9 @@ const MainPage = () => {
   const [Category, setCategory] = useState(0);
   const [Disable, setDisable] = useState(false);
   const [Img, setImg] = useState(null);
+  const [expanded, setExpanded] = useState([]);
+  const [checked, setChecked] = useState([]);
+  const [updatedCategory, setUpdatedCategory] = useState(false);
   const ImgName = Img ? Img.name.slice(0, 9) : false;
   const handleClose = () => {
     setOpen(false);
@@ -34,6 +47,9 @@ const MainPage = () => {
     setError("");
     setImg(null);
     setName("");
+  };
+  const handleCloseUpdatedCategory = () => {
+    setUpdatedCategory(false);
   };
   const [error, setError] = useState("");
   const [createCat] = useCreateCatMutation();
@@ -77,22 +93,20 @@ const MainPage = () => {
       setError("please enter a category name");
     }
   };
-
   const catsDeploy = (param) => {
     return param.map((p) => {
-      return (
-        <React.Fragment key={p._id}>
-          <li>{p.name}</li>
-          {p.children?.length > 0 && <ul>{catsDeploy(p.children)}</ul>}
-        </React.Fragment>
-      );
+      return {
+        value: p._id,
+        label: p.name,
+        children: p.children.length > 0 ? catsDeploy(p.children) : [],
+      };
     });
   };
-  const renderCats = (cats, option = []) => {
+  const categoryList = (cats, option = []) => {
     for (let cat of cats) {
       if (cat.children?.length > 0) {
         option.push({ _id: cat._id, value: cat.name });
-        renderCats(cat.children, option);
+        categoryList(cat.children, option);
       } else {
         option.push({ _id: cat._id, value: cat.name });
       }
@@ -142,7 +156,7 @@ const MainPage = () => {
               <MenuItem value={0} disabled>
                 select a category
               </MenuItem>
-              {renderCats(allCategories).map((m) => (
+              {categoryList(allCategories).map((m) => (
                 <MenuItem value={m.value} key={m._id}>
                   {m.value}
                 </MenuItem>
@@ -207,7 +221,39 @@ const MainPage = () => {
           </form>
         </Box>
       </Modal>
-      {allCategories && <ul>{catsDeploy(allCategories)}</ul>}
+      {/* for editing */}
+      <Modal open={updatedCategory} onClose={handleCloseUpdatedCategory}>
+        <Box sx={style}>
+          <Stack direction="row" display="flex" justifyContent="space-between">
+            <Typography variant="h6">Add new category</Typography>
+            <IconButton onClick={handleCloseUpdatedCategory} size="small">
+              <CloseIcon />
+            </IconButton>
+          </Stack>
+        </Box>
+      </Modal>
+      {allCategories && (
+        <ul>
+          {
+            <CheckboxTree
+              nodes={catsDeploy(allCategories)}
+              checked={checked}
+              expanded={expanded}
+              onCheck={(e) => setChecked(e)}
+              onExpand={(e) => setExpanded(e)}
+              icons={{
+                check: <IoCheckbox />,
+                uncheck: <IoSquareOutline />,
+                halfCheck: <IoCheckbox opacity="0.5" />,
+                expandOpen: <IoArrowForward />,
+                expandClose: <IoArrowDown />,
+                parentClose: <FcFolder />,
+                parentOpen: <FcOpenedFolder />,
+              }}
+            />
+          }
+        </ul>
+      )}
     </Container>
   );
 };
