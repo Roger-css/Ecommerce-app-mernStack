@@ -115,3 +115,11 @@ div:has(> a.active) {
 .mf {
   display: flex;
 }
+.boringSelect {
+  padding: 5px;
+  margin-bottom: 10px;
+  height: 46px;
+  outline: none;
+  border: 1px solid #c4c4c4;
+  border-radius: 6px;
+}
