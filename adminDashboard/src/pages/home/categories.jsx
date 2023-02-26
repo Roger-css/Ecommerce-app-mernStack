@@ -23,10 +23,7 @@ import DoneAllIcon from "@mui/icons-material/DoneAll";
 import "react-checkbox-tree/lib/react-checkbox-tree.css";
 import CloseIcon from "@mui/icons-material/Close";
 import CheckboxTree from "react-checkbox-tree";
-import {
-  useCreateCatMutation,
-  useUpdateCatMutation,
-} from "../../api/actions/category";
+import { useCreateCatMutation } from "../../api/actions/category";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import usePrivate from "../../hooks/usePrivate";
@@ -87,7 +84,6 @@ const MainPage = () => {
   };
   const [error, setError] = useState("");
   const [createCat] = useCreateCatMutation();
-  const [updateCat] = useUpdateCatMutation();
   const style = {
     position: "absolute",
     top: "50%",
@@ -156,7 +152,9 @@ const MainPage = () => {
         form.append("type", item.type);
       });
       const req = await axios.post("/category/update", form, {
-        "content-type": "multipart/form-data",
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       });
       console.log(req);
     } catch (er) {
@@ -174,318 +172,315 @@ const MainPage = () => {
       };
     });
   };
+  const renderUpdatingModel = () => (
+    <Modal open={updatedCategory} onClose={handleCloseUpdatedCategory}>
+      <Box sx={styledModel}>
+        <Stack
+          sx={{
+            mb: "5px",
+            right: 0,
+            display: "flex",
+            flexDirection: "row-reverse",
+          }}
+          direction="row"
+          display="flex"
+          justifyContent="space-between"
+        >
+          <IconButton onClick={handleCloseUpdatedCategory} size="small">
+            <CloseIcon />
+          </IconButton>
+        </Stack>
+        <Box className="editBox" sx={{ maxHeight: "400px", overflowY: "auto" }}>
+          {expandedArray.length > 0 && (
+            <>
+              <Typography sx={{ mb: "20px" }} variant="h6">
+                Expanded Categories
+              </Typography>
+              {expandedArray.map((item, i) => {
+                return (
+                  <Stack
+                    key={i}
+                    sx={{ mb: "15px" }}
+                    direction="row"
+                    spacing={3}
+                  >
+                    <TextField
+                      size="small"
+                      sx={{ width: "30%" }}
+                      label="Category Name"
+                      value={expandedArray[i].value}
+                      onChange={(e) =>
+                        setExpandedArray((p) => {
+                          p[i].value = e.target.value;
+                          return [...p];
+                        })
+                      }
+                    />
+                    <select
+                      className="boringSelect"
+                      style={{ width: "200px" }}
+                      id="cats-select"
+                      value={expandedArray[i].parentId || 0}
+                      onChange={(e) => {
+                        setExpandedArray((p) => {
+                          p[i].parentId = e.target.value;
+                          return [...p];
+                        });
+                        setError("");
+                      }}
+                    >
+                      <option className="defaultOp op" value={0} disabled>
+                        select a category
+                      </option>
+                      {categoryList(allCategories).map((m) => {
+                        return (
+                          <option className="op" value={m._id} key={m._id}>
+                            {m.value}
+                          </option>
+                        );
+                      })}
+                    </select>
+                    <Select
+                      size="small"
+                      defaultValue={0}
+                      sx={{ width: "200px", mt: "10px" }}
+                      id="updatedCats-select"
+                      value={expandedArray[i].type || 0}
+                      renderValue={(selected) => {
+                        if (selected === 0) {
+                          return <em>category type</em>;
+                        }
 
+                        return selected;
+                      }}
+                      onChange={(e) => {
+                        setExpandedArray((p) => {
+                          p[i].type = e.target.value;
+                          return [...p];
+                        });
+                      }}
+                    >
+                      <MenuItem value={0} disabled>
+                        category type
+                      </MenuItem>
+                      <MenuItem value="product">product</MenuItem>
+                      <MenuItem value="page">page</MenuItem>
+                      <MenuItem value="store">store</MenuItem>
+                    </Select>
+                  </Stack>
+                );
+              })}
+            </>
+          )}
+          {checkedArray.length > 0 && (
+            <>
+              <Typography sx={{ mb: "20px" }} variant="h6">
+                Checked Categories
+              </Typography>
+              {checkedArray.map((item, i) => {
+                return (
+                  <Stack
+                    key={i}
+                    sx={{ mb: "15px" }}
+                    direction="row"
+                    spacing={3}
+                  >
+                    <TextField
+                      size="small"
+                      sx={{ width: "30%" }}
+                      label="Category Name"
+                      value={checkedArray[i].value}
+                      onChange={(e) =>
+                        setCheckedArray((p) => {
+                          p[i].value = e.target.value;
+                          return [...p];
+                        })
+                      }
+                    />
+                    <select
+                      className="boringSelect"
+                      style={{ width: "200px" }}
+                      id="cats-select"
+                      value={checkedArray[i].parentId || 0}
+                      onChange={(e) => {
+                        setCheckedArray((p) => {
+                          p[i].parentId = e.target.value;
+                          return [...p];
+                        });
+                        setError("");
+                      }}
+                    >
+                      <option className="defaultOp op" value={0} disabled>
+                        select a category
+                      </option>
+                      {categoryList(allCategories).map((m) => {
+                        return (
+                          <option className="op" value={m._id} key={m._id}>
+                            {m.value}
+                          </option>
+                        );
+                      })}
+                    </select>
+                    <Select
+                      size="small"
+                      defaultValue={0}
+                      sx={{ width: "200px", mt: "10px" }}
+                      id="updatedCats-select"
+                      value={checkedArray[i].type || 0}
+                      renderValue={(selected) => {
+                        if (selected === 0) {
+                          return <em>category type</em>;
+                        }
+
+                        return selected;
+                      }}
+                      onChange={(e) => {
+                        setCheckedArray((p) => {
+                          p[i].type = e.target.value;
+                          return [...p];
+                        });
+                      }}
+                    >
+                      <MenuItem value={0} disabled>
+                        category type
+                      </MenuItem>
+                      <MenuItem value="product">product</MenuItem>
+                      <MenuItem value="page">page</MenuItem>
+                      <MenuItem value="store">store</MenuItem>
+                    </Select>
+                  </Stack>
+                );
+              })}
+            </>
+          )}
+        </Box>
+        <Stack
+          m="20px 0 0"
+          direction="row"
+          display="flex"
+          flexDirection="row-reverse"
+        >
+          <Button
+            variant="contained"
+            onClick={handleUpdateCategory}
+            size="small"
+            disabled={Disable}
+          >
+            save Changes
+          </Button>
+        </Stack>
+      </Box>
+    </Modal>
+  );
+  const renderCreatingModel = () => (
+    <Modal open={Open} onClose={handleClose}>
+      <Box sx={style}>
+        <Stack direction="row" display="flex" justifyContent="space-between">
+          <Typography variant="h6">Add new category</Typography>
+          <IconButton onClick={handleClose} size="small">
+            <CloseIcon />
+          </IconButton>
+        </Stack>
+        <form
+          onSubmit={handleSubmit}
+          style={{ marginTop: "20px", width: "100%" }}
+        >
+          <TextField
+            label="Category Name"
+            value={Name}
+            onChange={(e) => {
+              setName(e.target.value);
+              setError("");
+            }}
+          ></TextField>
+          <Select
+            defaultValue={0}
+            sx={{ width: "200px", mt: "10px" }}
+            id="cats-select"
+            value={Category}
+            renderValue={(selected) => {
+              if (selected === 0) {
+                return <em>select a category</em>;
+              }
+
+              return selected;
+            }}
+            onChange={(e) => {
+              setCategory(e.target.value);
+              setError("");
+            }}
+          >
+            <MenuItem value={0} disabled>
+              select a category
+            </MenuItem>
+            {categoryList(allCategories).map((m) => (
+              <MenuItem value={m.value} key={m._id}>
+                {m.value}
+              </MenuItem>
+            ))}
+          </Select>
+          <Stack direction="row" spacing={3} display="flex" alignItems="center">
+            <Button
+              className="files"
+              color="primary"
+              sx={{
+                padding: "0",
+                display: "block",
+                position: "relative",
+                width: "200px",
+                marginTop: "10px",
+                border: `1px solid ${theme.palette.primary.main}`,
+              }}
+            >
+              <input
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  opacity: "0",
+                  padding: "10px 8px",
+                }}
+                id="upload"
+                type="file"
+                onChange={(e) => {
+                  setImg(e.target.files[0]);
+                  setError("");
+                }}
+                multiple={false}
+              />
+            </Button>
+            {Img && (
+              <Stack sx={{ mt: "10px" }} direction="row" spacing={3}>
+                <DoneAllIcon color="success" />
+                <Typography>{ImgName}</Typography>
+              </Stack>
+            )}
+          </Stack>
+          {error && (
+            <Alert sx={{ mt: "10px" }} severity="error">
+              {error}
+            </Alert>
+          )}
+
+          <Stack
+            mt="30px"
+            width="100%"
+            direction="row"
+            justifyContent="flex-end"
+          >
+            <Button disabled={Disable} variant="contained" type="submit">
+              save changes
+            </Button>
+          </Stack>
+        </form>
+      </Box>
+    </Modal>
+  );
   return (
     <Container sx={{ ml: "133px" }}>
       <Button onClick={() => setOpen(true)}>Open model</Button>
-      <Modal open={Open} onClose={handleClose}>
-        <Box sx={style}>
-          <Stack direction="row" display="flex" justifyContent="space-between">
-            <Typography variant="h6">Add new category</Typography>
-            <IconButton onClick={handleClose} size="small">
-              <CloseIcon />
-            </IconButton>
-          </Stack>
-          <form
-            onSubmit={handleSubmit}
-            style={{ marginTop: "20px", width: "100%" }}
-          >
-            <TextField
-              label="Category Name"
-              value={Name}
-              onChange={(e) => {
-                setName(e.target.value);
-                setError("");
-              }}
-            ></TextField>
-            <Select
-              defaultValue={0}
-              sx={{ width: "200px", mt: "10px" }}
-              id="cats-select"
-              value={Category}
-              renderValue={(selected) => {
-                if (selected === 0) {
-                  return <em>select a category</em>;
-                }
-
-                return selected;
-              }}
-              onChange={(e) => {
-                setCategory(e.target.value);
-                setError("");
-              }}
-            >
-              <MenuItem value={0} disabled>
-                select a category
-              </MenuItem>
-              {categoryList(allCategories).map((m) => (
-                <MenuItem value={m.value} key={m._id}>
-                  {m.value}
-                </MenuItem>
-              ))}
-            </Select>
-            <Stack
-              direction="row"
-              spacing={3}
-              display="flex"
-              alignItems="center"
-            >
-              <Button
-                className="files"
-                color="primary"
-                sx={{
-                  padding: "0",
-                  display: "block",
-                  position: "relative",
-                  width: "200px",
-                  marginTop: "10px",
-                  border: `1px solid ${theme.palette.primary.main}`,
-                }}
-              >
-                <input
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    opacity: "0",
-                    padding: "10px 8px",
-                  }}
-                  id="upload"
-                  type="file"
-                  onChange={(e) => {
-                    setImg(e.target.files[0]);
-                    setError("");
-                  }}
-                  multiple={false}
-                />
-              </Button>
-              {Img && (
-                <Stack sx={{ mt: "10px" }} direction="row" spacing={3}>
-                  <DoneAllIcon color="success" />
-                  <Typography>{ImgName}</Typography>
-                </Stack>
-              )}
-            </Stack>
-            {error && (
-              <Alert sx={{ mt: "10px" }} severity="error">
-                {error}
-              </Alert>
-            )}
-
-            <Stack
-              mt="30px"
-              width="100%"
-              direction="row"
-              justifyContent="flex-end"
-            >
-              <Button disabled={Disable} variant="contained" type="submit">
-                save changes
-              </Button>
-            </Stack>
-          </form>
-        </Box>
-      </Modal>
+      {renderCreatingModel()}
       {/* for editing */}
-      <Modal open={updatedCategory} onClose={handleCloseUpdatedCategory}>
-        <Box sx={styledModel}>
-          <Stack
-            sx={{
-              mb: "5px",
-              right: 0,
-              display: "flex",
-              flexDirection: "row-reverse",
-            }}
-            direction="row"
-            display="flex"
-            justifyContent="space-between"
-          >
-            <IconButton onClick={handleCloseUpdatedCategory} size="small">
-              <CloseIcon />
-            </IconButton>
-          </Stack>
-          <Box
-            className="editBox"
-            sx={{ maxHeight: "400px", overflowY: "auto" }}
-          >
-            {expandedArray.length > 0 && (
-              <>
-                <Typography sx={{ mb: "20px" }} variant="h6">
-                  Expanded Categories
-                </Typography>
-                {expandedArray.map((item, i) => {
-                  return (
-                    <Stack
-                      key={i}
-                      sx={{ mb: "15px" }}
-                      direction="row"
-                      spacing={3}
-                    >
-                      <TextField
-                        size="small"
-                        sx={{ width: "30%" }}
-                        label="Category Name"
-                        value={expandedArray[i].value}
-                        onChange={(e) =>
-                          setExpandedArray((p) => {
-                            p[i].value = e.target.value;
-                            return [...p];
-                          })
-                        }
-                      />
-                      <select
-                        className="boringSelect"
-                        style={{ width: "200px" }}
-                        id="cats-select"
-                        value={expandedArray[i].parentId || 0}
-                        onChange={(e) => {
-                          setExpandedArray((p) => {
-                            p[i].parentId = e.target.value;
-                            return [...p];
-                          });
-                          setError("");
-                        }}
-                      >
-                        <option className="defaultOp op" value={0} disabled>
-                          select a category
-                        </option>
-                        {categoryList(allCategories).map((m) => {
-                          return (
-                            <option className="op" value={m._id} key={m._id}>
-                              {m.value}
-                            </option>
-                          );
-                        })}
-                      </select>
-                      <Select
-                        size="small"
-                        defaultValue={0}
-                        sx={{ width: "200px", mt: "10px" }}
-                        id="updatedCats-select"
-                        value={expandedArray[i].type || 0}
-                        renderValue={(selected) => {
-                          if (selected === 0) {
-                            return <em>category type</em>;
-                          }
-
-                          return selected;
-                        }}
-                        onChange={(e) => {
-                          setExpandedArray((p) => {
-                            p[i].type = e.target.value;
-                            return [...p];
-                          });
-                        }}
-                      >
-                        <MenuItem value={0} disabled>
-                          category type
-                        </MenuItem>
-                        <MenuItem value="product">product</MenuItem>
-                        <MenuItem value="page">page</MenuItem>
-                        <MenuItem value="store">store</MenuItem>
-                      </Select>
-                    </Stack>
-                  );
-                })}
-              </>
-            )}
-            {checkedArray.length > 0 && (
-              <>
-                <Typography sx={{ mb: "20px" }} variant="h6">
-                  Checked Categories
-                </Typography>
-                {checkedArray.map((item, i) => {
-                  return (
-                    <Stack
-                      key={i}
-                      sx={{ mb: "15px" }}
-                      direction="row"
-                      spacing={3}
-                    >
-                      <TextField
-                        size="small"
-                        sx={{ width: "30%" }}
-                        label="Category Name"
-                        value={checkedArray[i].value}
-                        onChange={(e) =>
-                          setCheckedArray((p) => {
-                            p[i].value = e.target.value;
-                            return [...p];
-                          })
-                        }
-                      />
-                      <select
-                        className="boringSelect"
-                        style={{ width: "200px" }}
-                        id="cats-select"
-                        value={checkedArray[i].parentId || 0}
-                        onChange={(e) => {
-                          setCheckedArray((p) => {
-                            p[i].parentId = e.target.value;
-                            return [...p];
-                          });
-                          setError("");
-                        }}
-                      >
-                        <option className="defaultOp op" value={0} disabled>
-                          select a category
-                        </option>
-                        {categoryList(allCategories).map((m) => {
-                          return (
-                            <option className="op" value={m._id} key={m._id}>
-                              {m.value}
-                            </option>
-                          );
-                        })}
-                      </select>
-                      <Select
-                        size="small"
-                        defaultValue={0}
-                        sx={{ width: "200px", mt: "10px" }}
-                        id="updatedCats-select"
-                        value={checkedArray[i].type || 0}
-                        renderValue={(selected) => {
-                          if (selected === 0) {
-                            return <em>category type</em>;
-                          }
-
-                          return selected;
-                        }}
-                        onChange={(e) => {
-                          setCheckedArray((p) => {
-                            p[i].type = e.target.value;
-                            return [...p];
-                          });
-                        }}
-                      >
-                        <MenuItem value={0} disabled>
-                          category type
-                        </MenuItem>
-                        <MenuItem value="product">product</MenuItem>
-                        <MenuItem value="page">page</MenuItem>
-                        <MenuItem value="store">store</MenuItem>
-                      </Select>
-                    </Stack>
-                  );
-                })}
-              </>
-            )}
-          </Box>
-          <Stack
-            m="20px 0 0"
-            direction="row"
-            display="flex"
-            flexDirection="row-reverse"
-          >
-            <Button
-              variant="contained"
-              onClick={handleUpdateCategory}
-              size="small"
-              disabled={Disable}
-            >
-              save Changes
-            </Button>
-          </Stack>
-        </Box>
-      </Modal>
+      {renderUpdatingModel()}
       {allCategories && (
         <ul>
           {
