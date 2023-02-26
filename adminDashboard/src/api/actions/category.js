@@ -11,5 +11,4 @@ const categoriesEndPoints = apiSlice.injectEndpoints({
     }),
   }),
 });
-export const { useCreateCatMutation, useUpdateCatMutation } =
-  categoriesEndPoints;
+export const { useCreateCatMutation } = categoriesEndPoints;
