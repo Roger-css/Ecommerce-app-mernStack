@@ -29,6 +29,7 @@ import {
 } from "../../api/actions/category";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import usePrivate from "../../hooks/usePrivate";
 const MainPage = () => {
   const theme = useTheme();
   const allCategories = useSelector((state) => state.category.categories);
@@ -42,6 +43,7 @@ const MainPage = () => {
   const [updatedCategory, setUpdatedCategory] = useState(false);
   const [expandedArray, setExpandedArray] = useState([]);
   const [checkedArray, setCheckedArray] = useState([]);
+  const axios = usePrivate();
   const ImgName = Img ? Img.name.slice(0, 9) : false;
   const handleClose = () => {
     setOpen(false);
@@ -153,7 +155,9 @@ const MainPage = () => {
         form.append("parentId", item.parentId);
         form.append("type", item.type);
       });
-      const req = await updateCat(form);
+      const req = await axios.post("/category/update", form, {
+        "content-type": "multipart/form-data",
+      });
       console.log(req);
     } catch (er) {
       console.log(er);
