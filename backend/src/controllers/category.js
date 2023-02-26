@@ -3,14 +3,14 @@ const categoryModel = require("../models/category")
 
 function categoriesOrder(categories,  parentId = null) {
     const catList = []
-    let filtredCategories; 
+    let filteredCategories; 
     if(parentId == null){ 
-        filtredCategories = categories.filter((singleCat) => singleCat.parentId == undefined);
+        filteredCategories = categories.filter((singleCat) => singleCat.parentId == undefined);
     } else {
-        filtredCategories =  categories.filter((singleCat) => singleCat.parentId == parentId);
+        filteredCategories =  categories.filter((singleCat) => singleCat.parentId == parentId);
     }
 
-    for(let cat of filtredCategories) {
+    for(let cat of filteredCategories) {
         catList.push({
             _id: cat._id,
             name: cat.name,
@@ -29,8 +29,8 @@ module.exports.getCategories = async (req, res, next)=> {
     try {
         const categories = await categoryModel.find({}).exec()
         if(categories){
-                const ordeCtegories = categoriesOrder(categories)
-                return res.status(200).json({ordeCtegories})
+                const orderCategories = categoriesOrder(categories)
+                return res.status(200).json({orderCategories: orderCategories})
         } else {
             res.status(400).json({message:"something went wrong"})
         }
@@ -67,7 +67,7 @@ module.exports.addCategory = async (req, res, next)=> {
 
         // } 
         // else {
-        //     res.status(400).json({message: "access denaied"})
+        //     res.status(400).json({message: "access denied"})
         // }        
     } catch (error) {
         console.log(error)
@@ -78,15 +78,17 @@ module.exports.addCategory = async (req, res, next)=> {
 // update Category
 module.exports.updateCategory = async (req, res , next ) => {
     const {_id, name, parentId, type} =  req.body
+    console.log(req.body);
     try {
     let updatedCategoryList = []
     if (name.length > 0){
         for(let i=0 ; i<name.length; i ++){
+            console.log(_id[0]);
             const updatedCategoryObject = {
                 name : name[i],
                 type: type [i]
             }
-            if (parentId !== ""){
+            if (parentId !== undefined){
                 updatedCategoryObject.parentId = parentId[i]
             }
             const updatedCategory = await categoryModel.findOneAndUpdate({_id: _id[0]}, updatedCategoryObject)
@@ -99,7 +101,7 @@ module.exports.updateCategory = async (req, res , next ) => {
             type: type,
             parentId: parentId
         }
-        const updatedCategory = await categoryModel.findOneAndUpdate({_id: _id[0]},  updatedCategoryObject)
+        const updatedCategory = await categoryModel.findOneAndUpdate({_id: _id},  updatedCategoryObject)
         return res.status(200).json({message: updatedCategory})
     }
     

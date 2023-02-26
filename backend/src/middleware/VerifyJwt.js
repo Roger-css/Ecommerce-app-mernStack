@@ -26,7 +26,7 @@ const verifyJWT = (req , res, next )=> {
                                     } 
                                     const foundUser = await UserModel.findOne({username: decode.Userinfo.username})
                                     if (!foundUser) return res.status(401).json({message: `Unauthorized line 28 `})
-                                    // this line shoube be moved
+                                    // this line should be moved
                                     const accessToken = jwt.sign(
                                         {
                                             Userinfo: {
@@ -46,7 +46,6 @@ const verifyJWT = (req , res, next )=> {
                         return res.status(401).json({message: "Unauthorized ss"})
                     }
                 } else if (decode) {
-                    console.log(decode);
                     req.role = decode.Userinfo.roles
                     req.user = decode.Userinfo.username
                     req.id = decode.Userinfo.id

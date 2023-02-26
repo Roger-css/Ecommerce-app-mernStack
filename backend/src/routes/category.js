@@ -29,6 +29,7 @@ router
 router.route("/get").get(categoryController.getCategories);
 
 // Update Category/ies 
-router.route("/update").post(upload.array("categoryImages"), categoryController.updateCategory)
+router.route("/update").post(categoryController.updateCategory)
+// upload.array("categoryImages"),
 
 module.exports = router;

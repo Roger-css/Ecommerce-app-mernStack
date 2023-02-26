@@ -72,7 +72,7 @@ module.exports.getProductsByCategory = async (req , res, next) => {
         const category = await categoryModel.findOne({name: categoryName})
         if(category){
             const products = await productModel.find({category})
-            return res.status(200).json({
+                return res.status(200).json({
                 products,
                 productsByPrice:{
                     under5k: products.filter(singleProduct => singleProduct.price < 5000),
