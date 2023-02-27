@@ -40,6 +40,8 @@ const MainPage = () => {
   const [updatedCategory, setUpdatedCategory] = useState(false);
   const [expandedArray, setExpandedArray] = useState([]);
   const [checkedArray, setCheckedArray] = useState([]);
+  const [OpenDelete, setOpenDelete] = useState(false);
+  const [Contained, setContained] = useState(false);
   const axios = usePrivate();
   const ImgName = Img ? Img.name.slice(0, 9) : false;
   const handleClose = () => {
@@ -122,12 +124,12 @@ const MainPage = () => {
       } catch (error) {
         console.log(error);
         setError(error);
+      } finally {
+        setCategory(0);
+        setImg(null);
+        setName("");
+        setDisable(false);
       }
-      setCategory(0);
-      setError("");
-      setImg(null);
-      setName("");
-      setDisable(false);
     } else if (Name && Img && !Pic) {
       setError("enter a valid image please");
     } else {
@@ -138,24 +140,37 @@ const MainPage = () => {
     setDisable(true);
     setUpdatedCategory(false);
     try {
-      const form = new FormData();
+      const myForm = { name: [], _id: [], parentId: [], type: [] };
       expandedArray.forEach((item) => {
-        form.append("name", item.value);
-        form.append("_id", item._id);
-        form.append("parentId", item.parentId);
-        form.append("type", item.type);
+        myForm.name.push(item.value);
+        myForm._id.push(item._id);
+        myForm.parentId.push(item.parentId);
+        myForm.type.push(item.type);
       });
       checkedArray.forEach((item) => {
-        form.append("name", item.value);
-        form.append("_id", item._id);
-        form.append("parentId", item.parentId);
-        form.append("type", item.type);
+        myForm.name.push(item.value);
+        myForm._id.push(item._id);
+        myForm.parentId.push(item.parentId);
+        myForm.type.push(item.type);
       });
-      const req = await axios.post("/category/update", form, {
+      console.log(myForm);
+      const req = await axios.post("/category/update", myForm, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
+      console.log(req);
+    } catch (er) {
+      console.log(er);
+    } finally {
+      setDisable(false);
+    }
+  };
+  const handleDeleting = async () => {
+    setDisable(true);
+    try {
+      const form = checkedArray.map((item) => ({ _id: item._id }));
+      const req = await axios.delete("");
       console.log(req);
     } catch (er) {
       console.log(er);
@@ -229,8 +244,8 @@ const MainPage = () => {
                         setError("");
                       }}
                     >
-                      <option className="defaultOp op" value={0} disabled>
-                        select a category
+                      <option className="defaultOp op" value={0}>
+                        base Category
                       </option>
                       {categoryList(allCategories).map((m) => {
                         return (
@@ -399,20 +414,21 @@ const MainPage = () => {
             id="cats-select"
             value={Category}
             renderValue={(selected) => {
-              if (selected === 0) {
+              console.log(selected === 0);
+              console.log(typeof selected);
+              console.log(Category);
+              if (selected === "") {
                 return <em>select a category</em>;
+              } else {
+                return selected;
               }
-
-              return selected;
             }}
             onChange={(e) => {
               setCategory(e.target.value);
               setError("");
             }}
           >
-            <MenuItem value={0} disabled>
-              select a category
-            </MenuItem>
+            <MenuItem value={""}>select a category</MenuItem>
             {categoryList(allCategories).map((m) => (
               <MenuItem value={m.value} key={m._id}>
                 {m.value}
@@ -475,12 +491,62 @@ const MainPage = () => {
       </Box>
     </Modal>
   );
+  const renderDeleteModel = () => (
+    <Modal open={OpenDelete} onClose={() => setOpenDelete(false)}>
+      <Box sx={styledModel}>
+        <Stack direction="row" display="flex" justifyContent="space-between">
+          <Typography variant="h6">Delete Categories</Typography>
+          <IconButton onClick={() => setOpenDelete(false)} size="small">
+            <CloseIcon />
+          </IconButton>
+        </Stack>
+        <Box>
+          <Box
+            sx={{
+              border: "1px solid #e3e3e3",
+              margin: "20px",
+              padding: "10px 20px",
+            }}
+          >
+            <Typography color="primary" variant="h5">
+              Note:
+            </Typography>{" "}
+            <Typography variant="subtitle1" textTransform="capitalize">
+              only checked Categories will be deleted
+            </Typography>
+          </Box>
+          <Stack direction="row-reverse">
+            <Button
+              onClick={handleDeleting}
+              sx={{ ml: "10px" }}
+              onMouseEnter={() => setContained(true)}
+              onMouseLeave={() => setContained(false)}
+              variant={Contained ? "contained" : "outlined"}
+              color="error"
+              disabled={Disable}
+            >
+              Delete
+            </Button>
+            <Button
+              onClick={() => setOpenDelete(false)}
+              variant="contained"
+              color="primary"
+            >
+              no thanks
+            </Button>
+          </Stack>
+        </Box>
+      </Box>
+    </Modal>
+  );
   return (
     <Container sx={{ ml: "133px" }}>
       <Button onClick={() => setOpen(true)}>Open model</Button>
       {renderCreatingModel()}
       {/* for editing */}
       {renderUpdatingModel()}
+      {/* for deleting */}
+      {renderDeleteModel()}
       {allCategories && (
         <ul>
           {
@@ -505,7 +571,7 @@ const MainPage = () => {
       )}
       <div style={{ display: "flex" }}>
         <button onClick={() => setUpdatedCategory(true)}>Edit</button>
-        <button>delete</button>
+        <button onClick={() => setOpenDelete(true)}>delete</button>
       </div>
     </Container>
   );

@@ -9,7 +9,8 @@ const index = () => {
     const request = async () => {
       try {
         const req = await axios.get("/category/get");
-        dispatch(getAllCategories(req.data.ordeCtegories));
+        console.log(req);
+        dispatch(getAllCategories(req.data.orderCategories));
       } catch (err) {
         console.log(err);
       }
