@@ -151,6 +151,7 @@ const MainPage = () => {
         form.append("parentId", item.parentId);
         form.append("type", item.type);
       });
+      console.log(form);
       const req = await axios.post("/category/update", form, {
         headers: {
           "Content-Type": "multipart/form-data",

@@ -14,6 +14,7 @@ module.exports.createProduct = async (req, res , next) => {
                 description,
                 reviews,
                 } = req.body
+                console.log(req.body)
                 let productPictures = []
                 if(req.files){
                     if(req.files.length > 0){

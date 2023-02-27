@@ -78,31 +78,33 @@ module.exports.addCategory = async (req, res, next)=> {
 // update Category
 module.exports.updateCategory = async (req, res , next ) => {
     const {_id, name, parentId, type} =  req.body
-    console.log(req.body);
     try {
     let updatedCategoryList = []
-    if (name.length > 0){
-        for(let i=0 ; i<name.length; i ++){
-            console.log(_id[0]);
+    if(name){
+        if (name.length > 1){
+            for(let i=0 ; i<name.length; i++){
+                const updatedCategoryObject = {
+                    name : name[i],
+                    type: type [i]
+                }
+                if (parentId !== undefined){
+                    updatedCategoryObject.parentId = parentId[i]
+                }
+                const updatedCategory = await categoryModel.findOneAndUpdate({_id: _id}, updatedCategoryObject)
+                console.log(updatedCategory);
+                updatedCategoryList.push(updatedCategory)
+            }
+            return res.status(200).json({message: updatedCategoryList})
+        } else {
             const updatedCategoryObject = {
-                name : name[i],
-                type: type [i]
+                name: name,
+                type: type,
+                parentId: parentId
             }
-            if (parentId !== undefined){
-                updatedCategoryObject.parentId = parentId[i]
-            }
-            const updatedCategory = await categoryModel.findOneAndUpdate({_id: _id[0]}, updatedCategoryObject)
-            updatedCategoryList.push(updatedCategory)
+            const updatedCategory = await categoryModel.findOneAndUpdate({_id: _id},  updatedCategoryObject)
+            console.log(updatedCategory);
+            return res.status(200).json({message: updatedCategory})
         }
-        return res.status(200).json({message: updatedCategoryList})
-    } else {
-        const updatedCategoryObject = {
-            name: name,
-            type: type,
-            parentId: parentId
-        }
-        const updatedCategory = await categoryModel.findOneAndUpdate({_id: _id},  updatedCategoryObject)
-        return res.status(200).json({message: updatedCategory})
     }
     
     } catch (error) {
