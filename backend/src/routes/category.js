@@ -4,7 +4,6 @@ const categoryController = require("../controllers/category");
 const categoryModel = require("../models/category");
 const verifyJWT = require("../middleware/VerifyJwt");
 const router = express.Router();
-const adminChecker = require("../middleware/userchecker");
 const multer = require("multer");
 const path = require("path");
 const shortid = require("shortid");
@@ -29,7 +28,9 @@ router
 router.route("/get").get(categoryController.getCategories);
 
 // Update Category/ies 
-router.route("/update").post(categoryController.updateCategory)
-// upload.array("categoryImages"),
+router.route("/update").post(upload.array("categoryImages"), categoryController.updateCategory)
+
+router.route("/delete").post(categoryController.deleteCategory)
+
 
 module.exports = router;
