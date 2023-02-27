@@ -166,7 +166,7 @@ const MainPage = () => {
     setDisable(true);
     try {
       const form = checkedArray.map((item) => ({ _id: item._id }));
-      const req = await axios.delete("");
+      const req = await axios.delete("category/delete", form);
       console.log(req);
     } catch (er) {
       console.log(er);
