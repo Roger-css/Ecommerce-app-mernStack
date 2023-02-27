@@ -153,8 +153,8 @@ const MainPage = () => {
         myForm.parentId.push(item.parentId);
         myForm.type.push(item.type);
       });
-      console.log(form);
-      const req = await axios.post("/category/update", form);
+      console.log(myForm);
+      const req = await axios.post("/category/update", myForm);
       console.log(req);
     } catch (er) {
       console.log(er);
