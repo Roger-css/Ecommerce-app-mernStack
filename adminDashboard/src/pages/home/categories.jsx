@@ -166,7 +166,8 @@ const MainPage = () => {
     setDisable(true);
     try {
       const form = checkedArray.map((item) => ({ _id: item._id }));
-      const req = await axios.post("category/delete", form);
+      const myForm = { payload: form };
+      const req = await axios.post("category/delete", myForm);
       console.log(req);
     } catch (er) {
       console.log(er);
