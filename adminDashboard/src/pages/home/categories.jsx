@@ -154,11 +154,7 @@ const MainPage = () => {
         myForm.type.push(item.type);
       });
       console.log(form);
-      const req = await axios.post("/category/update", form, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      const req = await axios.post("/category/update", form);
       console.log(req);
     } catch (er) {
       console.log(er);
