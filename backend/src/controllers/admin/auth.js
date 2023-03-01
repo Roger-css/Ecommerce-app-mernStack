@@ -43,12 +43,12 @@ module.exports.postSignIn = async (req, res, next) => {
   try {
     if (!email) {
       res.status(400).json({
-        message: "all feild are required",
+        message: "all fields are required",
       });
     }
     if (!password) {
       res.status(400).json({
-        message: "all feilds are required",
+        message: "all fields are required",
       });
     }
     const foundUser = await UserModel.findOne({ email }).exec();
