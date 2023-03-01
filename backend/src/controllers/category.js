@@ -45,10 +45,11 @@ module.exports.addCategory = async (req, res, next)=> {
     try {
         console.log(req.role);
         // if(req.role === "admin"){
-            const {name, parentId} = req.body
+            const {name, parentId, type} = req.body
             const categoryObj = {
             name,
-            slug: slugify(name)
+            slug: slugify(name),
+            type
             }
             if(parentId) {
                 const theIdNum =   await categoryModel.findOne({name: parentId})
