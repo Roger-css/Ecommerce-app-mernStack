@@ -1,6 +1,6 @@
 const express = require("express");
 const productController = require("../controllers/product");
-const productyModel = require("../models/product");
+const productModel = require("../models/product");
 const verifyJWT = require("../middleware/VerifyJwt");
 const checkAdmin = require("../middleware/adminChecker");
 
@@ -34,5 +34,6 @@ router
   
 /// start of public roots 
     router.route("/:categoryName").get(productController.getProductsByCategory)
+    router.route("/:productId").get(productController.getProductsById)
 /// end of public roots 
 module.exports = router;

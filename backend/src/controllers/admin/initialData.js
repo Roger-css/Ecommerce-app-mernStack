@@ -3,14 +3,14 @@ const Category = require("../../models/category")
 
 function categoriesOrder(categories,  parentId = null) {
     const catList = []
-    let filtredCategories; 
+    let filteredCategories; 
     if(parentId == null){ 
-        filtredCategories = categories.filter((singleCat) => singleCat.parentId == undefined);
+        filteredCategories = categories.filter((singleCat) => singleCat.parentId == undefined);
     } else {
-        filtredCategories =  categories.filter((singleCat) => singleCat.parentId == parentId);
+        filteredCategories =  categories.filter((singleCat) => singleCat.parentId == parentId);
     }
 
-    for(let cat of filtredCategories) {
+    for(let cat of filteredCategories) {
         catList.push({
             _id: cat._id,
             name: cat.name,
