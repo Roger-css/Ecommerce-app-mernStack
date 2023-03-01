@@ -63,6 +63,10 @@ footer a {
   transform: translate(-50%, -50%);
   color: #1976d2;
   width: 100%;
+  transition: 250ms;
+}
+.files:hover:before {
+  color: white;
 }
 a.active {
   background-color: #1b1b1b;
@@ -122,4 +126,13 @@ div:has(> a.active) {
   outline: none;
   border: 1px solid #c4c4c4;
   border-radius: 6px;
+  font-style: italic;
+  font-size: 1rem;
+}
+.op {
+  font-style: italic;
+  font-size: 16px;
+}
+.uls {
+  white-space: nowrap;
 }

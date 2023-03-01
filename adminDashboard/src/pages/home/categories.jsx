@@ -17,8 +17,12 @@ import {
   IoSquareOutline,
   IoArrowDown,
   IoArrowForward,
+  IoAddOutline,
+  IoTrash,
 } from "react-icons/io5";
 import { FcFolder, FcOpenedFolder } from "react-icons/fc";
+import { FaEdit } from "react-icons/fa";
+
 import DoneAllIcon from "@mui/icons-material/DoneAll";
 import "react-checkbox-tree/lib/react-checkbox-tree.css";
 import CloseIcon from "@mui/icons-material/Close";
@@ -27,13 +31,16 @@ import { useCreateCatMutation } from "../../api/actions/category";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import usePrivate from "../../hooks/usePrivate";
+import useInitialData from "../../hooks/useInitialData";
 const MainPage = () => {
   const theme = useTheme();
   const allCategories = useSelector((state) => state.category.categories);
+  console.log(allCategories);
   const [Open, setOpen] = useState(false);
   const [Name, setName] = useState("");
   const [Category, setCategory] = useState(0);
   const [Disable, setDisable] = useState(false);
+  const [type, setType] = useState(0);
   const [Img, setImg] = useState(null);
   const [expanded, setExpanded] = useState([]);
   const [checked, setChecked] = useState([]);
@@ -42,7 +49,10 @@ const MainPage = () => {
   const [checkedArray, setCheckedArray] = useState([]);
   const [OpenDelete, setOpenDelete] = useState(false);
   const [Contained, setContained] = useState(false);
+  const [error, setError] = useState("");
+  const [createCat] = useCreateCatMutation();
   const axios = usePrivate();
+  const initialData = useInitialData();
   const ImgName = Img ? Img.name.slice(0, 9) : false;
   const handleClose = () => {
     setOpen(false);
@@ -54,7 +64,12 @@ const MainPage = () => {
   const categoryList = (cats, option = []) => {
     for (let cat of cats) {
       if (cat.children?.length > 0) {
-        option.push({ _id: cat._id, value: cat.name, parentId: cat.parentId });
+        option.push({
+          _id: cat._id,
+          value: cat.name,
+          parentId: cat.parentId,
+          type: cat.type,
+        });
         categoryList(cat.children, option);
       } else {
         option.push({ _id: cat._id, value: cat.name, parentId: cat.parentId });
@@ -84,8 +99,6 @@ const MainPage = () => {
   const handleCloseUpdatedCategory = () => {
     setUpdatedCategory(false);
   };
-  const [error, setError] = useState("");
-  const [createCat] = useCreateCatMutation();
   const style = {
     position: "absolute",
     top: "50%",
@@ -118,14 +131,15 @@ const MainPage = () => {
         name: `${Name[0].toUpperCase()}${Name.slice(1)}`,
         parentId: Category,
         categoryImage: Img,
+        type: type,
       };
+      console.log(data);
       try {
-        const req = await createCat(data);
+        const req = await createCat(data).unwrap();
+        initialData();
       } catch (error) {
         console.log(error);
-        setError(error);
       } finally {
-        setCategory(0);
         setImg(null);
         setName("");
         setDisable(false);
@@ -144,18 +158,17 @@ const MainPage = () => {
       expandedArray.forEach((item) => {
         myForm.name.push(item.value);
         myForm._id.push(item._id);
-        myForm.parentId.push(item.parentId);
-        myForm.type.push(item.type);
+        myForm.parentId.push(item.parentId || undefined);
+        myForm.type.push(item.type || undefined);
       });
       checkedArray.forEach((item) => {
         myForm.name.push(item.value);
         myForm._id.push(item._id);
-        myForm.parentId.push(item.parentId);
-        myForm.type.push(item.type);
+        myForm.parentId.push(item.parentId || undefined);
+        myForm.type.push(item.type || undefined);
       });
-      console.log(myForm);
       const req = await axios.post("/category/update", myForm);
-      console.log(req);
+      initialData();
     } catch (er) {
       console.log(er);
     } finally {
@@ -165,10 +178,14 @@ const MainPage = () => {
   const handleDeleting = async () => {
     setDisable(true);
     try {
-      const form = checkedArray.map((item) => ({ _id: item._id }));
+      const form =
+        checkedArray.length > 0
+          ? checkedArray.map((item) => ({ _id: item._id }))
+          : expandedArray.map((item) => ({ _id: item._id }));
       const myForm = { payload: form };
       const req = await axios.post("category/delete", myForm);
       console.log(req);
+      initialData();
     } catch (er) {
       console.log(er);
     } finally {
@@ -203,6 +220,20 @@ const MainPage = () => {
           </IconButton>
         </Stack>
         <Box className="editBox" sx={{ maxHeight: "400px", overflowY: "auto" }}>
+          {checkedArray.length === 0 && expandedArray.length === 0 && (
+            <Typography
+              variant="h6"
+              style={{
+                textAlign: "center",
+                padding: "10px 20px",
+                margin: "auto",
+                width: "fit-content",
+                border: "1px solid #e3e3e3",
+              }}
+            >
+              Please check or expand a category
+            </Typography>
+          )}
           {expandedArray.length > 0 && (
             <>
               <Typography sx={{ mb: "20px" }} variant="h6">
@@ -262,7 +293,6 @@ const MainPage = () => {
                         if (selected === 0) {
                           return <em>category type</em>;
                         }
-
                         return selected;
                       }}
                       onChange={(e) => {
@@ -322,8 +352,8 @@ const MainPage = () => {
                         setError("");
                       }}
                     >
-                      <option className="defaultOp op" value={0} disabled>
-                        select a category
+                      <option className="defaultOp op" value={0}>
+                        base Category
                       </option>
                       {categoryList(allCategories).map((m) => {
                         return (
@@ -343,7 +373,6 @@ const MainPage = () => {
                         if (selected === 0) {
                           return <em>category type</em>;
                         }
-
                         return selected;
                       }}
                       onChange={(e) => {
@@ -372,14 +401,16 @@ const MainPage = () => {
           display="flex"
           flexDirection="row-reverse"
         >
-          <Button
-            variant="contained"
-            onClick={handleUpdateCategory}
-            size="small"
-            disabled={Disable}
-          >
-            save Changes
-          </Button>
+          {(checkedArray.length > 0 || expandedArray.length > 0) && (
+            <Button
+              variant="contained"
+              onClick={handleUpdateCategory}
+              size="small"
+              disabled={Disable}
+            >
+              save Changes
+            </Button>
+          )}
         </Stack>
       </Box>
     </Modal>
@@ -398,6 +429,7 @@ const MainPage = () => {
           style={{ marginTop: "20px", width: "100%" }}
         >
           <TextField
+            style={{ display: "block" }}
             label="Category Name"
             value={Name}
             onChange={(e) => {
@@ -406,15 +438,13 @@ const MainPage = () => {
             }}
           ></TextField>
           <Select
+            style={{ display: "block" }}
             defaultValue={0}
             sx={{ width: "200px", mt: "10px" }}
             id="cats-select"
             value={Category}
             renderValue={(selected) => {
-              console.log(selected === 0);
-              console.log(typeof selected);
-              console.log(Category);
-              if (selected === "") {
+              if (selected === 0) {
                 return <em>select a category</em>;
               } else {
                 return selected;
@@ -425,17 +455,41 @@ const MainPage = () => {
               setError("");
             }}
           >
-            <MenuItem value={""}>select a category</MenuItem>
+            <MenuItem value={0}>select a category</MenuItem>
             {categoryList(allCategories).map((m) => (
               <MenuItem value={m.value} key={m._id}>
                 {m.value}
               </MenuItem>
             ))}
           </Select>
+          <Select
+            style={{ display: "block" }}
+            defaultValue={0}
+            sx={{ width: "200px", mt: "10px" }}
+            id="updatedCats-select"
+            value={type}
+            renderValue={(selected) => {
+              if (selected === 0) {
+                return <em>category type</em>;
+              }
+              return selected;
+            }}
+            onChange={(e) => setType(e.target.value)}
+          >
+            <MenuItem value={0} disabled>
+              category type
+            </MenuItem>
+            <MenuItem value="product">product</MenuItem>
+            <MenuItem value="page">page</MenuItem>
+            <MenuItem value="store">store</MenuItem>
+          </Select>
           <Stack direction="row" spacing={3} display="flex" alignItems="center">
             <Button
               className="files"
               color="primary"
+              onMouseEnter={() => setContained(true)}
+              onMouseLeave={() => setContained(false)}
+              variant={Contained ? "contained" : "outlined"}
               sx={{
                 padding: "0",
                 display: "block",
@@ -488,64 +542,83 @@ const MainPage = () => {
       </Box>
     </Modal>
   );
-  const renderDeleteModel = () => (
-    <Modal open={OpenDelete} onClose={() => setOpenDelete(false)}>
-      <Box sx={styledModel}>
-        <Stack direction="row" display="flex" justifyContent="space-between">
-          <Typography variant="h6">Delete Categories</Typography>
-          <IconButton onClick={() => setOpenDelete(false)} size="small">
-            <CloseIcon />
-          </IconButton>
-        </Stack>
-        <Box>
-          <Box
-            sx={{
-              border: "1px solid #e3e3e3",
-              margin: "20px",
-              padding: "10px 20px",
-            }}
-          >
-            <Typography color="primary" variant="h5">
-              Note:
-            </Typography>{" "}
-            <Typography variant="subtitle1" textTransform="capitalize">
-              only checked Categories will be deleted
-            </Typography>
-          </Box>
-          <Stack direction="row-reverse">
-            <Button
-              onClick={handleDeleting}
-              sx={{ ml: "10px" }}
-              onMouseEnter={() => setContained(true)}
-              onMouseLeave={() => setContained(false)}
-              variant={Contained ? "contained" : "outlined"}
-              color="error"
-              disabled={Disable}
-            >
-              Delete
-            </Button>
-            <Button
-              onClick={() => setOpenDelete(false)}
-              variant="contained"
-              color="primary"
-            >
-              no thanks
-            </Button>
+  const renderDeleteModel = () => {
+    const form =
+      checkedArray.length > 0
+        ? checkedArray.map((item, i) => (
+            <span key={item._id}>{`${item.value}${
+              checkedArray.length > i + 1 ? ", " : "."
+            }`}</span>
+          ))
+        : expandedArray.map((item, i) => (
+            <span key={item._id}>{`${item.value}${
+              expandedArray.length > i + 1 ? ", " : "."
+            }`}</span>
+          ));
+    return (
+      <Modal open={OpenDelete} onClose={() => setOpenDelete(false)}>
+        <Box sx={styledModel}>
+          <Stack direction="row" display="flex" justifyContent="space-between">
+            <Typography variant="h6">Delete Categories</Typography>
+            <IconButton onClick={() => setOpenDelete(false)} size="small">
+              <CloseIcon />
+            </IconButton>
           </Stack>
+          <Box>
+            <Box
+              sx={{
+                border: "1px solid #e3e3e3",
+                margin: "20px",
+                padding: "10px 20px",
+              }}
+            >
+              <Typography color="primary" variant="h5">
+                The Categories will be deleted are:
+              </Typography>
+              <Typography
+                variant="subtitle1"
+                maxHeight="200px"
+                sx={{ overflowY: "auto" }}
+              >
+                {form}
+              </Typography>
+            </Box>
+            <Stack direction="row-reverse">
+              <Button
+                onClick={handleDeleting}
+                sx={{ ml: "10px" }}
+                onMouseEnter={() => setContained(true)}
+                onMouseLeave={() => setContained(false)}
+                variant={Contained ? "contained" : "outlined"}
+                color="error"
+                disabled={Disable}
+              >
+                Delete
+              </Button>
+              <Button
+                onClick={() => setOpenDelete(false)}
+                variant="contained"
+                color="primary"
+              >
+                no thanks
+              </Button>
+            </Stack>
+          </Box>
         </Box>
-      </Box>
-    </Modal>
-  );
+      </Modal>
+    );
+  };
   return (
-    <Container sx={{ ml: "133px" }}>
-      <Button onClick={() => setOpen(true)}>Open model</Button>
+    <Container
+      sx={{ ml: "133px", display: "flex", justifyContent: "space-between" }}
+    >
       {renderCreatingModel()}
       {/* for editing */}
       {renderUpdatingModel()}
       {/* for deleting */}
       {renderDeleteModel()}
       {allCategories && (
-        <ul>
+        <ul className="uls">
           {
             <CheckboxTree
               nodes={catsDeploy(allCategories)}
@@ -566,9 +639,42 @@ const MainPage = () => {
           }
         </ul>
       )}
-      <div style={{ display: "flex" }}>
-        <button onClick={() => setUpdatedCategory(true)}>Edit</button>
-        <button onClick={() => setOpenDelete(true)}>delete</button>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-evenly",
+          width: "300px",
+          height: "40px",
+          margin: "5px 0",
+        }}
+      >
+        <Button
+          size="small"
+          color="primary"
+          variant="contained"
+          onClick={() => setOpen(true)}
+          endIcon={<IoAddOutline />}
+        >
+          Add
+        </Button>
+        <Button
+          size="small"
+          color="warning"
+          variant="contained"
+          onClick={() => setUpdatedCategory(true)}
+          endIcon={<FaEdit />}
+        >
+          Edit
+        </Button>
+        <Button
+          size="small"
+          color="error"
+          variant="contained"
+          onClick={() => setOpenDelete(true)}
+          endIcon={<IoTrash />}
+        >
+          Delete
+        </Button>
       </div>
     </Container>
   );

@@ -29,6 +29,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import React, { useState } from "react";
 import useAxios from "../../hooks/usePrivate";
 import { useDispatch, useSelector } from "react-redux";
+import useInitialData from "../../hooks/useInitialData";
 const products = () => {
   const allCategories = useSelector((state) => state.category.categories);
   const axios = useAxios();
@@ -44,6 +45,7 @@ const products = () => {
   const products = useSelector((state) => state.product.products);
   const [productsModel, setProductsModel] = useState(false);
   const [CurrentProduct, setCurrentProduct] = useState(null);
+  const initialData = useInitialData();
   const closingProductsModel = () => {
     setProductsModel(false);
   };
@@ -139,6 +141,7 @@ const products = () => {
             "content-type": "multipart/form-data",
           },
         });
+        initialData();
         console.log(req);
         handleClose();
       } catch (err) {
@@ -181,7 +184,6 @@ const products = () => {
               <StyledTableCell>Name</StyledTableCell>
               <StyledTableCell>Price</StyledTableCell>
               <StyledTableCell>Quantity</StyledTableCell>
-              <StyledTableCell>Description</StyledTableCell>
               <StyledTableCell>Category</StyledTableCell>
             </TableRow>
           </TableHead>
@@ -199,7 +201,6 @@ const products = () => {
                   </TableCell>
                   <TableCell>{e.price || "--"}</TableCell>
                   <TableCell>{e.quantity || "--"}</TableCell>
-                  <TableCell>{e.description || "--"}</TableCell>
                   <TableCell>{e.category?.name || "--"}</TableCell>
                 </StyledTableRow>
               );
