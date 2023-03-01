@@ -9,6 +9,7 @@ const categorySchema = new Schema({
         trim: true
     },
     categoryPic: {type: String},
+    type: {type: String},
     slug: {
         type: String,
         required: true,
