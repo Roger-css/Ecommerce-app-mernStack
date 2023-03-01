@@ -90,18 +90,18 @@ module.exports.updateCategory = async (req, res , next ) => {
                 if (parentId !== undefined){
                     updatedCategoryObject.parentId = parentId[i]
                 }
-                const updatedCategory = await categoryModel.findOneAndUpdate({_id: _id}, updatedCategoryObject)
+                const updatedCategory = await categoryModel.findOneAndUpdate({_id: _id[i]}, updatedCategoryObject)
                 console.log(updatedCategory);
                 updatedCategoryList.push(updatedCategory)
             }
             return res.status(200).json({message: updatedCategoryList})
         } else {
             const updatedCategoryObject = {
-                name: name,
-                type: type,
-                parentId: parentId
+                name: name[0],
+                type: type[0],
+                parentId: parentId[0]
             }
-            const updatedCategory = await categoryModel.findOneAndUpdate({_id: _id},  updatedCategoryObject)
+            const updatedCategory = await categoryModel.findOneAndUpdate({_id: _id[0]},  updatedCategoryObject)
             console.log(updatedCategory);
             return res.status(200).json({message: updatedCategory})
         }
@@ -115,9 +115,10 @@ module.exports.updateCategory = async (req, res , next ) => {
 
 module.exports.deleteCategory = async (req, res ,next) => {
     try {
-        const {ids} = req.body.payload
+        const ids = req.body.payload
+        console.log(req.body.payload);
         const deletedCategories = [];
-        for (let i = 0; i < deletedCategories.length; i++) {
+        for (let i = 0; i < ids.length; i++) {
             const deletedSingleCategory = await categoryModel.findOneAndDelete({_id: ids[i]._id})
             deletedCategories.push(deletedSingleCategory)
         }

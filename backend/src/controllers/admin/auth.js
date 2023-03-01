@@ -92,7 +92,7 @@ module.exports.postSignIn = async (req, res, next) => {
     );
     // set Secure http Cookie that have RrefreshToken
     res.cookie("jwt", refreshToken, {
-      secure:  process.env.IS_POST_MAN ? false : true,
+      secure:  false,
       sameSite: "None",
       maxAge: 7 * 24 * 60 * 60 * 60 * 60 * 60 * 1000,
     });

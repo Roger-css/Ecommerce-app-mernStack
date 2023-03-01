@@ -11,6 +11,7 @@ const CategoryRoutes = require("./routes/category");
 const adminProductRoutes = require("./routes/product");
 const cartRoutes = require("./routes/cart");
 const initialDataRoutes = require("./routes/admin/initailData");
+const adminPageRoute = require("./routes/admin/page")
 const path = require("path");
 
 const refreshRoot = require("./routes/refresh");
@@ -39,10 +40,14 @@ express.static.mime.define({
 });
 
 app.use(express.static(path.join(__dirname, "public")));
-app.use("/api", userRoutes);
-app.use("/api", refreshRoot);
+
+//admin routes
 app.use("/api/admin", adminRoutes);
 app.use("/api/admin", adminInitialData);
+app.use("/api/page", adminPageRoute)
+// combined routes
+app.use("/api", userRoutes);
+app.use("/api", refreshRoot);
 app.use("/api/category", CategoryRoutes);
 app.use("/api/product", adminProductRoutes);
 app.use("/api/cart", cartRoutes);
