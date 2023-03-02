@@ -46,9 +46,6 @@ const products = () => {
   const [productsModel, setProductsModel] = useState(false);
   const [CurrentProduct, setCurrentProduct] = useState(null);
   const initialData = useInitialData();
-  const closingProductsModel = () => {
-    setProductsModel(false);
-  };
   const menuItemStyling = {
     height: "20px",
     fontSize: "14px",

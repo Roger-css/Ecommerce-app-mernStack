@@ -7,6 +7,7 @@ import Categories from "./pages/home/categories";
 import Products from "./pages/home/product";
 import Orders from "./pages/home/orders";
 import PersistLogin from "./components/PersistLogin";
+import Pages from "./pages/home/pages";
 function App() {
   return (
     <div className="App">
@@ -15,6 +16,7 @@ function App() {
         <Route element={<PersistLogin />}>
           <Route path="/" element={<Home />}>
             <Route index element={<Categories />} />
+            <Route path="page" element={<Pages />} />
             <Route path="products" element={<Products />} />
             <Route path="orders" element={<Orders />} />
           </Route>

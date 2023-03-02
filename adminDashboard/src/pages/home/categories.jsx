@@ -22,7 +22,6 @@ import {
 } from "react-icons/io5";
 import { FcFolder, FcOpenedFolder } from "react-icons/fc";
 import { FaEdit } from "react-icons/fa";
-
 import DoneAllIcon from "@mui/icons-material/DoneAll";
 import "react-checkbox-tree/lib/react-checkbox-tree.css";
 import CloseIcon from "@mui/icons-material/Close";
@@ -32,10 +31,11 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import usePrivate from "../../hooks/usePrivate";
 import useInitialData from "../../hooks/useInitialData";
+import categoryList from "../../helpers/categoryList";
+
 const MainPage = () => {
   const theme = useTheme();
   const allCategories = useSelector((state) => state.category.categories);
-  console.log(allCategories);
   const [Open, setOpen] = useState(false);
   const [Name, setName] = useState("");
   const [Category, setCategory] = useState(0);
@@ -60,22 +60,6 @@ const MainPage = () => {
     setError("");
     setImg(null);
     setName("");
-  };
-  const categoryList = (cats, option = []) => {
-    for (let cat of cats) {
-      if (cat.children?.length > 0) {
-        option.push({
-          _id: cat._id,
-          value: cat.name,
-          parentId: cat.parentId,
-          type: cat.type,
-        });
-        categoryList(cat.children, option);
-      } else {
-        option.push({ _id: cat._id, value: cat.name, parentId: cat.parentId });
-      }
-    }
-    return option;
   };
   useEffect(() => {
     const cat = categoryList(allCategories);
@@ -186,6 +170,7 @@ const MainPage = () => {
       const req = await axios.post("category/delete", myForm);
       console.log(req);
       initialData();
+      setOpenDelete(false);
     } catch (er) {
       console.log(er);
     } finally {

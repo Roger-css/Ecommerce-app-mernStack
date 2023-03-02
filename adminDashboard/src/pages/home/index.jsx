@@ -1,5 +1,5 @@
 import NavBar from "../../layout/navBar";
-import SideBar from "./SideBar";
+import SideBar from "../../layout/SideBar";
 import { Stack } from "@mui/material";
 import { useSelector } from "react-redux";
 import useInitialData from "../../hooks/useInitialData";

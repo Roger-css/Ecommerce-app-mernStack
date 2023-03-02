@@ -15,6 +15,7 @@ const SideBar = () => {
     { text: "categories", link: "/" },
     { text: "products", link: "products" },
     { text: `orders`, link: `orders` },
+    { text: "pages", link: "page" },
   ];
   return (
     <>
