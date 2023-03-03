@@ -6,10 +6,7 @@ import useInitialData from "../../hooks/useInitialData";
 import { useEffect } from "react";
 const Home = () => {
   const cats = useSelector((state) => state.category.categories);
-  const req = useInitialData();
-  const lel = useEffect(() => {
-    req();
-  }, []);
+  const lel = useEffect(() => {}, []);
   return (
     <>
       <NavBar />

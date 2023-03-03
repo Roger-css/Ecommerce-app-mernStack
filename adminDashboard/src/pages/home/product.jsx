@@ -277,7 +277,7 @@ const products = () => {
   };
   return (
     <Container sx={{ ml: "133px", maxWidth: "100%", overflow: "hidden" }}>
-      <Button onClick={() => setOpen(true)}>Open model</Button>
+      <Button onClick={() => setOpen(true)}>create Product</Button>
       <Modal open={Open} onClose={handleClose}>
         <Box sx={style}>
           <Stack direction="row" display="flex" justifyContent="space-between">

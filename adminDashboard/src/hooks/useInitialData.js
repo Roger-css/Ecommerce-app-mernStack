@@ -1,5 +1,4 @@
 import useAxios from "./usePrivate";
-import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { addAllProducts } from "../state/reducers/products";
 import { addAllCategories } from "../state/reducers/category";

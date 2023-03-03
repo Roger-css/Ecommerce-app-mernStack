@@ -65,7 +65,6 @@ const pages = () => {
       form.append("banners", ban);
     }
     try {
-      console.log(...form);
       const req = await axios.post("page/create", form);
       console.log(req);
     } catch (error) {
@@ -346,7 +345,7 @@ const pages = () => {
 
   return (
     <Container sx={{ ml: "133px", maxWidth: "100%", overflow: "hidden" }}>
-      <Button onClick={() => setPage(true)}>open</Button>
+      <Button onClick={() => setPage(true)}>create page</Button>
       {renderCreatePage()}
     </Container>
   );
