@@ -43,7 +43,6 @@ module.exports.getCategories = async (req, res, next)=> {
 
 module.exports.addCategory = async (req, res, next)=> {
     try {
-        console.log(req.role);
         // if(req.role === "admin"){
             const {name, parentId, type} = req.body
             const categoryObj = {

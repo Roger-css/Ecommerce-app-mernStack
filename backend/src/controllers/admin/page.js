@@ -21,7 +21,7 @@ module.exports.createPage = async (req, res, next) => {
     const existedPage =  await pageSchema.findOne(category).exec()
     console.log(existedPage);
     if(existedPage){
-        const updatedExistedPage = await existedPage.findOneAndUpdate(category, req.body).exec()
+        const updatedExistedPage = await pageSchema.findOneAndUpdate(category, req.body).exec()
         if(updatedExistedPage){
             console.log(updatedExistedPage);
             return res.status(201).json({updatedExistedPage})

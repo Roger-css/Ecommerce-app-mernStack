@@ -16,11 +16,12 @@ router.route("/refresh").get((req, res, next) => {
     process.env.JWT_REFRESH_TOKEN_KEY,
     async (err, decode) => {
       if (err) return res.status(403).json({ message: err });
+      console.log(decode.Userinfo.username);
       const foundUser = await UserModel.findOne({
         username: decode.Userinfo.username,
       });
       if (!foundUser) return res.status(401).json({ message: `Unauthorized ` });
-      // this line shoube be moved
+      // this line should be moved
       const accessToken = jwt.sign(
         {
           Userinfo: {
