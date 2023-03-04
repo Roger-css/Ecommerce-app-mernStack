@@ -15,6 +15,7 @@ function categoriesOrder(categories,  parentId = null) {
             _id: cat._id,
             name: cat.name,
             slug: cat.slug,
+            type: cat.type,
             parentId: cat.parentId,
             children: categoriesOrder(categories, cat._id)
         });
