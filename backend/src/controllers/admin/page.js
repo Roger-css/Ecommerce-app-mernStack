@@ -1,7 +1,9 @@
 const pageSchema = require('../../models/page');
 
 module.exports.createPage = async (req, res, next) => {
-    const { banners, products, category, type, createdBy} = req.files
+    const { banners, products} = req.files
+    const {category, type, title, description} = req.body
+    console.log(req.body);
     if (banners){
         if (banners.length > 0){
             req.body.banners = banners.map((singleBanner, index) => ({
@@ -20,8 +22,6 @@ module.exports.createPage = async (req, res, next) => {
             }))
         }
     }
-    req.body.createdBy = req.id
-    req.body.category = category
 
     const existedPage =  await pageSchema.findOne({category}).exec()
     if(existedPage){
@@ -35,7 +35,7 @@ module.exports.createPage = async (req, res, next) => {
     } else {
         const page = new pageSchema(req.body)
         page.save((error, page)=> {
-        if(error) return res.status(400).json({message: error})
+        if(error) return res.status(400).json({message: "error here"})
         if(page) return res.status(201).json({message: "created successfully"})
     })
     }
