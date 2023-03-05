@@ -21,8 +21,9 @@ module.exports.createPage = async (req, res, next) => {
         }
     }
     req.body.createdBy = req.id
+    req.body.category = category
 
-    const existedPage =  await pageSchema.findOne(category).exec()
+    const existedPage =  await pageSchema.findOne({category}).exec()
     if(existedPage){
         const updatedExistedPage = await pageSchema.findOneAndUpdate(category, req.body).exec()
         if(updatedExistedPage){
@@ -43,8 +44,10 @@ module.exports.createPage = async (req, res, next) => {
 module.exports.getPage = async (req, res, next) => {
     try {
         const {category, type} = req.params
+        console.log(type , category);
         if (type == "page"){
-            const foundedPage = pageSchema.findOne({category}).exec()
+            const foundedPage = await pageSchema.findOne({category}).exec()
+            console.log(foundedPage);
             if (foundedPage){
             return res.status(200).json({foundedPage})
             } else {
@@ -53,6 +56,6 @@ module.exports.getPage = async (req, res, next) => {
     }
     } catch (error) {
         console.log(error);
-        return res.status(400).json({message : "someThing happened"})
+        return res.status(400).json({message : error})
     }
 }

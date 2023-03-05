@@ -27,7 +27,7 @@ router
     PageController.createPage
   );
 router
-    .route("/:id/:type")
+    .route("/:category/:type")
     .get(PageController.getPage)
 
 module.exports = router;
