@@ -26,5 +26,8 @@ router
     ]),
     PageController.createPage
   );
+router
+    .route("/:id/:type")
+    .get(PageController.getPage)
 
 module.exports = router;
