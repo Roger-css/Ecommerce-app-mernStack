@@ -8,9 +8,10 @@ const Page = (props) => {
   return (
     <>
       <h3>{page.title}</h3>
-      <Carousel>
+      <Carousel renderThumbs={() => {}}>
         {page.banners &&
           page.banners.map((banner, i) => {
+            console.log(banner);
             return (
               <a key={i} style={{ display: "block" }} href={banner.navigateTo}>
                 <img src={banner.img} alt="" />
@@ -25,7 +26,7 @@ const Page = (props) => {
           page.products.map((product, i) => {
             return (
               <Card key={i}>
-                <img src={product.img} alt="" />
+                <img style={{ width: "100%" }} src={product.img} alt="" />
               </Card>
             );
           })}

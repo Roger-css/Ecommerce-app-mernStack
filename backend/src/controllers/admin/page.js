@@ -4,22 +4,18 @@ module.exports.createPage = async (req, res, next) => {
   const { banners, products } = req.files;
   const { category, type, title, description } = req.body;
   console.log(req.body);
-  if (banners) {
-    if (banners.length > 0) {
-      req.body.banners = banners.map((singleBanner, index) => ({
-        img: `${process.env.API}/uploads/${singleBanner.filename}`,
-        NavigateTo: `/bannerClicked?categoryId=${category}&type=${type}`,
-      }));
-    }
+  if (banners?.length > 0) {
+    req.body.banners = banners.map((singleBanner, index) => ({
+      img: `${process.env.API}/uploads/${singleBanner.filename}`,
+      NavigateTo: `/bannerClicked?categoryId=${category}&type=${type}`,
+    }));
   }
 
-  if (products) {
-    if (products.length > 0) {
-      req.body.products = products.map((singleProduct, index) => ({
-        img: `${process.env.API}/uploads/${singleProduct.filename}`,
-        NavigateTo: `/productClicked?categoryId=${category}&type=${type}`,
-      }));
-    }
+  if (products?.length > 0) {
+    req.body.products = products.map((singleProduct, index) => ({
+      img: `${process.env.API}/uploads/${singleProduct.filename}`,
+      NavigateTo: `/productClicked?categoryId=${category}&type=${type}`,
+    }));
   }
 
   const existedPage = await pageSchema.findOne({ category }).exec();

@@ -53,24 +53,36 @@ const pages = () => {
   };
 
   const handleSubmit = async () => {
-    const cat = categoryList(allCategories).find((c) => c.value === Category);
-    const { type, _id } = cat;
-    const form = new FormData();
-    form.append("title", title);
-    form.append("description", desc);
-    form.append("category", _id);
-    form.append("type", type);
-    for (const img of Img) {
-      form.append("products", img);
-    }
-    for (const ban of banner) {
-      form.append("banners", ban);
-    }
-    try {
-      const req = await axios.post("page/create", form);
-      console.log(req);
-    } catch (error) {
-      console.log(error);
+    if (title && Category && desc && Img.length > 0 && banner.length > 0) {
+      const cat = categoryList(allCategories).find((c) => c.value === Category);
+      const { type, _id } = cat;
+      const form = new FormData();
+      form.append("title", title);
+      form.append("description", desc);
+      form.append("category", _id);
+      form.append("type", type);
+      for (const img of Img) {
+        form.append("products", img);
+      }
+      for (const ban of banner) {
+        form.append("banners", ban);
+      }
+      try {
+        const req = await axios.post("page/create", form);
+        setAnchorEl(null);
+        setAnchorEl2(null);
+        setBanner([]);
+        setCategory(0);
+        setDesc("");
+        setImg([]);
+        setPage(false);
+        setTitle("");
+        console.log(req);
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      return false;
     }
   };
   const renderCreatePage = () => {
