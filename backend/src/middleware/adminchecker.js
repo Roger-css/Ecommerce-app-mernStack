@@ -8,7 +8,7 @@ const checkAdmin = (req, res, next) => {
                 return res.status(401).json({message : `"Unauthorized from admin"`})
             }
     } catch (error) {
-        console.log("error from amdi ncghecker");
+        console.log("error from admin checker");
         return res.status(401).json("Unauthorized")
     }
 }

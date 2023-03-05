@@ -1,14 +1,14 @@
 const pageSchema = require('../../models/page');
 
 module.exports.createPage = async (req, res, next) => {
-    const { banners, products} = req.files
+    const { banners, products} = req.files 
     const {category, type, title, description} = req.body
     console.log(req.body);
     if (banners){
         if (banners.length > 0){
             req.body.banners = banners.map((singleBanner, index) => ({
                 img: `${process.env.API}/public/uploads/${singleBanner.filename}`,
-                NavigateTo:`/bannerClicked?categoryId=${category}&type=${type}`
+                navigateTo:`/bannerClicked?categoryId=${category}&type=${type}`
             }))
             
         }
@@ -18,11 +18,12 @@ module.exports.createPage = async (req, res, next) => {
         if (products.length > 0){
             req.body.products = products.map((singleProduct, index) => ({
                 img: `${process.env.API}/public/uploads/${singleProduct.filename}`,
-                NavigateTo:`/productClicked?categoryId=${category}&type=${type}`
+                navigateTo:`/productClicked?categoryId=${category}&type=${type}`
             }))
         }
     }
-
+    
+    req.body.createdBy = req.id
     const existedPage =  await pageSchema.findOne({category}).exec()
     if(existedPage){
         const updatedExistedPage = await pageSchema.findOneAndUpdate(category, req.body).exec()
@@ -35,7 +36,7 @@ module.exports.createPage = async (req, res, next) => {
     } else {
         const page = new pageSchema(req.body)
         page.save((error, page)=> {
-        if(error) return res.status(400).json({message: "error here"})
+        if(error) return res.status(400).json({message: error})
         if(page) return res.status(201).json({message: "created successfully"})
     })
     }
