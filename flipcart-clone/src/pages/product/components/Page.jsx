@@ -5,15 +5,13 @@ import Card from "../../../components/card";
 
 const Page = (props) => {
   const { page } = props;
-  return <div>hi</div>;
-};
-
-export default Page;
-/* <>
+  return (
+    <>
       <h3>{page.title}</h3>
-      <Carousel>
+      <Carousel renderThumbs={() => {}}>
         {page.banners &&
           page.banners.map((banner, i) => {
+            console.log(banner);
             return (
               <a key={i} style={{ display: "block" }} href={banner.navigateTo}>
                 <img src={banner.img} alt="" />
@@ -28,10 +26,13 @@ export default Page;
           page.products.map((product, i) => {
             return (
               <Card key={i}>
-                <img src={product.img} alt="" />
+                <img style={{ width: "100%" }} src={product.img} alt="" />
               </Card>
             );
           })}
       </div>
-    </> 
-*/
+    </>
+  );
+};
+
+export default Page;
