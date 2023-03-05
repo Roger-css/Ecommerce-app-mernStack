@@ -19,7 +19,7 @@ const upload = multer({ storage: storage });
 router
   .route("/create")
   .post(
-    verifyJWT,
+    // verifyJWT,
     upload.fields([
       {name: "banners"},
       {name: "products"}
