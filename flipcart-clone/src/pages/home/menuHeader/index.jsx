@@ -9,7 +9,6 @@ const index = () => {
     const request = async () => {
       try {
         const req = await axios.get("/category/get");
-        console.log(req);
         dispatch(getAllCategories(req.data.orderCategories));
       } catch (err) {
         console.log(err);
@@ -21,7 +20,11 @@ const index = () => {
     return param.map((p) => {
       return (
         <li key={p._id}>
-          {p.parentId ? <a href={p.slug}>{p.name}</a> : <span>{p.name}</span>}
+          {p.parentId ? (
+            <a href={`/${p.slug}?cid=${p._id}&type=${p.type}`}>{p.name}</a>
+          ) : (
+            <span>{p.name}</span>
+          )}
           {p.children?.length > 0 && <ul>{catsDeploy(p.children)}</ul>}
         </li>
       );

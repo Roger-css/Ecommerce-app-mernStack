@@ -1,32 +1,10 @@
-import React, { useEffect } from "react";
-import { useLocation } from "react-router-dom";
-import Wrapper from "../../layout/Wrapper";
-import usePrivate from "../../hooks/usePrivate";
-import { useDispatch, useSelector } from "react-redux";
-import { addProducts } from "../../state/reducers/products";
-import "./style.css";
-const productsListPage = () => {
-  const location = useLocation();
-  const products = useSelector((state) => state.product);
-  const axios = usePrivate();
-  const dispatch = useDispatch();
-  const { pathname } = location;
-  const path = pathname.slice(1);
-  useEffect(() => {
-    const fn = async () => {
-      try {
-        const req = await axios.get(`/product${pathname}`);
-        dispatch(addProducts(req.data));
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    fn();
-  }, []);
+import React from "react";
+import generatePhoto from "../../../hooks/useGeneratePhoto";
+const Store = (props) => {
+  const { products, path } = props;
   return (
-    <Wrapper>
+    <>
       {Object.keys(products.productsByPrice).map((e, i) => {
-        console.log(e);
         return (
           <div key={e} className="card">
             <div className="cardHeader">
@@ -40,7 +18,10 @@ const productsListPage = () => {
                 return (
                   <div key={JSON.stringify(a)} className="product">
                     <div className="picture">
-                      <img src="https://random.imagecdn.app/180/300" alt="" />
+                      <img
+                        src={generatePhoto(a.productPictures[0]?.img)}
+                        alt=""
+                      />
                     </div>
                     <div className="productDetails">
                       <div className="productName">{a.name}</div>
@@ -57,8 +38,8 @@ const productsListPage = () => {
           </div>
         );
       })}
-    </Wrapper>
+    </>
   );
 };
 
-export default productsListPage;
+export default Store;

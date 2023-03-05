@@ -13,6 +13,7 @@ const PersistLogin = () => {
   const navigate = useNavigate();
   const initialData = useInitialData();
   const userName = useSelector((state) => state.auth.user.userName);
+  const loader = useSelector((state) => state.category.loading);
   useEffect(() => {
     let isMounted = true;
     const Check = async () => {
@@ -40,13 +41,16 @@ const PersistLogin = () => {
         await initialData();
       } catch (error) {
         console.log(error);
-      } finally {
-        isMounted && setLoading(false);
       }
     };
-    userName ? initial() : setLoading(false);
+    userName && initial();
     return () => (isMounted = false);
   }, [userName]);
+  useEffect(() => {
+    let isMounted = true;
+    isMounted && !loader && setLoading(false);
+    return () => (isMounted = false);
+  }, [loader]);
   const content = (
     <>
       {!persistent ? (
