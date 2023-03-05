@@ -5,11 +5,8 @@ import Card from "../../../components/card";
 
 const Page = (props) => {
   const { page } = props;
-  return <div>hi</div>;
-};
-
-export default Page;
-/* <>
+  return (
+    <>
       <h3>{page.title}</h3>
       <Carousel>
         {page.banners &&
@@ -33,5 +30,8 @@ export default Page;
             );
           })}
       </div>
-    </> 
-*/
+    </>
+  );
+};
+
+export default Page;
