@@ -117,7 +117,6 @@ const MainPage = () => {
         categoryImage: Img,
         type: type,
       };
-      console.log(data);
       try {
         const req = await createCat(data).unwrap();
         initialData();

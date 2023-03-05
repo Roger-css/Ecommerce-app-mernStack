@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Modal,
   Box,
@@ -17,7 +17,7 @@ import DoneAllIcon from "@mui/icons-material/DoneAll";
 import CloseIcon from "@mui/icons-material/Close";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import categoryList from "../../helpers/categoryList";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import usePrivate from "../../hooks/usePrivate";
 const pages = () => {
   const [page, setPage] = useState(false);
@@ -33,6 +33,7 @@ const pages = () => {
   const [anchorEl2, setAnchorEl2] = useState(null);
   const axios = usePrivate();
   const theme = useTheme();
+  const dispatch = useDispatch();
   const style = {
     position: "absolute",
     top: "50%",
@@ -50,6 +51,7 @@ const pages = () => {
     width: "130px",
     position: "relative",
   };
+
   const handleSubmit = async () => {
     const cat = categoryList(allCategories).find((c) => c.value === Category);
     const { type, _id } = cat;
@@ -130,7 +132,7 @@ const pages = () => {
               mt="10px"
             >
               <Button
-                className="files"
+                className="files3"
                 color="primary"
                 onMouseEnter={() => setContained(true)}
                 onMouseLeave={() => setContained(false)}

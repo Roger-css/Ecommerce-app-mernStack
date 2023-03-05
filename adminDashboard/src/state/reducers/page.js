@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
-  pages: [],
+  pages: {},
 };
 const pageSlice = createSlice({
   initialState,
@@ -11,3 +11,5 @@ const pageSlice = createSlice({
     },
   },
 });
+export default pageSlice.reducer;
+export const { addPage } = pageSlice.actions;

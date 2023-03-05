@@ -75,8 +75,19 @@ footer a {
   width: 100%;
   transition: 250ms;
 }
+.files3::before {
+  content: "product pictures";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #1976d2;
+  width: 100%;
+  transition: 250ms;
+}
 .files:hover:before,
-.files2:hover:before {
+.files2:hover:before,
+.files3:hover:before {
   color: white;
 }
 a.active {
