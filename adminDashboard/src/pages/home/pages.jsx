@@ -51,7 +51,6 @@ const pages = () => {
     width: "130px",
     position: "relative",
   };
-
   const handleSubmit = async () => {
     if (title && Category && desc && Img.length > 0 && banner.length > 0) {
       const cat = categoryList(allCategories).find((c) => c.value === Category);
@@ -364,5 +363,4 @@ const pages = () => {
     </Container>
   );
 };
-
 export default pages;
