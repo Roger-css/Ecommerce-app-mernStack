@@ -7,7 +7,7 @@ module.exports.createPage = async (req, res, next) => {
 
     if (banners?.length > 0){
         req.body.banners = banners.map((singleBanner, index) => ({
-            img: `${process.env.API}/public/uploads/${singleBanner.filename}`,
+            img: `${process.env.API}/uploads/${singleBanner.filename}`,
             navigateTo:`/bannerClicked?categoryId=${category}&type=${type}`
         }))
             
