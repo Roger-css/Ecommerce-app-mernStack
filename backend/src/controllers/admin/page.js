@@ -3,8 +3,6 @@ const pageSchema = require("../../models/page");
 module.exports.createPage = async (req, res, next) => {
   const { banners, products } = req.files;
   const { category, type, title, description } = req.body;
-  console.log(req.body);
-
   if (banners?.length > 0) {
     req.body.banners = banners.map((singleBanner, index) => ({
       img: `${process.env.API}/uploads/${singleBanner.filename}`,
