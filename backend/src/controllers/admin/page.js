@@ -7,13 +7,13 @@ module.exports.createPage = async (req, res, next) => {
 
   if (banners?.length > 0) {
     req.body.banners = banners.map((singleBanner, index) => ({
-      img: `${process.env.API}uploads/${singleBanner.filename}`,
+      img: `${process.env.API}/uploads/${singleBanner.filename}`,
       navigateTo: `/bannerClicked?categoryId=${category}&type=${type}`,
     }));
   }
   if (products?.length > 0) {
     req.body.products = products.map((singleProduct, index) => ({
-      img: `${process.env.API}uploads/${singleProduct.filename}`,
+      img: `${process.env.API}/uploads/${singleProduct.filename}`,
       navigateTo: `/productClicked?categoryId=${category}&type=${type}`,
     }));
   }
