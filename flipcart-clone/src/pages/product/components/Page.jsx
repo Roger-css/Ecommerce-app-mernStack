@@ -5,13 +5,13 @@ import Card from "../../../components/card";
 
 const Page = (props) => {
   const { page } = props;
+  console.log(page);
   return (
     <>
       <h3>{page.title}</h3>
       <Carousel renderThumbs={() => {}}>
         {page.banners &&
           page.banners.map((banner, i) => {
-            console.log(banner);
             return (
               <a key={i} style={{ display: "block" }} href={banner.navigateTo}>
                 <img src={banner.img} alt="" />
