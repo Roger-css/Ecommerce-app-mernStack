@@ -3,8 +3,6 @@ const pageSchema = require("../../models/page");
 module.exports.createPage = async (req, res, next) => {
   const { banners, products } = req.files;
   const { category, type, title, description } = req.body;
-  console.log(req.body);
-
     if (banners?.length > 0){
         req.body.banners = banners.map((singleBanner, index) => ({
             img: `${process.env.API}/uploads/${singleBanner.filename}`,
@@ -30,17 +28,16 @@ module.exports.createPage = async (req, res, next) => {
             return res.status(400).json({message: "something happened"})
         }
     } else {
-      return res.status(400).json({ message: "something happened" });
+      const page = new pageSchema(req.body);
+      page.save((error, page) => {
+        if (error) return res.status(400).json({ message: error });
+        if (page)
+          return res.status(201).json({ message: "created successfully" });
+      });
     }
-  } else {
-    const page = new pageSchema(req.body);
-    page.save((error, page) => {
-      if (error) return res.status(400).json({ message: error });
-      if (page)
-        return res.status(201).json({ message: "created successfully" });
-    });
   }
-};
+
+
 
 module.exports.getPage = async (req, res, next) => {
   try {
