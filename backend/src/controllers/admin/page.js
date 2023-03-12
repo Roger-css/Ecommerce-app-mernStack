@@ -3,41 +3,40 @@ const pageSchema = require("../../models/page");
 module.exports.createPage = async (req, res, next) => {
   const { banners, products } = req.files;
   const { category, type, title, description } = req.body;
-    if (banners?.length > 0){
-        req.body.banners = banners.map((singleBanner, index) => ({
-            img: `${process.env.API}/uploads/${singleBanner.filename}`,
-            navigateTo:`/bannerClicked?categoryId=${category}&type=${type}`
-        }))
-            
-    }
-    if (products?.length > 0){
-        req.body.products = products.map((singleProduct, index) => ({
-            img: `${process.env.API}/uploads/${singleProduct.filename}`,
-            navigateTo:`/productClicked?categoryId=${category}&type=${type}`
-        }))
-    }
-    
-    req.body.createdBy = req.id
-    const existedPage =  await pageSchema.findOne({category}).exec()
-    if(existedPage){
-        const updatedExistedPage = await pageSchema.findOneAndUpdate(category, req.body).exec()
-        console.log(updatedExistedPage);
-        if(updatedExistedPage){
-            return res.status(201).json({message: "Updated successfully"})
-        } else {
-            return res.status(400).json({message: "something happened"})
-        }
-    } else {
-      const page = new pageSchema(req.body);
-      page.save((error, page) => {
-        if (error) return res.status(400).json({ message: error });
-        if (page)
-          return res.status(201).json({ message: "created successfully" });
-      });
-    }
+  if (banners?.length > 0) {
+    req.body.banners = banners.map((singleBanner, index) => ({
+      img: `${process.env.API}/uploads/${singleBanner.filename}`,
+      navigateTo: `/bannerClicked?categoryId=${category}&type=${type}`,
+    }));
+  }
+  if (products?.length > 0) {
+    req.body.products = products.map((singleProduct, index) => ({
+      img: `${process.env.API}/uploads/${singleProduct.filename}`,
+      navigateTo: `/productClicked?categoryId=${category}&type=${type}`,
+    }));
   }
 
-
+  req.body.createdBy = req.id;
+  const existedPage = await pageSchema.findOne({ category }).exec();
+  if (existedPage) {
+    const updatedExistedPage = await pageSchema
+      .findOneAndUpdate(category, req.body)
+      .exec();
+    console.log(updatedExistedPage);
+    if (updatedExistedPage) {
+      return res.status(201).json({ message: "Updated successfully" });
+    } else {
+      return res.status(400).json({ message: "something happened" });
+    }
+  } else {
+    const page = new pageSchema(req.body);
+    page.save((error, page) => {
+      if (error) return res.status(400).json({ message: error });
+      if (page)
+        return res.status(201).json({ message: "created successfully" });
+    });
+  }
+};
 
 module.exports.getPage = async (req, res, next) => {
   try {
