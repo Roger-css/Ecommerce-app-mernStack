@@ -96,7 +96,12 @@ module.exports.postSignIn = async (req, res, next) => {
       sameSite: "None",
       maxAge: 7 * 24 * 60 * 60 * 60 * 60 * 60 * 1000,
     });
-    res.json({ accessToken });
+    res.json({ accessToken,  
+      Userinfo: {
+      username: foundUser.username,
+      email: foundUser.email,
+      id: foundUser._id
+    }  });
     return;
   } catch (err) {
     console.log(err);
