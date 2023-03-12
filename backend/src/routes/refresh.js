@@ -33,7 +33,7 @@ router.route("/refresh").get((req, res, next) => {
         process.env.JWT_ACCESS_TOKEN_KEY,
         { expiresIn: `1m` }
       );
-      return res.status(201).json({ accessToken });
+      return res.status(201).json({ accessToken , email : foundUser.email});
     }
   );
 });
