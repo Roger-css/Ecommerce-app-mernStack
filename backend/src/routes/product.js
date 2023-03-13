@@ -33,7 +33,7 @@ router
 
   
 /// start of public roots 
-    router.route("/:categoryName").get(productController.getProductsByCategory)
+    router.route("/category/:categoryName").get(productController.getProductsByCategory)
     router.route("/:productId").get(productController.getProductsById)
 /// end of public roots 
 module.exports = router;
