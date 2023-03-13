@@ -7,7 +7,7 @@ import jwtDecode from "jwt-decode";
 const PersistLogin = () => {
   const [Loading, setLoading] = useState(true);
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const auth = JSON.parse(localStorage.getItem("authenticated"));
   useEffect(() => {
     let isMounted = true;
     const Check = async () => {
@@ -20,12 +20,11 @@ const PersistLogin = () => {
       } catch (err) {
         console.log(err);
         logout({ error: err });
-        navigate("sign-in");
       } finally {
         setLoading(false);
       }
     };
-    Check();
+    auth ? Check() : setLoading(false);
     return () => (isMounted = false);
   }, []);
   const content = (
