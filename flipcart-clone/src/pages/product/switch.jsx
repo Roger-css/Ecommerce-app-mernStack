@@ -18,7 +18,7 @@ const Switch = (props) => {
   useEffect(() => {
     const storeReq = async () => {
       try {
-        const req = await axios.get(`/product${pathname}`);
+        const req = await axios.get(`/product/category${pathname}`);
         dispatch(addProducts(req.data));
       } catch (err) {
         console.log(err);
