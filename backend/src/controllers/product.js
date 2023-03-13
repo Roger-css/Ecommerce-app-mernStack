@@ -70,6 +70,7 @@ module.exports.getProducts = async (req ,res ,next ) => {
 module.exports.getProductsByCategory = async (req , res, next) => {
     try {
         const {categoryName} = req.params
+        console.log(categoryName);
         const category = await categoryModel.findOne({name: categoryName})
         if(category){
             const products = await productModel.find({category})
