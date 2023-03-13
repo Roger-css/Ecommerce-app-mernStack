@@ -18,10 +18,11 @@ const Store = (props) => {
               {products.productsByPrice[e].map((a) => {
                 return (
                   <Link
+                    key={JSON.stringify(a)}
                     style={{ textDecoration: "none", color: "unset" }}
                     to={`/${a.slug}/${a._id}/p`}
                   >
-                    <div key={JSON.stringify(a)} className="product">
+                    <div className="product">
                       <div className="picture">
                         <img
                           src={generatePhoto(a.productPictures[0]?.img)}

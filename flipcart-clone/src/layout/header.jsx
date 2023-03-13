@@ -129,7 +129,7 @@ const Header = (props) => {
       </Modal>
       <div className="subHeader">
         <div className="logo">
-          <a href="">
+          <a href="/">
             <img src={flipKartLogo} className="logoimage" alt="" />
           </a>
           <a style={{ marginTop: "-10px" }}>
