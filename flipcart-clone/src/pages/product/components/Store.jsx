@@ -1,5 +1,6 @@
 import React from "react";
 import generatePhoto from "../../../hooks/useGeneratePhoto";
+import { Link } from "react-router-dom";
 const Store = (props) => {
   const { products, path } = props;
   return (
@@ -16,22 +17,27 @@ const Store = (props) => {
             <div className="productsContainer">
               {products.productsByPrice[e].map((a) => {
                 return (
-                  <div key={JSON.stringify(a)} className="product">
-                    <div className="picture">
-                      <img
-                        src={generatePhoto(a.productPictures[0]?.img)}
-                        alt=""
-                      />
-                    </div>
-                    <div className="productDetails">
-                      <div className="productName">{a.name}</div>
-                      <div className="ratings">
-                        <span className="total">4.5</span>
-                        <span className="count">3345</span>
+                  <Link
+                    style={{ textDecoration: "none", color: "unset" }}
+                    to={`/${a.slug}/${a._id}/p`}
+                  >
+                    <div key={JSON.stringify(a)} className="product">
+                      <div className="picture">
+                        <img
+                          src={generatePhoto(a.productPictures[0]?.img)}
+                          alt=""
+                        />
                       </div>
-                      <div className="price">{a.price}</div>
+                      <div className="productDetails">
+                        <div className="productName">{a.name}</div>
+                        <div className="ratings">
+                          <span className="total">4.5</span>
+                          <span className="count">3345</span>
+                        </div>
+                        <div className="price">{a.price}</div>
+                      </div>
                     </div>
-                  </div>
+                  </Link>
                 );
               })}
             </div>

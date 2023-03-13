@@ -2,12 +2,20 @@ import "./App.css";
 import { Routes, Route } from "react-router-dom";
 import HomePage from "./pages/home";
 import ProductsListPage from "./pages/product/index";
+import PersistLogin from "./components/persistantLogin";
+import Wrapper from "./layout/Wrapper";
+import Product from "./pages/singleProduct";
 function App() {
   return (
     <div className="App">
       <Routes>
-        <Route path="/" exact element={<HomePage />}></Route>
-        <Route path=":slug" element={<ProductsListPage />} />
+        <Route element={<PersistLogin />}>
+          <Route element={<Wrapper />}>
+            <Route path="/" exact element={<HomePage />} />
+            <Route path=":slug" element={<ProductsListPage />} />
+            <Route path=":productSlug/:product_id/p" element={<Product />} />
+          </Route>
+        </Route>
       </Routes>
     </div>
   );

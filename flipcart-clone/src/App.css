@@ -89,7 +89,8 @@
   font-size: 16px;
   cursor: pointer;
 }
-.more {
+.more,
+.fullName {
   font-weight: bold;
   color: #fff;
   display: flex;
@@ -198,6 +199,7 @@
   color: #2874f0;
 }
 .menuHeader > ul > li > ul {
+  z-index: 2;
   position: absolute;
   left: 0;
   right: 0;

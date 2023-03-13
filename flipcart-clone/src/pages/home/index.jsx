@@ -1,13 +1,5 @@
-import React from "react";
-import Header from "../../layout/header";
-import MenuHeader from "../home/menuHeader";
 const Index = () => {
-  return (
-    <div>
-      <Header />
-      <MenuHeader />
-    </div>
-  );
+  return <div>empty</div>;
 };
 
 export default Index;

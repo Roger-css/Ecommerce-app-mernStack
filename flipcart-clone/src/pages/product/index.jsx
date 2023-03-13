@@ -7,11 +7,7 @@ const productsListPage = () => {
   const location = useLocation();
   const { pathname } = location;
   const path = pathname.slice(1);
-  return (
-    <Wrapper>
-      <Switch location={location} />
-    </Wrapper>
-  );
+  return <Switch location={location} />;
 };
 
 export default productsListPage;
