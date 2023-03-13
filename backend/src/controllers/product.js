@@ -98,7 +98,8 @@ module.exports.getProductsByCategory = async (req , res, next) => {
 module.exports.getProductsById = async (req , res, next) => {
     try {
         const {productId} = req.params
-        const product = productModel.findById({_id: productId}).exec()
+        const product = await productModel.findById({_id: productId}).exec()
+        console.log(product);
         if(product){
             return res.status(200).json({product})
         } else {
