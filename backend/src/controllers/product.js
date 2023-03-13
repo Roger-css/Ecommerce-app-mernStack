@@ -100,7 +100,7 @@ module.exports.getProductsById = async (req , res, next) => {
         const {productId} = req.params
         const product = productModel.findById({_id: productId}).exec()
         if(product){
-            return res.status(200).json(product)
+            return res.status(200).json({product})
         } else {
             return res.status(400).json({message: "something went wrong"})
         }
