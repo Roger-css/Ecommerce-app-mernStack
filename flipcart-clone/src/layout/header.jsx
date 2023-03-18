@@ -14,6 +14,7 @@ import {
 } from "../components/materialUI";
 import Logo from "../assets/login-image.png";
 import axios from "../api/axios";
+import useLogOut from "../hooks/useLogout";
 
 const Header = (props) => {
   const [loginModal, setLoginModal] = useState(false);
@@ -21,7 +22,9 @@ const Header = (props) => {
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth);
+  const logOut = useLogOut();
   const submitLogin = async () => {
+    setLoginModal(false);
     try {
       const req = await axios.post("sign-in", { email, password });
       const info = decode(req.data);
@@ -29,6 +32,7 @@ const Header = (props) => {
         Userinfo: { username },
       } = info;
       dispatch(login({ token: req.data, username }));
+      localStorage.setItem("authenticated", true);
     } catch (error) {
       console.log(error);
     }
@@ -73,7 +77,12 @@ const Header = (props) => {
           { label: "Rewards", href: "", icon: null },
           { label: "Notifications", href: "", icon: null },
           { label: "Gift Cards", href: "", icon: null },
-          { label: "LogOut", href: "", icon: null },
+          {
+            label: "LogOut",
+            href: "",
+            icon: null,
+            handleClick: logOut,
+          },
         ]}
       />
     );

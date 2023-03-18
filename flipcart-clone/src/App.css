@@ -232,3 +232,6 @@
 .menuHeader > ul > li > ul > li:first-child {
   margin-top: 10px;
 }
+.flexRow {
+  display: flex;
+}

@@ -1,18 +1,15 @@
-import axios from "../api/axios";
+import useAxios from "../hooks/usePrivate";
 import { logout } from "../state/reducers/auth";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
 const useLogOut = () => {
-  const token = useSelector((state) => state.auth.token);
+  const axios = useAxios();
   const dispatch = useDispatch();
   const handleLogOut = async () => {
     try {
-      const req = await axios.post("/sign-out", null, {
-        headers: {
-          authorization: token ? `Bearer ${token}` : "",
-        },
-      });
-      localStorage.removeItem("persist");
+      const req = await axios.post("/sign-out", null);
+      console.log("done");
+      localStorage.removeItem("authenticated");
       dispatch(logout());
     } catch (error) {
       console.log(error);
