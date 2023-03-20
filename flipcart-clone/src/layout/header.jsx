@@ -15,6 +15,7 @@ import {
 import Logo from "../assets/login-image.png";
 import axios from "../api/axios";
 import useLogOut from "../hooks/useLogout";
+import { Link } from "react-router-dom";
 
 const Header = (props) => {
   const [loginModal, setLoginModal] = useState(false);
@@ -188,10 +189,14 @@ const Header = (props) => {
             ]}
           />
           <div>
-            <a className="cart">
+            <Link
+              style={{ textDecoration: "none" }}
+              to={"/cart"}
+              className="cart"
+            >
               <IoCart />
               <span style={{ margin: "0 10px" }}>Cart</span>
-            </a>
+            </Link>
           </div>
         </div>
       </div>
