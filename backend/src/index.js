@@ -12,6 +12,9 @@ const adminProductRoutes = require("./routes/product");
 const cartRoutes = require("./routes/cart");
 const initialDataRoutes = require("./routes/admin/initailData");
 const adminPageRoute = require("./routes/admin/page")
+const  AddressRoutes = require("./routes/address")
+const  orderRoutes = require("./routes/order")
+const  AdminOrderRoutes = require("./routes/admin/order.routes")
 const path = require("path");
 
 const refreshRoot = require("./routes/refresh");
@@ -52,6 +55,9 @@ app.use("/api/category", CategoryRoutes);
 app.use("/api/product", adminProductRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api", initialDataRoutes);
+// app.use("/api", AddressRoutes)
+// app.use("/api", orderRoutes)
+// app.use("/api", AdminOrderRoutes)
 
 mongoose
   .connect(DB_URI, {
