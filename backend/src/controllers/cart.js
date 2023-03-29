@@ -67,18 +67,28 @@ module.exports.addToCart = async (req, res, next) => {
   }
 };
 
-exports.getCartItems = (req, res) => {
+exports.getCartItems = async (req, res) => {
   //const { user } = req.body.payload;
   //if(user){
-  console.log("it worked ?");
+  console.log("it worked 1?");
+
+  const FoundedCart = await cartModel.findOne({ user: req.id });
+  console.log(req.id);
+
   cartModel
     .findOne({ user: req.id })
     .populate("cartItems.product", "_id name price productPictures")
     .exec((error, cart) => {
+      console.log("it worked 2?");
       if (error) return res.status(400).json({ error });
       if (cart) {
         let cartItems = {};
         cart.cartItems.forEach((item, index) => {
+          console.log(`product id  = ${item.product._id}`);
+          console.log(`product name  = ${item.product.name}`);
+          console.log(`product pic  = ${item.product.productPictures[0].img}`);
+          console.log(`product id  = ${item.product.price}`);
+          console.log(`product qty  = ${item.quantity}`);
           cartItems[item.product._id.toString()] = {
             _id: item.product._id.toString(),
             name: item.product.name,
@@ -88,6 +98,8 @@ exports.getCartItems = (req, res) => {
           };
         });
         return res.status(200).json({ cartItems });
+      } else {
+        return res.status(204).json({ message: "Not Cart Items" });
       }
     });
 };
