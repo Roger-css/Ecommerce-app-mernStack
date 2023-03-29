@@ -70,6 +70,7 @@ module.exports.addToCart = async (req, res, next) => {
 exports.getCartItems = (req, res) => {
   //const { user } = req.body.payload;
   //if(user){
+  console.log("it worked ?");
   cartModel
     .findOne({ user: req.id })
     .populate("cartItems.product", "_id name price productPictures")
@@ -89,7 +90,6 @@ exports.getCartItems = (req, res) => {
         return res.status(200).json({ cartItems });
       }
     });
-  //}
 };
 
 // new update remove cart items
