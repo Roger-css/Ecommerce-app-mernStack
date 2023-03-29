@@ -7,7 +7,6 @@ import {
   decreaseQty,
 } from "../../state/reducers/cart";
 import "./style.css";
-import { MaterialButton } from "../../components/MaterialUI";
 const CartPage = (props) => {
   const cart = useSelector((state) => state.cart.cartProducts);
   const auth = useSelector((state) => state.auth);
@@ -26,7 +25,6 @@ const CartPage = (props) => {
   const onRemoveCartItem = (_id) => {
     dispatch(removeProductFromCart({ _id }));
   };
-
   return (
     <>
       <div className="cartContainer">
