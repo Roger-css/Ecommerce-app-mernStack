@@ -1,13 +1,15 @@
 import { useState, useEffect } from "react";
-import { useNavigate, Outlet } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import { logout, login } from "../state/reducers/auth";
-import { useDispatch } from "react-redux";
-import axios from "../api/axios";
+import { useDispatch, useSelector } from "react-redux";
 import jwtDecode from "jwt-decode";
+import usePrivate from "../hooks/usePrivate";
 const PersistLogin = () => {
   const [Loading, setLoading] = useState(true);
   const dispatch = useDispatch();
   const auth = JSON.parse(localStorage.getItem("authenticated"));
+  const axios = usePrivate();
+  const token = useSelector((state) => state.auth.token);
   useEffect(() => {
     let isMounted = true;
     const Check = async () => {
@@ -18,15 +20,27 @@ const PersistLogin = () => {
         } = jwtDecode(req.data.accessToken);
         dispatch(login({ token: req.data.accessToken, username }));
       } catch (err) {
+        dispatch(logout());
         console.log(err);
-        logout({ error: err });
       } finally {
         setLoading(false);
       }
     };
+
     auth ? Check() : setLoading(false);
     return () => (isMounted = false);
   }, []);
+  useEffect(() => {
+    const cartItems = async () => {
+      try {
+        const req = await axios.get("cart/user/getCartItems");
+        console.log(req);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    token && cartItems();
+  }, [token]);
   const content = (
     <>
       {Loading ? (
