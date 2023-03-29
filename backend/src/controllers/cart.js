@@ -86,32 +86,32 @@ exports.getCartItems = (req, res) => {
             qty: item.quantity,
           };
         });
-        res.status(200).json({ cartItems });
+        return res.status(200).json({ cartItems });
       }
     });
   //}
 };
 
 // new update remove cart items
-exports.removeCartItems = (req, res) => {
-  const { productId } = req.body.payload;
-  if (productId) {
-    cartModel
-      .update(
-        { user: req.id },
-        {
-          $pull: {
-            cartItems: {
-              product: productId,
-            },
-          },
-        }
-      )
-      .exec((error, result) => {
-        if (error) return res.status(400).json({ error });
-        if (result) {
-          res.status(202).json({ result });
-        }
-      });
-  }
-};
+// exports.removeCartItems = (req, res) => {
+//   const { productId } = req.body.payload;
+//   if (productId) {
+//     cartModel
+//       .update(
+//         { user: req.id },
+//         {
+//           $pull: {
+//             cartItems: {
+//               product: productId,
+//             },
+//           },
+//         }
+//       )
+//       .exec((error, result) => {
+//         if (error) return res.status(400).json({ error });
+//         if (result) {
+//           res.status(202).json({ result });
+//         }
+//       });
+//   }
+// };
