@@ -11,10 +11,10 @@ const CategoryRoutes = require("./routes/category");
 const adminProductRoutes = require("./routes/product");
 const cartRoutes = require("./routes/cart");
 const initialDataRoutes = require("./routes/admin/initailData");
-const adminPageRoute = require("./routes/admin/page")
-const  AddressRoutes = require("./routes/address")
-const  orderRoutes = require("./routes/order")
-const  AdminOrderRoutes = require("./routes/admin/order.routes")
+const adminPageRoute = require("./routes/admin/page");
+const AddressRoutes = require("./routes/address");
+const orderRoutes = require("./routes/order");
+const AdminOrderRoutes = require("./routes/admin/order.routes");
 const path = require("path");
 
 const refreshRoot = require("./routes/refresh");
@@ -47,7 +47,7 @@ app.use(express.static(path.join(__dirname, "public")));
 //admin routes
 app.use("/api/admin", adminRoutes);
 app.use("/api/admin", adminInitialData);
-app.use("/api/page", adminPageRoute)
+app.use("/api/page", adminPageRoute);
 // combined routes
 app.use("/api", userRoutes);
 app.use("/api", refreshRoot);

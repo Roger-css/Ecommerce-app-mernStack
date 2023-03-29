@@ -70,7 +70,8 @@ module.exports.addToCart = async (req, res, next) => {
 exports.getCartItems = (req, res) => {
   //const { user } = req.body.payload;
   //if(user){
-  Cart.findOne({ user: req.id })
+  cartModel
+    .findOne({ user: req.id })
     .populate("cartItems.product", "_id name price productPictures")
     .exec((error, cart) => {
       if (error) return res.status(400).json({ error });
@@ -95,20 +96,22 @@ exports.getCartItems = (req, res) => {
 exports.removeCartItems = (req, res) => {
   const { productId } = req.body.payload;
   if (productId) {
-    Cart.update(
-      { user: req.id },
-      {
-        $pull: {
-          cartItems: {
-            product: productId,
+    cartModel
+      .update(
+        { user: req.id },
+        {
+          $pull: {
+            cartItems: {
+              product: productId,
+            },
           },
-        },
-      }
-    ).exec((error, result) => {
-      if (error) return res.status(400).json({ error });
-      if (result) {
-        res.status(202).json({ result });
-      }
-    });
+        }
+      )
+      .exec((error, result) => {
+        if (error) return res.status(400).json({ error });
+        if (result) {
+          res.status(202).json({ result });
+        }
+      });
   }
 };
