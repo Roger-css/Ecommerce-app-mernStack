@@ -3,133 +3,70 @@ const cartModel = require("../models/cart");
 const productModel = require("../models/product");
 const ObjectId = require("mongoose").Types.ObjectId;
 
-function runUpdate(condition, updateData) {
-  return new Promise((resolve, reject) => {
-    //you update code here
-
-    Cart.findOneAndUpdate(condition, updateData, { upsert: true })
-      .then((result) => resolve())
-      .catch((err) => reject(err));
-  });
-}
-// module.exports.addToCart = async (req, res, next) => {
-//   const { cartItems, price } = req.body;
-//   try {
-//     const existCart = await cartModel.findOne({ userId: req.id }).exec();
-//     if (existCart) {
-//       const isProductExsist = existCart.cartItems.find(
-//         (e) => e.product == cartItems.product
-//       );
-//       if (isProductExsist) {
-//         const doc = await cartModel.updateOne(
-//           {
-//             userId: req.id,
-//             "cartItems.product": cartItems.product,
-//           },
-//           {
-//             $inc: {
-//               "cartItems.$.quantity": 1,
-//             },
-//           }
-//         );
-//         return res.status(200).json({ message: "quantity added " });
-//       } else {
-//         const isValidObjectId = ObjectId.isValid(cartItems.product);
-//         if (isValidObjectId) {
-//           const isProductId = await productModel.findOne({
-//             _id: cartItems.product,
-//           });
-//           if (isProductId) {
-//             cartModel.updateOne(
-//               { userId: req.id },
-//               {
-//                 $push: {
-//                   cartItems: {
-//                     product: cartItems.product,
-//                     price: price,
-//                   },
-//                 },
-//               }
-//             );
-//             existCart.cartItems.push({ cartItems });
-//             await existCart.save();
-//             return res.status(201).json({ existCart });
-//           } else {
-//             res.status(400).json({ message: " no such product" });
-//           }
-//         } else {
-//           res.status(400).json({ message: " no such product" });
-//         }
-//       }
-//     } else {
-//       const addCartToUser = new cartModel({
-//         userId: req.id,
-//         cartItems: cartItems,
-//       });
-//       addCartToUser.save((err, result) => {
-//         if (err) return res.status(400).json({ message: `error ${err}` });
-//         if (result) return res.status(201).json({ message: result });
-//       });
-//     }
-//   } catch (error) {
-//     return res.status(400).json({ message: "error happened" });
-//   }
-// };
-
-exports.addItemToCart = (req, res) => {
-  cartModel.findOne({ user: req.id }).exec((error, cart) => {
-    if (error) return res.status(400).json({ error });
-    if (cart) {
-      //if cart already exists then update cart by quantity
-      let promiseArray = [];
-
-      req.body.cartItems.forEach((cartItem) => {
-        const product = cartItem.product;
-        const item = cart.cartItems.find((c) => c.product == product);
-        let condition, update;
-        if (item) {
-          condition = { user: req.user._id, "cartItems.product": product };
-          update = {
-            $set: {
-              "cartItems.$": cartItem,
+module.exports.addToCart = async (req, res, next) => {
+  const { cartItems, price } = req.body;
+  try {
+    const existCart = await cartModel.findOne({ userId: req.id }).exec();
+    if (existCart) {
+      const isProductExsist = existCart.cartItems.find(
+        (e) => e.product == cartItems.product
+      );
+      if (isProductExsist) {
+        const doc = await cartModel.updateOne(
+          {
+            userId: req.id,
+            "cartItems.product": cartItems.product,
+          },
+          {
+            $inc: {
+              "cartItems.$.quantity": 1,
             },
-          };
+          }
+        );
+        return res.status(200).json({ message: "quantity added " });
+      } else {
+        const isValidObjectId = ObjectId.isValid(cartItems.product);
+        if (isValidObjectId) {
+          const isProductId = await productModel.findOne({
+            _id: cartItems.product,
+          });
+          if (isProductId) {
+            cartModel.updateOne(
+              { userId: req.id },
+              {
+                $push: {
+                  cartItems: {
+                    product: cartItems.product,
+                    price: price,
+                  },
+                },
+              }
+            );
+            existCart.cartItems.push({ cartItems });
+            await existCart.save();
+            return res.status(201).json({ existCart });
+          } else {
+            res.status(400).json({ message: " no such product" });
+          }
         } else {
-          condition = { user: req.id };
-          update = {
-            $push: {
-              cartItems: cartItem,
-            },
-          };
+          res.status(400).json({ message: " no such product" });
         }
-        promiseArray.push(runUpdate(condition, update));
-        //Cart.findOneAndUpdate(condition, update, { new: true }).exec();
-        // .exec((error, _cart) => {
-        //     if(error) return res.status(400).json({ error });
-        //     if(_cart){
-        //         //return res.status(201).json({ cart: _cart });
-        //         updateCount++;
-        //     }
-        // })
-      });
-      Promise.all(promiseArray)
-        .then((response) => res.status(201).json({ response }))
-        .catch((error) => res.status(400).json({ error }));
+      }
     } else {
-      //if cart not exist then create a new cart
-      const cart = new cartModel({
-        user: req.id,
-        cartItems: req.body.cartItems,
+      const addCartToUser = new cartModel({
+        userId: req.id,
+        cartItems: cartItems,
       });
-      cart.save((error, cart) => {
-        if (error) return res.status(400).json({ error });
-        if (cart) {
-          return res.status(201).json({ cart });
-        }
+      addCartToUser.save((err, result) => {
+        if (err) return res.status(400).json({ message: `error ${err}` });
+        if (result) return res.status(201).json({ message: result });
       });
     }
-  });
+  } catch (error) {
+    return res.status(400).json({ message: "error happened" });
+  }
 };
+
 exports.getCartItems = async (req, res) => {
   //const { user } = req.body.payload;
   //if(user){
