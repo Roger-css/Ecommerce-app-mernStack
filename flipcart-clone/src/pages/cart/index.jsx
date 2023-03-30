@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import CartItem from "./CartItem";
 import {
@@ -7,16 +7,28 @@ import {
   decreaseQty,
 } from "../../state/reducers/cart";
 import "./style.css";
-const CartPage = (props) => {
+import usePrivate from "../../hooks/usePrivate";
+const CartPage = () => {
   const cart = useSelector((state) => state.cart.cartProducts);
   const auth = useSelector((state) => state.auth);
   const dispatch = useDispatch();
-
+  const axios = usePrivate();
+  useEffect(() => {
+    const sendToApi = async () => {
+      try {
+        const payload = Object.values(cart);
+        const req = await axios.post("/cart/user/addToCart", payload);
+        console.log(req);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    auth && sendToApi();
+  }, [cart]);
   const onQuantityIncrement = (_id) => {
     const { name, price, img } = cart[_id];
     dispatch(addProductToCart({ _id, name, price, img }));
   };
-
   const onQuantityDecrement = (_id) => {
     const { name, price, img } = cart[_id];
     dispatch(decreaseQty({ _id, name, price, img }));

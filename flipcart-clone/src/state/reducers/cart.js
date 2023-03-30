@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-
 const initialState = {
   cartProducts: JSON.parse(localStorage.getItem("myCart")) || {},
 };
@@ -8,6 +7,7 @@ const cartSlice = createSlice({
   initialState,
   reducers: {
     addProductToCart: (state, action) => {
+      console.log(action.payload);
       const keys = Object.keys(state.cartProducts);
       const qtyPlus = keys.find((item) => item == action.payload._id);
       qtyPlus

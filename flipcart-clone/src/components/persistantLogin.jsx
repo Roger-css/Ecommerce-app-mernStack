@@ -34,7 +34,6 @@ const PersistLogin = () => {
     const cartItems = async () => {
       try {
         const req = await axios.get("cart/user/getCartItems");
-        console.log(req);
       } catch (error) {
         console.log(error);
       }

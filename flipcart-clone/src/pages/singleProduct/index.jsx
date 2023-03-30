@@ -35,7 +35,7 @@ const index = () => {
       description,
       name,
       img: product.productPictures[0]?.img,
-      qty: 0.5,
+      qty: 0,
     };
     dispatch(addProductToCart(form));
   };
