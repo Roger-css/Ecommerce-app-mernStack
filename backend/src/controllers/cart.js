@@ -62,7 +62,7 @@ module.exports.addToCart = async (req, res, next) => {
         });
         addCartToUser.save((err, result) => {
           if (err) return res.status(400).json({ message: `error ${err}` });
-          console.log(`created succes`);
+          console.log(result);
           if (result) return res.status(201).json({ message: result });
         });
       }
@@ -75,43 +75,37 @@ module.exports.addToCart = async (req, res, next) => {
   }
 };
 
-// exports.getCartItems = async (req, res) => {
-//   //const { user } = req.body.payload;
-//   //if(user){
-//   console.log("it worked 1?");
+exports.getCartItems = async (req, res) => {
+  //const { user } = req.body.payload;
+  //if(user){
 
-//   const FoundedCart = await cartModel.findOne({ user: req.id });
-//   console.log(FoundedCart);
-//   console.log(`that is id ${req.id}`);
+  const FoundedCart = await cartModel.findOne({ userId: req.id });
+  console.log(FoundedCart);
+  console.log(`that is id ${req.id}`);
 
-//   cartModel
-//     .findOne({ user: req.id })
-//     .populate("cartItems.product", "_id name price productPictures")
-//     .exec((error, cart) => {
-//       console.log(`this is cart ${cart}`);
-//       if (error) return res.status(400).json({ error });
-//       if (cart) {
-//         let cartItems = {};
-//         cart.cartItems.forEach((item) => {
-//           console.log(`product id  = ${item.product._id}`);
-//           console.log(`product name  = ${item.product.name}`);
-//           console.log(`product pic  = ${item.product.productPictures[0].img}`);
-//           console.log(`product id  = ${item.product.price}`);
-//           console.log(`product qty  = ${item.quantity}`);
-//           cartItems[item.product._id] = {
-//             _id: item.product._id,
-//             name: item.product.name,
-//             img: item.product.productPictures[0].img,
-//             price: item.product.price,
-//             qty: item.quantity,
-//           };
-//         });
-//         return res.status(200).json({ cartItems });
-//       } else {
-//         return res.status(204).json({ message: "Not Cart Items" });
-//       }
-//     });
-// };
+  cartModel
+    .findOne({ useIdr: req.id })
+    .populate("cartItems.product", "_id name price productPictures")
+    .exec((error, cart) => {
+      if (error) return res.status(400).json({ error });
+      if (cart) {
+        let cartItems = {};
+        cart.cartItems.forEach((item) => {
+          cartItems[item.product._id] = {
+            _id: item.product._id,
+            name: item.product.name,
+            img: item.product.productPictures[0].img,
+            price: item.product.price,
+            qty: item.quantity,
+          };
+        });
+        console.log(cartItems);
+        return res.status(200).json({ cartItems });
+      } else {
+        return res.status(204).json({ message: "Not Cart Items" });
+      }
+    });
+};
 
 // new update remove cart items
 // exports.removeCartItems = (req, res) => {
