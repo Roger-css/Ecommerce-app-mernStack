@@ -5,6 +5,7 @@ const ObjectId = require("mongoose").Types.ObjectId;
 
 module.exports.addToCart = async (req, res, next) => {
   const payload = { ...req.body };
+  console.log(payload);
   try {
     if (!req.body) {
       return res.status(401).json({ message: "Nothing to add" });
@@ -56,10 +57,15 @@ module.exports.addToCart = async (req, res, next) => {
           }
         }
       } else {
+        const newItem = {
+          product: payload[0]._id,
+          price: payload[0].price,
+        };
         const addCartToUser = new cartModel({
           userId: req.id,
-          cartItems: payload[0],
+          cartItems: [newItem],
         });
+        console.log(`that is user cart added ${addCartToUser}`);
         addCartToUser.save((err, result) => {
           if (err) return res.status(400).json({ message: `error ${err}` });
           if (result) return res.status(201).json({ message: result });
@@ -75,35 +81,33 @@ module.exports.addToCart = async (req, res, next) => {
 };
 
 exports.getCartItems = async (req, res) => {
-  //const { user } = req.body.payload;
-  //if(user){
-
-  const FoundedCart = await cartModel.findOne({ userId: req.id });
-  console.log(FoundedCart);
-  console.log(`that is id ${req.id}`);
-
-  cartModel
-    .findOne({ useIdr: req.id })
-    .populate("cartItems.product", "_id name price productPictures")
-    .exec((error, cart) => {
-      if (error) return res.status(400).json({ error });
-      if (cart) {
+  console.log(req.id);
+  if (isValidObjectId(req.id)) {
+    try {
+      const foundedCart = await cartModel
+        .findOne({ userId: req.id })
+        .populate("cartItems.product", "_id name price productPictures");
+      console.log(foundedCart);
+      if (foundedCart) {
         let cartItems = {};
-        cart.cartItems.forEach((item) => {
-          cartItems[item.product._id] = {
+        foundedCart.cartItems.forEach((item) => {
+          cartItems[item._id] = {
             _id: item.product._id,
             name: item.product.name,
             img: item.product.productPictures[0].img,
             price: item.product.price,
             qty: item.quantity,
           };
+          console.log(cartItems);
         });
-        console.log(cartItems);
         return res.status(200).json({ cartItems });
       } else {
         return res.status(204).json({ message: "Not Cart Items" });
       }
-    });
+    } catch (error) {
+      return res.status(204).json({ message: "invalid auth " });
+    }
+  }
 };
 
 // new update remove cart items
