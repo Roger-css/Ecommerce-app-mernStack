@@ -45,7 +45,7 @@ module.exports.addToCart = async (req, res, next) => {
                   },
                 }
               );
-              existCart.cartItems.push({ cartItems: payload[0]._id });
+              existCart.cartItems.push({ product: payload[0]._id });
               await existCart.save();
               return res.status(201).json({ existCart });
             } else {
@@ -58,11 +58,10 @@ module.exports.addToCart = async (req, res, next) => {
       } else {
         const addCartToUser = new cartModel({
           userId: req.id,
-          cartItems: cartItems,
+          cartItems: payload[0],
         });
         addCartToUser.save((err, result) => {
           if (err) return res.status(400).json({ message: `error ${err}` });
-          console.log(result);
           if (result) return res.status(201).json({ message: result });
         });
       }
