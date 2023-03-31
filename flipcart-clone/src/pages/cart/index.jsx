@@ -10,7 +10,7 @@ import "./style.css";
 import usePrivate from "../../hooks/usePrivate";
 const CartPage = () => {
   const cart = useSelector((state) => state.cart.cartProducts);
-  const auth = useSelector((state) => state.auth);
+  const auth = useSelector((state) => state.auth.token);
   const dispatch = useDispatch();
   const axios = usePrivate();
   useEffect(() => {
