@@ -17,7 +17,7 @@ module.exports.addToCart = async (req, res, next) => {
           (e) => e.product == payload[0]._id
         );
         if (isProductExsist) {
-          const doc = await cartModel.updateOne(
+          cartModel.updateOne(
             {
               userId: req.id,
               "cartItems.product": payload[0]._id,
@@ -65,7 +65,6 @@ module.exports.addToCart = async (req, res, next) => {
           userId: req.id,
           cartItems: [newItem],
         });
-        console.log(`that is user cart added ${addCartToUser}`);
         addCartToUser.save((err, result) => {
           if (err) return res.status(400).json({ message: `error ${err}` });
           if (result) return res.status(201).json({ message: result });
@@ -87,10 +86,10 @@ exports.getCartItems = async (req, res) => {
       const foundedCart = await cartModel
         .findOne({ userId: req.id })
         .populate("cartItems.product", "_id name price productPictures");
-      console.log(foundedCart);
       if (foundedCart) {
         let cartItems = {};
         foundedCart.cartItems.forEach((item) => {
+          console.log(item.quantity);
           cartItems[item._id] = {
             _id: item.product._id,
             name: item.product.name,
@@ -98,7 +97,6 @@ exports.getCartItems = async (req, res) => {
             price: item.product.price,
             qty: item.quantity,
           };
-          console.log(cartItems);
         });
         return res.status(200).json({ cartItems });
       } else {
