@@ -101,38 +101,40 @@ const Header = (props) => {
               <img src={Logo} alt="" />
             </div>
             <div className="rightspace" style={{ paddingTop: "40px" }}>
-              <MaterialInput
-                type="text"
-                label="Enter Email/Enter Mobile Number"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
+              <div className="loginInputContainer">
+                <MaterialInput
+                  type="text"
+                  label="Enter Email/Enter Mobile Number"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
 
-              <MaterialInput
-                type="password"
-                label="Enter Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                // rightElement={<a href="#">Forgot?</a>}
-              />
-              <p className="pptof">
-                By continuing, you agree to Flipkart's <span>Terms of Use</span>{" "}
-                and <span>Privacy Policy</span>.
-              </p>
-              <MaterialButton
-                style={{ margin: "20px 0" }}
-                title="Login"
-                bgColor="#fb641b"
-                textColor="#ffffff"
-                handleClick={submitLogin}
-              />
-              <p>or</p>
-              <MaterialButton
-                style={{ margin: "20px 0" }}
-                title="request OTP"
-                bgColor="#fff"
-                textColor="#2874f0"
-              />
+                <MaterialInput
+                  type="password"
+                  label="Enter Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  // rightElement={<a href="#">Forgot?</a>}
+                />
+                <p className="pptof">
+                  By continuing, you agree to Flipkart's{" "}
+                  <span>Terms of Use</span> and <span>Privacy Policy</span>.
+                </p>
+                <MaterialButton
+                  style={{ margin: "20px 0" }}
+                  title="Login"
+                  bgColor="#fb641b"
+                  textColor="#ffffff"
+                  handleClick={submitLogin}
+                />
+                <p style={{ textAlign: "center" }}>or</p>
+                <MaterialButton
+                  style={{ margin: "20px 0" }}
+                  title="request OTP"
+                  bgColor="#fff"
+                  textColor="#2874f0"
+                />
+              </div>
             </div>
           </div>
         </div>

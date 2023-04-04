@@ -64,14 +64,11 @@ const MaterialInput = (props) => {
 
 const MaterialButton = (props) => {
   return (
-    <div
-      style={{ width: "90%", ...props.style }}
-      onClick={props.handleClick ? props.handleClick : null}
-    >
+    <div onClick={props.handleClick} style={{ width: "100%", ...props.style }}>
       <button
+        disabled={props.disabled ? props.disabled : false}
         style={{ backgroundColor: props.bgColor, color: props.textColor }}
         className="materialButton"
-        onClick={props.handleClick}
       >
         {props.title && props.title}
       </button>

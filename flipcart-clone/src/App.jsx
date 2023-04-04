@@ -6,6 +6,7 @@ import PersistLogin from "./components/persistantLogin";
 import Wrapper from "./layout/Wrapper";
 import Product from "./pages/singleProduct";
 import Cart from "./pages/cart";
+import CheckoutPage from "./pages/checkout";
 function App() {
   return (
     <div className="App">
@@ -14,6 +15,7 @@ function App() {
           <Route element={<Wrapper />}>
             <Route path="/" exact element={<HomePage />} />
             <Route path="cart" element={<Cart />} />
+            <Route path="/checkout" element={<CheckoutPage />} />
             <Route path=":slug" element={<ProductsListPage />} />
             <Route path=":productSlug/:product_id/p" element={<Product />} />
           </Route>

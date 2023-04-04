@@ -34,7 +34,7 @@ const PersistLogin = () => {
     const cartItems = async () => {
       try {
         const req = await axios.get("cart/user/getCartItems");
-        console.log(req);
+        // make the cart items from request in the redux store
       } catch (error) {
         console.log(error);
       }
