@@ -1,6 +1,20 @@
 import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
-  addresses: [],
+  addresses: [
+    {
+      _id: "12321",
+      name: "mustafa",
+      mobileNumber: "07813789596",
+      pinCode: 1234,
+      locality: "middleEastern",
+      address: "iraq",
+      cityDistrictTown: "nassiryah",
+      state: "shattrah",
+      landmark: "null",
+      alternatePhone: null,
+      addressType: "I donno man",
+    },
+  ],
 };
 const addressSlice = createSlice({
   initialState,

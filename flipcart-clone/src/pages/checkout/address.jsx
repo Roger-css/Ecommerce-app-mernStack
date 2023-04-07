@@ -6,7 +6,7 @@ import { MaterialButton, MaterialInput } from "../../components/materialUI";
 const AddressForm = (props) => {
   const { initialData } = props;
   const [name, setName] = useState(initialData ? initialData.name : "");
-  const [wtf, setWtf] = useState("");
+  console.log(initialData);
   const [mobileNumber, setMobileNumber] = useState(
     initialData ? initialData.mobileNumber : ""
   );
@@ -62,6 +62,7 @@ const AddressForm = (props) => {
         <div className="flexRow">
           <div style={inputContainer}>
             <MaterialInput
+              focus={true}
               label="Name"
               value={name}
               onChange={(e) => setName(e.target.value)}
@@ -69,6 +70,7 @@ const AddressForm = (props) => {
           </div>
           <div style={inputContainer}>
             <MaterialInput
+              focus={true}
               label="10-digit mobile number"
               value={mobileNumber}
               onChange={(e) => setMobileNumber(e.target.value)}
@@ -78,6 +80,7 @@ const AddressForm = (props) => {
         <div className="flexRow">
           <div style={inputContainer}>
             <MaterialInput
+              focus={true}
               label="Pincode"
               value={pinCode}
               onChange={(e) => setPinCode(e.target.value)}
@@ -85,6 +88,7 @@ const AddressForm = (props) => {
           </div>
           <div style={inputContainer}>
             <MaterialInput
+              focus={true}
               label="Locality"
               value={locality}
               onChange={(e) => setLocality(e.target.value)}
@@ -94,6 +98,7 @@ const AddressForm = (props) => {
         <div className="flexRow">
           <div style={inputContainer}>
             <MaterialInput
+              focus={true}
               label="Address"
               value={address}
               onChange={(e) => setAddress(e.target.value)}
@@ -103,6 +108,7 @@ const AddressForm = (props) => {
         <div className="flexRow">
           <div style={inputContainer}>
             <MaterialInput
+              focus={true}
               label="City/District/Town"
               value={cityDistrictTown}
               onChange={(e) => setCityDistrictTown(e.target.value)}
@@ -110,6 +116,7 @@ const AddressForm = (props) => {
           </div>
           <div style={inputContainer}>
             <MaterialInput
+              focus={true}
               label="State"
               value={state}
               onChange={(e) => setState(e.target.value)}
@@ -119,6 +126,7 @@ const AddressForm = (props) => {
         <div className="flexRow">
           <div style={inputContainer}>
             <MaterialInput
+              focus={true}
               label="Landmark (Optional)"
               value={landmark}
               onChange={(e) => setLandmark(e.target.value)}
@@ -126,6 +134,7 @@ const AddressForm = (props) => {
           </div>
           <div style={inputContainer}>
             <MaterialInput
+              focus={true}
               label="Alternate Phone (Optional)"
               value={alternatePhone}
               onChange={(e) => setAlternatePhone(e.target.value)}
@@ -134,7 +143,7 @@ const AddressForm = (props) => {
         </div>
         <div style={{ marginTop: "15px", fontSize: "16px" }}>
           <label>Address Type</label>
-          <div className="flexRow" style={{ marginTop: "10px" }}>
+          <div className="flexBox" style={{ marginTop: "10px" }}>
             <div>
               <input
                 type="radio"

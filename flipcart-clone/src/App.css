@@ -234,6 +234,10 @@
 }
 .flexRow {
   display: flex;
+  justify-content: space-between;
+}
+.flexBox {
+  display: flex;
 }
 .loginInputContainer {
   width: 100%;

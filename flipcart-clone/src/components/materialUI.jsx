@@ -24,7 +24,7 @@ const Modal = (props) => {
 };
 
 const MaterialInput = (props) => {
-  const [focus, setFocus] = useState(false);
+  const [focus, setFocus] = useState(props.focus ? props.focus : false);
 
   return (
     <div className="materialInput">
