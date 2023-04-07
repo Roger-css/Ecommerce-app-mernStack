@@ -72,6 +72,7 @@ const CartPage = () => {
               display: "flex",
               flexDirection: "row-reverse",
               alignItems: "center",
+              boxShadow: "0px -3px 20px 1px rgb(203 203 203)",
             }}
           >
             <MaterialButton

@@ -33,8 +33,18 @@ const index = () => {
   const auth = useSelector((state) => state.auth.authenticated);
   const addresses = useSelector((state) => state.address.addresses);
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [editOrNewAddress, setEditOrNewAddress] = useState(false);
+  const [selectedAddress, setSelectedAddress] = useState(null);
+  const [changingAddress, setChangingAddress] = useState(false);
+  const [modifiedAddresses, setModifiedAddresses] = useState([]);
+  const [EditingAddress, setEditingAddress] = useState(null);
+  console.log(selectedAddress);
+  useEffect(() => {
+    const modifiedAddresses = addresses.map((e, i) => {
+      const ee = { ...e, selected: false };
+      return ee;
+    });
+    setModifiedAddresses(modifiedAddresses);
+  }, [addresses]);
   useEffect(() => {
     async function promise() {
       const req = await axios.post("user/getaddress").catch((error) => {
@@ -49,6 +59,13 @@ const index = () => {
     }
     auth && promise();
   }, [auth]);
+  const addSelectedProp = (newAdd) => {
+    const theChange = modifiedAddresses.map((e) => {
+      const theOne = modifiedAddresses.find((add) => add._id === newAdd);
+      return e == theOne ? { ...theOne, selected: true } : e;
+    });
+    setModifiedAddresses(theChange);
+  };
   const newAddress = async (payload) => {
     try {
       const req = await axios.post("user/address/create", payload);
@@ -97,16 +114,28 @@ const index = () => {
         <CheckoutStep
           stepNumber="2"
           stepTitle="DELIVERY ADDRESS"
-          active={auth ? true : false}
+          active={Boolean(selectedAddress) ? false : true}
         >
-          {addresses.length > 0 &&
-            addresses.map((add, i) => {
+          {modifiedAddresses.length > 0 &&
+            modifiedAddresses.map((add, i) => {
               return (
-                <div key={i} className="flexBox addressContainer">
+                <div
+                  key={i}
+                  onClick={() => addSelectedProp(add._id)}
+                  className="flexRow addressContainer"
+                >
                   <div>
-                    <input type="radio" title="address" />
+                    <input
+                      type="radio"
+                      name="selectedAddress"
+                      title="address"
+                      id={`address${i + 1}`}
+                    />
                   </div>
-                  <div className="flexRow sb addressInfo">
+                  <label
+                    htmlFor={`address${i + 1}`}
+                    className="flexRow sb addressInfo"
+                  >
                     <div>
                       <div>
                         <span>{add.name} </span>
@@ -114,22 +143,34 @@ const index = () => {
                         <span>{add.mobileNumber}</span>
                       </div>
                       <div>{add.address}</div>
-                      <MaterialButton
-                        title="DELIVERY HERE"
-                        bgColor="#fb641b"
-                        style={{ width: "250px" }}
-                      />
+                      {add.selected ? (
+                        <MaterialButton
+                          title="DELIVERY HERE"
+                          handleClick={() => setSelectedAddress(add._id)}
+                          bgColor="#fb641b"
+                          style={{ width: "250px" }}
+                        />
+                      ) : null}
                     </div>
-                    <div>edit</div>
-                  </div>
+                    <div
+                      onClick={() => {
+                        setEditingAddress(add);
+                        setChangingAddress(true);
+                      }}
+                      style={{ cursor: "pointer" }}
+                    >
+                      edit
+                    </div>
+                  </label>
                 </div>
               );
             })}
         </CheckoutStep>
-        {editOrNewAddress ? (
+        {changingAddress ? (
           <AddressForm
-            show={() => setEditOrNewAddress(false)}
+            show={() => setChangingAddress(false)}
             onSubmitForm={newAddress}
+            initialData={EditingAddress}
             onCancel={() => {
               console.log("cancel");
             }}
@@ -139,7 +180,7 @@ const index = () => {
             stepNumber="+"
             stepTitle="ADD NEW ADDRESS"
             active={false}
-            handleClick={() => setEditOrNewAddress(true)}
+            handleClick={() => setChangingAddress(true)}
           />
         )}
       </div>

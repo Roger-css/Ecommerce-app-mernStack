@@ -20,6 +20,8 @@ const PersistLogin = () => {
         } = jwtDecode(req.data.accessToken);
         dispatch(login({ token: req.data.accessToken, username }));
       } catch (err) {
+        // make an axios interceptor to make sure of the refresh token expiration
+        dispatch(logout());
         console.log(err);
       } finally {
         setLoading(false);
