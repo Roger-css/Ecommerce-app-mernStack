@@ -20,7 +20,6 @@ const PersistLogin = () => {
         } = jwtDecode(req.data.accessToken);
         dispatch(login({ token: req.data.accessToken, username }));
       } catch (err) {
-        dispatch(logout());
         console.log(err);
       } finally {
         setLoading(false);

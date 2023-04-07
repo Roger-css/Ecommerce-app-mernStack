@@ -85,13 +85,6 @@ const AddressForm = (props) => {
           </div>
           <div style={inputContainer}>
             <MaterialInput
-              label="Pincode"
-              value={wtf}
-              onChange={(e) => setWtf(e.target.value)}
-            />
-          </div>
-          <div style={inputContainer}>
-            <MaterialInput
               label="Locality"
               value={locality}
               onChange={(e) => setLocality(e.target.value)}
@@ -107,7 +100,6 @@ const AddressForm = (props) => {
             />
           </div>
         </div>
-
         <div className="flexRow">
           <div style={inputContainer}>
             <MaterialInput
@@ -140,9 +132,9 @@ const AddressForm = (props) => {
             />
           </div>
         </div>
-        <div>
+        <div style={{ marginTop: "15px", fontSize: "16px" }}>
           <label>Address Type</label>
-          <div className="flexRow">
+          <div className="flexRow" style={{ marginTop: "10px" }}>
             <div>
               <input
                 type="radio"
@@ -150,16 +142,20 @@ const AddressForm = (props) => {
                 name="addressType"
                 value="home"
               />
-              <span>Home</span>
+              <span style={{ display: "inline-block", marginLeft: "5px" }}>
+                Home
+              </span>
             </div>
-            <div>
+            <div style={{ marginLeft: "10px" }}>
               <input
                 type="radio"
                 onClick={() => setAddressType("work")}
                 name="addressType"
                 value="work"
               />
-              <span>Work</span>
+              <span style={{ display: "inline-block", marginLeft: "5px" }}>
+                Work
+              </span>
             </div>
           </div>
         </div>
@@ -180,7 +176,7 @@ const AddressForm = (props) => {
 
   return (
     <div className="checkoutStep" style={{ background: "#f5faff" }}>
-      <div className={`checkoutHeader`}>
+      <div onClick={props.show} className={`checkoutHeader`}>
         <div>
           <span className="stepNumber">+</span>
           <span className="stepTitle">{"ADD NEW ADDRESS"}</span>
@@ -193,7 +189,7 @@ const AddressForm = (props) => {
           boxSizing: "border-box",
         }}
       >
-        {<RenderAddressForm />}
+        {RenderAddressForm()}
       </div>
     </div>
   );

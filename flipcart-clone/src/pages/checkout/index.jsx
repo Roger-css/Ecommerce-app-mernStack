@@ -1,12 +1,22 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { MaterialButton } from "../../components/materialUI";
+import { MaterialButton, MaterialInput } from "../../components/materialUI";
 import usePrivate from "../../hooks/usePrivate";
 import { addAddress } from "../../state/reducers/address";
 import AddressForm from "./address";
 import "./style.css";
-const CheckoutStep = ({ stepNumber, stepTitle, active, children }) => (
-  <div className="checkoutStep">
+const CheckoutStep = ({
+  stepNumber,
+  stepTitle,
+  active,
+  children,
+  handleClick,
+}) => (
+  <div
+    onClick={handleClick}
+    className="checkoutStep"
+    style={{ marginBottom: "10px" }}
+  >
     <div className={`checkoutHeader ${active ? "active" : ""}`}>
       <div>
         <span className="stepNumber">{stepNumber}</span>
@@ -20,8 +30,11 @@ const index = () => {
   const axios = usePrivate();
   const dispatch = useDispatch();
   const name = useSelector((state) => state.auth.user.userName);
-  const auth = useSelector((state) => state.auth.authenticate);
+  const auth = useSelector((state) => state.auth.authenticated);
   const addresses = useSelector((state) => state.address.addresses);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [editOrNewAddress, setEditOrNewAddress] = useState(false);
   useEffect(() => {
     async function promise() {
       const req = await axios.post("user/getaddress").catch((error) => {
@@ -51,14 +64,41 @@ const index = () => {
         <CheckoutStep
           stepNumber="1"
           stepTitle="LOGIN"
+          active={auth ? false : true}
+        >
+          {auth ? (
+            <div className="loggedInId">
+              <span style={{ fontWeight: "500" }}>username</span>
+              <span style={{ margin: "0 5px" }}>{name}</span>
+            </div>
+          ) : (
+            <>
+              <MaterialInput
+                type="text"
+                label="Enter Email/Enter Mobile Number"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              {/* 
+              <MaterialInput
+                type="password"
+                label="Enter Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              <MaterialButton
+                title="submit"
+                bgColor="#fb641b"
+                style={{ width: "250px" }}
+              /> */}
+            </>
+          )}
+        </CheckoutStep>
+        <CheckoutStep
+          stepNumber="2"
+          stepTitle="DELIVERY ADDRESS"
           active={auth ? true : false}
         >
-          <div className="loggedInId">
-            <span style={{ fontWeight: "500" }}>username</span>
-            <span style={{ margin: "0 5px" }}>{name}</span>
-          </div>
-        </CheckoutStep>
-        <CheckoutStep stepNumber="2" stepTitle="DELIVERY ADDRESS" active={true}>
           {addresses.length > 0 &&
             addresses.map((add, i) => {
               return (
@@ -86,12 +126,22 @@ const index = () => {
               );
             })}
         </CheckoutStep>
-        <AddressForm
-          onSubmitForm={newAddress}
-          onCancel={() => {
-            console.log("cancel");
-          }}
-        />
+        {editOrNewAddress ? (
+          <AddressForm
+            show={() => setEditOrNewAddress(false)}
+            onSubmitForm={newAddress}
+            onCancel={() => {
+              console.log("cancel");
+            }}
+          />
+        ) : (
+          <CheckoutStep
+            stepNumber="+"
+            stepTitle="ADD NEW ADDRESS"
+            active={false}
+            handleClick={() => setEditOrNewAddress(true)}
+          />
+        )}
       </div>
     </div>
   );
