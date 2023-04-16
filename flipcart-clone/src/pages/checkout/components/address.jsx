@@ -1,12 +1,11 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { addAddress } from "../../state/reducers/address";
-import { MaterialButton, MaterialInput } from "../../components/materialUI";
+import { addAddress } from "../../../state/reducers/address";
+import { MaterialButton, MaterialInput } from "../../../components/materialUI";
 
 const AddressForm = (props) => {
   const { initialData } = props;
   const [name, setName] = useState(initialData ? initialData.name : "");
-  console.log(initialData);
   const [mobileNumber, setMobileNumber] = useState(
     initialData ? initialData.mobileNumber : ""
   );
@@ -62,7 +61,7 @@ const AddressForm = (props) => {
         <div className="flexRow">
           <div style={inputContainer}>
             <MaterialInput
-              focus={true}
+              focus={props.focus ? true : false}
               label="Name"
               value={name}
               onChange={(e) => setName(e.target.value)}
@@ -70,7 +69,7 @@ const AddressForm = (props) => {
           </div>
           <div style={inputContainer}>
             <MaterialInput
-              focus={true}
+              focus={props.focus ? true : false}
               label="10-digit mobile number"
               value={mobileNumber}
               onChange={(e) => setMobileNumber(e.target.value)}
@@ -80,7 +79,7 @@ const AddressForm = (props) => {
         <div className="flexRow">
           <div style={inputContainer}>
             <MaterialInput
-              focus={true}
+              focus={props.focus ? true : false}
               label="Pincode"
               value={pinCode}
               onChange={(e) => setPinCode(e.target.value)}
@@ -88,7 +87,7 @@ const AddressForm = (props) => {
           </div>
           <div style={inputContainer}>
             <MaterialInput
-              focus={true}
+              focus={props.focus ? true : false}
               label="Locality"
               value={locality}
               onChange={(e) => setLocality(e.target.value)}
@@ -98,7 +97,7 @@ const AddressForm = (props) => {
         <div className="flexRow">
           <div style={inputContainer}>
             <MaterialInput
-              focus={true}
+              focus={props.focus ? true : false}
               label="Address"
               value={address}
               onChange={(e) => setAddress(e.target.value)}
@@ -108,7 +107,7 @@ const AddressForm = (props) => {
         <div className="flexRow">
           <div style={inputContainer}>
             <MaterialInput
-              focus={true}
+              focus={props.focus ? true : false}
               label="City/District/Town"
               value={cityDistrictTown}
               onChange={(e) => setCityDistrictTown(e.target.value)}
@@ -116,7 +115,7 @@ const AddressForm = (props) => {
           </div>
           <div style={inputContainer}>
             <MaterialInput
-              focus={true}
+              focus={props.focus ? true : false}
               label="State"
               value={state}
               onChange={(e) => setState(e.target.value)}
@@ -126,7 +125,7 @@ const AddressForm = (props) => {
         <div className="flexRow">
           <div style={inputContainer}>
             <MaterialInput
-              focus={true}
+              focus={props.focus ? true : false}
               label="Landmark (Optional)"
               value={landmark}
               onChange={(e) => setLandmark(e.target.value)}
@@ -134,7 +133,7 @@ const AddressForm = (props) => {
           </div>
           <div style={inputContainer}>
             <MaterialInput
-              focus={true}
+              focus={props.focus ? true : false}
               label="Alternate Phone (Optional)"
               value={alternatePhone}
               onChange={(e) => setAlternatePhone(e.target.value)}
