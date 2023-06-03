@@ -94,7 +94,7 @@ module.exports.postSignIn = async (req, res, next) => {
       secure: true,
       maxAge: 7 * 24 * 60 * 60 * 60 * 60 * 60 * 1000,
     });
-    res.status(201).json(accessToken, email);
+    res.status(201).json(accessToken);
   } catch (err) {
     console.log(err);
   }
