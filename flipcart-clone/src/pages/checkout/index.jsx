@@ -1,31 +1,12 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { MaterialButton, MaterialInput } from "../../components/materialUI";
 import usePrivate from "../../hooks/usePrivate";
 import { addAddress } from "../../state/reducers/address";
-import AddressForm from "./address";
+import AddressForm from "./components/address";
+import CheckoutStep from "./components/checkStep";
 import "./style.css";
-const CheckoutStep = ({
-  stepNumber,
-  stepTitle,
-  active,
-  children,
-  handleClick,
-}) => (
-  <div
-    onClick={handleClick}
-    className="checkoutStep"
-    style={{ marginBottom: "10px" }}
-  >
-    <div className={`checkoutHeader ${active ? "active" : ""}`}>
-      <div>
-        <span className="stepNumber">{stepNumber}</span>
-        <span className="stepTitle">{stepTitle}</span>
-      </div>
-    </div>
-    {children}
-  </div>
-);
+
 const index = () => {
   const axios = usePrivate();
   const dispatch = useDispatch();
@@ -37,7 +18,6 @@ const index = () => {
   const [changingAddress, setChangingAddress] = useState(false);
   const [modifiedAddresses, setModifiedAddresses] = useState([]);
   const [EditingAddress, setEditingAddress] = useState(null);
-  console.log(selectedAddress);
   useEffect(() => {
     const modifiedAddresses = addresses.map((e, i) => {
       const ee = { ...e, selected: false };
@@ -46,23 +26,25 @@ const index = () => {
     setModifiedAddresses(modifiedAddresses);
   }, [addresses]);
   useEffect(() => {
-    async function promise() {
-      const req = await axios.post("user/getaddress").catch((error) => {
-        throw console.error(error);
-      });
-      if (req.status >= 200) {
+    const promise = async () => {
+      try {
+        const req = await axios.post("user/getaddress");
         const {
           userAddress: { address },
         } = req.data;
-        addresses ?? dispatch(addAddress(address));
+        addresses.length < 1 && dispatch(addAddress(address));
+      } catch (error) {
+        console.log(error);
       }
-    }
-    auth && promise();
-  }, [auth]);
+    };
+    promise();
+  }, []);
   const addSelectedProp = (newAdd) => {
     const theChange = modifiedAddresses.map((e) => {
       const theOne = modifiedAddresses.find((add) => add._id === newAdd);
-      return e == theOne ? { ...theOne, selected: true } : e;
+      return e == theOne
+        ? { ...theOne, selected: true }
+        : { ...e, selected: false };
     });
     setModifiedAddresses(theChange);
   };
@@ -152,14 +134,16 @@ const index = () => {
                         />
                       ) : null}
                     </div>
-                    <div
-                      onClick={() => {
-                        setEditingAddress(add);
-                        setChangingAddress(true);
-                      }}
-                      style={{ cursor: "pointer" }}
-                    >
-                      edit
+                    <div>
+                      <div
+                        onClick={() => {
+                          setEditingAddress(add);
+                          setChangingAddress(true);
+                        }}
+                        style={{ cursor: "pointer" }}
+                      >
+                        edit
+                      </div>
                     </div>
                   </label>
                 </div>

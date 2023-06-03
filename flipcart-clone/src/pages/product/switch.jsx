@@ -15,7 +15,9 @@ const Switch = (props) => {
   const path = pathname.slice(1);
   const cType = search.split("type=")[1];
   const c_id = search.split("&")[0].slice(5);
+
   useEffect(() => {
+    console.log("1");
     const storeReq = async () => {
       try {
         const req = await axios.get(`/product/category${pathname}`);
