@@ -69,6 +69,7 @@ module.exports.postSignIn = async (req, res, next) => {
       {
         Userinfo: {
           username: foundUser.username,
+          email: foundUser.email,
           role: foundUser.role,
           id: foundUser._id,
         },
@@ -82,7 +83,6 @@ module.exports.postSignIn = async (req, res, next) => {
         Userinfo: {
           username: foundUser.username,
           role: foundUser.role,
-          email: foundUser.email,
           id: foundUser._id,
         },
       },
