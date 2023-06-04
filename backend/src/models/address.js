@@ -1,4 +1,4 @@
-const mongoose = require("mongoose")
+const mongoose = require("mongoose");
 
 // C
 const addressSchema = new mongoose.Schema({
@@ -56,7 +56,7 @@ const addressSchema = new mongoose.Schema({
     required: true,
     enum: ["home", "work"],
   },
-})
+});
 
 // B
 const userAddressSchema = new mongoose.Schema(
@@ -69,7 +69,11 @@ const userAddressSchema = new mongoose.Schema(
     address: [addressSchema],
   },
   { timestamps: true }
-)
+);
 
-mongoose.model("Address", addressSchema)
-module.exports = mongoose.model("UserAddress", userAddressSchema)
+const addressModel = mongoose.model("Address", addressSchema);
+
+const UserAddressModel = mongoose.model("UserAddress", userAddressSchema);
+
+module.exports = UserAddressModel;
+module.exports = addressModel;
