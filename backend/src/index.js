@@ -48,6 +48,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/api/admin", adminRoutes);
 app.use("/api/admin", adminInitialData);
 app.use("/api/page", adminPageRoute);
+
 // combined routes
 app.use("/api", userRoutes);
 app.use("/api", refreshRoot);
@@ -57,7 +58,7 @@ app.use("/api/cart", cartRoutes);
 app.use("/api", initialDataRoutes);
 app.use("/api", AddressRoutes);
 app.use("/api", orderRoutes);
-// app.use("/api", AdminOrderRoutes)
+app.use("/api", AdminOrderRoutes);
 
 mongoose
   .connect(DB_URI, {
