@@ -7,12 +7,10 @@ const useLogOut = () => {
   const dispatch = useDispatch();
   const handleLogOut = async () => {
     try {
-      const req = await axios.post("/sign-out", null);
-      console.log("done");
+      await axios.post("/sign-out", null);
       localStorage.removeItem("authenticated");
       dispatch(logout());
     } catch (error) {
-      console.log(error);
       dispatch(logout({ error: error.message }));
     }
   };

@@ -29,13 +29,14 @@ const index = () => {
     requestProduct();
   }, []);
   const addToCart = () => {
-    const { _id, description, name } = product;
+    const { _id, description, name, price } = product;
     const form = {
       _id,
       description,
       name,
       img: product.productPictures[0]?.img,
       qty: 1,
+      price,
     };
     dispatch(addProductToCart(form));
   };

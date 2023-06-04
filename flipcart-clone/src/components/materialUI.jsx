@@ -33,6 +33,7 @@ const MaterialInput = (props) => {
         style={{
           top: 0,
           lineHeight: "none",
+          marginLeft: "10px",
         }}
       >
         {props.label}
@@ -55,6 +56,7 @@ const MaterialInput = (props) => {
               setFocus(false);
             }
           }}
+          style={{ paddingLeft: "10px" }}
         />
         {props.rightElement ? props.rightElement : null}
       </div>

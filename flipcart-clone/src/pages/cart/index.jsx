@@ -10,7 +10,8 @@ import "./style.css";
 import usePrivate from "../../hooks/usePrivate";
 import { MaterialButton } from "../../components/materialUI";
 import { useNavigate } from "react-router-dom";
-const CartPage = () => {
+import PriceDetails from "../../components/priceDetails";
+const CartPage = (props) => {
   const cart = useSelector((state) => state.cart.cartProducts);
   const auth = useSelector((state) => state.auth.token);
   const dispatch = useDispatch();
@@ -21,7 +22,6 @@ const CartPage = () => {
       try {
         const payload = Object.values(cart);
         const req = await axios.post("/cart/user/addToCart", payload);
-        console.log(req);
       } catch (error) {
         console.log(error);
       }
@@ -40,6 +40,24 @@ const CartPage = () => {
   const onRemoveCartItem = (_id) => {
     dispatch(removeProductFromCart({ _id }));
   };
+  if (props.readOnly) {
+    return (
+      <>
+        {Object.keys(cart).map((item, i) => {
+          return (
+            <div key={i} style={{ marginBottom: "30px", ...props.style }}>
+              <CartItem
+                onQuantityDecrement={onQuantityDecrement}
+                onQuantityIncrement={onQuantityIncrement}
+                onRemoveCartItem={onRemoveCartItem}
+                cartItem={cart[item]}
+              />
+            </div>
+          );
+        })}
+      </>
+    );
+  }
   return (
     <>
       <div className="cartContainer">
@@ -86,9 +104,16 @@ const CartPage = () => {
             />
           </div>
         </div>
-        <div className="priceContainer">
-          <h4>price</h4>
-        </div>
+        {cart && (
+          <PriceDetails
+            totalItem={Object.keys(cart).reduce(function (qty, next) {
+              return qty + cart[next].qty;
+            }, 0)}
+            totalPrice={Object.keys(cart).reduce(function (qty, next) {
+              return qty + cart[next].price;
+            }, 0)}
+          />
+        )}
       </div>
     </>
   );

@@ -4,6 +4,7 @@ const initialState = {
   authenticated: localStorage.getItem("authenticated") || false,
   user: {
     userName: "",
+    email: "",
   },
 };
 const authSlice = createSlice({
@@ -13,6 +14,7 @@ const authSlice = createSlice({
     login: (state, action) => {
       state.token = action.payload.token;
       state.user.userName = action.payload.username;
+      state.user.email = action.payload.email;
       state.authenticated = true;
       localStorage.setItem("authenticated", true);
     },

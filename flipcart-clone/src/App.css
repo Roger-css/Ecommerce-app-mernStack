@@ -6,6 +6,12 @@
   margin: 0;
   box-sizing: border-box;
 }
+html,
+body,
+#root,
+.App {
+  height: 100%;
+}
 .header {
   width: 100%;
   height: 56px;
@@ -243,4 +249,7 @@
   width: 100%;
   padding: 0 30px;
   margin: 40px 0;
+}
+.sb {
+  justify-content: space-between;
 }

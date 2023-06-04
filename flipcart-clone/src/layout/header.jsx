@@ -17,7 +17,7 @@ import axios from "../api/axios";
 import useLogOut from "../hooks/useLogout";
 import { Link } from "react-router-dom";
 
-const Header = (props) => {
+const Header = () => {
   const [loginModal, setLoginModal] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -32,7 +32,9 @@ const Header = (props) => {
       const {
         Userinfo: { username },
       } = info;
-      dispatch(login({ token: req.data, username }));
+      dispatch(
+        login({ token: req.data, username, email: info.Userinfo.email })
+      );
       localStorage.setItem("authenticated", true);
     } catch (error) {
       console.log(error);

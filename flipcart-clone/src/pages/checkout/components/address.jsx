@@ -1,10 +1,8 @@
-import { useState } from "react";
-import { useDispatch } from "react-redux";
-import { addAddress } from "../../../state/reducers/address";
+import React, { useState } from "react";
 import { MaterialButton, MaterialInput } from "../../../components/materialUI";
 
 const AddressForm = (props) => {
-  const { initialData } = props;
+  const { initialData, keyValue } = props;
   const [name, setName] = useState(initialData ? initialData.name : "");
   const [mobileNumber, setMobileNumber] = useState(
     initialData ? initialData.mobileNumber : ""
@@ -31,33 +29,46 @@ const AddressForm = (props) => {
   const [addressType, setAddressType] = useState(
     initialData ? initialData.addressType : ""
   );
-  const dispatch = useDispatch();
   const inputContainer = {
     width: "100%",
     marginRight: 10,
   };
-
   const onAddressSubmit = () => {
-    const payload = {
-      address: {
-        name,
-        mobileNumber,
-        pinCode,
-        locality,
-        address,
-        cityDistrictTown,
-        state,
-        landmark,
-        alternatePhone,
-        addressType,
-      },
-    };
-    dispatch(addAddress(payload.address));
+    const payload = initialData?._id
+      ? {
+          address: {
+            name,
+            mobileNumber,
+            pinCode,
+            locality,
+            address,
+            cityDistrictTown,
+            state,
+            landmark,
+            alternatePhone,
+            addressType,
+            _id: initialData._id,
+          },
+        }
+      : {
+          address: {
+            name,
+            mobileNumber,
+            pinCode,
+            locality,
+            address,
+            cityDistrictTown,
+            state,
+            landmark,
+            alternatePhone,
+            addressType,
+          },
+        };
     props.onSubmitForm(payload);
   };
   const RenderAddressForm = () => {
     return (
-      <>
+      <React.Fragment key={keyValue}>
         <div className="flexRow">
           <div style={inputContainer}>
             <MaterialInput
@@ -149,21 +160,33 @@ const AddressForm = (props) => {
                 onClick={() => setAddressType("home")}
                 name="addressType"
                 value="home"
+                onChange={() => null}
+                id="home"
+                checked={addressType == "home" ? true : false}
               />
-              <span style={{ display: "inline-block", marginLeft: "5px" }}>
+              <label
+                htmlFor="home"
+                style={{ display: "inline-block", marginLeft: "5px" }}
+              >
                 Home
-              </span>
+              </label>
             </div>
             <div style={{ marginLeft: "10px" }}>
               <input
                 type="radio"
                 onClick={() => setAddressType("work")}
+                onChange={() => null}
                 name="addressType"
                 value="work"
+                id="work"
+                checked={addressType == "work" ? true : false}
               />
-              <span style={{ display: "inline-block", marginLeft: "5px" }}>
+              <label
+                htmlFor="work"
+                style={{ display: "inline-block", marginLeft: "5px" }}
+              >
                 Work
-              </span>
+              </label>
             </div>
           </div>
         </div>
@@ -178,12 +201,18 @@ const AddressForm = (props) => {
             }}
           />
         </div>
-      </>
+      </React.Fragment>
     );
   };
-
+  if (props.withoutLayout) {
+    return RenderAddressForm();
+  }
   return (
-    <div className="checkoutStep" style={{ background: "#f5faff" }}>
+    <div
+      key={keyValue}
+      className="checkoutStep"
+      style={{ background: "#f5faff" }}
+    >
       <div onClick={props.show} className={`checkoutHeader`}>
         <div>
           <span className="stepNumber">+</span>

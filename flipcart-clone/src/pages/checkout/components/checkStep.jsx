@@ -2,13 +2,16 @@ const CheckoutStep = ({
   stepNumber,
   stepTitle,
   active,
-  children,
+  body,
   handleClick,
+  style,
+  children,
+  bodyStyle,
 }) => (
   <div
     onClick={handleClick}
     className="checkoutStep"
-    style={{ marginBottom: "10px" }}
+    style={{ marginBottom: "10px", ...style }}
   >
     <div className={`checkoutHeader ${active ? "active" : ""}`}>
       <div>
@@ -16,7 +19,10 @@ const CheckoutStep = ({
         <span className="stepTitle">{stepTitle}</span>
       </div>
     </div>
-    {children}
+    <div style={bodyStyle}>
+      {body}
+      {children}
+    </div>
   </div>
 );
 

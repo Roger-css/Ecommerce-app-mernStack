@@ -18,11 +18,16 @@ const PersistLogin = () => {
         const {
           Userinfo: { username },
         } = jwtDecode(req.data.accessToken);
-        dispatch(login({ token: req.data.accessToken, username }));
+        dispatch(
+          login({
+            token: req.data.accessToken,
+            username,
+            email: req.data.email,
+          })
+        );
       } catch (err) {
         // make an axios interceptor to make sure of the refresh token expiration
         dispatch(logout());
-        console.log(err);
       } finally {
         setLoading(false);
       }
@@ -36,9 +41,7 @@ const PersistLogin = () => {
       try {
         const req = await axios.get("cart/user/getCartItems");
         // make the cart items from request in the redux store
-      } catch (error) {
-        console.log(error);
-      }
+      } catch (error) {}
     };
     token && cartItems();
   }, [token]);
