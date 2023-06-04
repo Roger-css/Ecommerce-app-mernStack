@@ -56,7 +56,7 @@ app.use("/api/product", adminProductRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api", initialDataRoutes);
 app.use("/api", AddressRoutes);
-// app.use("/api", orderRoutes)
+app.use("/api", orderRoutes);
 // app.use("/api", AdminOrderRoutes)
 
 mongoose
