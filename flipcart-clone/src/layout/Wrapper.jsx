@@ -6,7 +6,16 @@ const Wrapper = (props) => {
     <>
       <Header />
       <MenuHeader />
-      <Outlet />
+      <div
+        style={{
+          backgroundColor: "#f2f2f6",
+          padding: 0,
+          margin: 0,
+          minHeight: "calc(100% - 96px)",
+        }}
+      >
+        <Outlet />
+      </div>
     </>
   );
 };

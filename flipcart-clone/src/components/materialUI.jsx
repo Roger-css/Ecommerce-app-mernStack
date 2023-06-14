@@ -1,6 +1,7 @@
 import { useState } from "react";
 import "./style.css";
 import { IoCloseOutline } from "react-icons/io5";
+import { Link } from "react-router-dom";
 const Modal = (props) => {
   if (!props.visible) {
     return null;
@@ -89,15 +90,7 @@ const DropdownMenu = (props) => {
           {props.menus &&
             props.menus.map((item, index) => (
               <li key={index}>
-                <a
-                  href={item.href}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    item.handleClick ? item.handleClick() : () => null;
-                  }}
-                >
-                  {item.label}
-                </a>
+                <Link to={item.href}>{item.label}</Link>
               </li>
             ))}
         </ul>
@@ -105,5 +98,19 @@ const DropdownMenu = (props) => {
     </div>
   );
 };
-
-export { Modal, MaterialInput, MaterialButton, DropdownMenu };
+const Breed = (props) => {
+  return (
+    <div className="breed">
+      <ul>
+        {props.breed &&
+          props.breed.map((item, index) => (
+            <li key={index}>
+              <a href={item.href}>{item.name}</a>
+              {props.breedIcon}
+            </li>
+          ))}
+      </ul>
+    </div>
+  );
+};
+export { Modal, MaterialInput, MaterialButton, DropdownMenu, Breed };

@@ -73,7 +73,7 @@ const Header = () => {
           { label: "My Profile", href: "", icon: null },
           { label: "SuperCoin zone", href: "", icon: null },
           { label: "Flipkart Plus Zone", href: "", icon: null },
-          { label: "Orders", href: "", icon: null },
+          { label: "Orders", href: "/orders", icon: null },
           { label: "Wishlist", href: "", icon: null },
           { label: "My chats", href: "", icon: null },
           { label: "Coupons", href: "", icon: null },

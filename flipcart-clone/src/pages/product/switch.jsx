@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { addProducts } from "../../state/reducers/products";
 import Page from "./components/Page";
 import Store from "./components/Store";
+import ClothingAndAccessories from "./components/clothingAndAccessories";
 import { addPage } from "../../state/reducers/page";
 const Switch = (props) => {
   const products = useSelector((state) => state.product);
@@ -17,7 +18,6 @@ const Switch = (props) => {
   const c_id = search.split("&")[0].slice(5);
 
   useEffect(() => {
-    console.log("1");
     const storeReq = async () => {
       try {
         const req = await axios.get(`/product/category${pathname}`);
@@ -37,11 +37,14 @@ const Switch = (props) => {
     cType === undefined || cType === "store" ? storeReq() : pageReq();
   }, []);
   const Content = () => {
-    return cType === "undefined" || cType === "store" ? (
-      <Store path={path} products={products} />
-    ) : (
-      <Page page={pages} />
-    );
+    switch (cType) {
+      case "store":
+        return <Store path={path} products={products} />;
+      case "page":
+        return <Page page={pages} />;
+      default:
+        return <ClothingAndAccessories />;
+    }
   };
   return <Content />;
 };

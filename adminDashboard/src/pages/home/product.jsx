@@ -28,13 +28,12 @@ import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import CloseIcon from "@mui/icons-material/Close";
 import React, { useState } from "react";
 import useAxios from "../../hooks/usePrivate";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import useInitialData from "../../hooks/useInitialData";
 const products = () => {
   const allCategories = useSelector((state) => state.category.categories);
   const axios = useAxios();
   const [anchorEl, setAnchorEl] = useState(null);
-  const dispatch = useDispatch();
   const [Open, setOpen] = useState(false);
   const [Name, setName] = useState("");
   const [Description, setDescription] = useState("");

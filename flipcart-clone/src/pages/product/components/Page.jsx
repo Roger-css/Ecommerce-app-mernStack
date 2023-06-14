@@ -6,9 +6,13 @@ import Card from "../../../components/card";
 const Page = (props) => {
   const { page } = props;
   return (
-    <div style={{ margin: "0 10px" }}>
+    <div style={{ margin: "0 10px", backgroundColor: "white" }}>
       <h3 style={{ margin: "15px 0" }}>{page.title}</h3>
-      <Carousel renderIndicator={() => {}} renderThumbs={() => {}}>
+      <Carousel
+        autoPlay={true}
+        renderIndicator={() => {}}
+        renderThumbs={() => {}}
+      >
         {page.banners &&
           page.banners.map((banner, i) => {
             return (

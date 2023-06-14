@@ -1,0 +1,1 @@
+U have to add authentication and the axios interceptors to the flipcart clone
