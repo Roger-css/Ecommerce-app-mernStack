@@ -8,8 +8,7 @@ import CheckoutStep from "./components/checkStep";
 import "./style.css";
 import PriceDetails from "../../components/priceDetails";
 import CartItem from "../cart";
-import Card from "../../components/card/index";
-
+import Card from "../../components/MUIcard";
 const index = () => {
   const axios = usePrivate();
   const dispatch = useDispatch();
@@ -25,6 +24,22 @@ const index = () => {
   const [paymentOptions, setPaymentOptions] = useState(false);
   const [confirmOrder, setConfirmOrder] = useState(false);
   const cart = useSelector((state) => state.cart.cartProducts);
+  console.log({ sda: 1, sd: 324 });
+  if (Object.keys(cart).length == 0) {
+    return (
+      <div
+        style={{
+          height: "100%",
+          fontSize: "30px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        Your cart is empty
+      </div>
+    );
+  }
   useEffect(() => {
     const mod = addresses.map((e) => {
       const ee = { ...e, selected: false, edit: false };
@@ -93,11 +108,12 @@ const index = () => {
       items,
       totalAmount,
       paymentStatus: "pending",
+      paymentType: "cod",
     };
     try {
       const req = await axios.post("/addOrder", payload);
-      console.log(req);
       setConfirmOrder(true);
+      localStorage.removeItem("myCart");
     } catch (error) {
       console.log(error);
     }

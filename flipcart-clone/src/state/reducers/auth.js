@@ -5,6 +5,7 @@ const initialState = {
   user: {
     userName: "",
     email: "",
+    orders: [],
   },
 };
 const authSlice = createSlice({
@@ -24,7 +25,10 @@ const authSlice = createSlice({
       state.authenticated = false;
       localStorage.removeItem("authenticated");
     },
+    addOrders: (state, action) => {
+      state.user.orders = action.payload;
+    },
   },
 });
 export default authSlice.reducer;
-export const { login, logout } = authSlice.actions;
+export const { login, logout, addOrders } = authSlice.actions;

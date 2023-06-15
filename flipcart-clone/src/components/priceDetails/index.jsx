@@ -1,5 +1,5 @@
 import React from "react";
-import Card from "../card/index";
+import Card from "../MUIcard/index";
 
 /**
  * @author

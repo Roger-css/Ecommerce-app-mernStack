@@ -60,7 +60,7 @@ const CartPage = (props) => {
   }
   return (
     <>
-      <div className="cartContainer">
+      <div className="cartContainer" style={{ backgroundColor: "white" }}>
         <div style={{ position: "relative" }} className="cartProductsContainer">
           <div className="cartHeadings">
             <h4>my cart</h4>
