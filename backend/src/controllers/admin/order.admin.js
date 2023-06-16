@@ -1,7 +1,7 @@
 const Order = require("../../models/order");
 
 exports.updateOrder = (req, res) => {
-  Order.updateOne(
+  Order.findOneAndUpdate(
     { _id: req.body.orderId, "orderStatus.type": req.body.type },
     {
       $set: {
