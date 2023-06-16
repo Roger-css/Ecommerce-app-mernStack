@@ -38,7 +38,7 @@ module.exports.getInitialData = async (req, res, next) => {
       .populate({ path: "category", select: "_id name" })
       .exec();
     const orders = await OrderModel.find({})
-      .populate("items.productId", "name")
+      .populate("items.productId", "name", "items.productId.price")
       .exec();
     return res.status(200).json({
       Categories: categoriesOrder(Categories),
