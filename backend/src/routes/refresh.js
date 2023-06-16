@@ -2,7 +2,7 @@ const express = require("express");
 const authController = require("../controllers/auth");
 const verifyJWT = require("../middleware/VerifyJwt");
 const router = express.Router();
-const cookieParser = require("cookie-Parser");
+const cookieParser = require("cookie-parser");
 const jwt = require("jsonwebtoken");
 const UserModel = require("../models/User");
 
@@ -27,13 +27,13 @@ router.route("/refresh").get((req, res, next) => {
           Userinfo: {
             username: foundUser.username,
             roles: foundUser.role,
-            id : foundUser._id
+            id: foundUser._id,
           },
         },
         process.env.JWT_ACCESS_TOKEN_KEY,
         { expiresIn: `1m` }
       );
-      return res.status(201).json({ accessToken , email : foundUser.email});
+      return res.status(201).json({ accessToken, email: foundUser.email });
     }
   );
 });

@@ -7,7 +7,7 @@ const {
   validateSignIn,
   validateResult,
 } = require(`../middleware/validator`);
-const cookieParser = require("cookie-Parser");
+const cookieParser = require("cookie-parser");
 
 router.use(cookieParser());
 router
@@ -17,10 +17,6 @@ router
   .route("/sign-in")
   .post(validateSignIn, validateResult, authController.postSignIn);
 
-router
-  .route("/sign-out")
-  .post(verifyJWT, authController.postSignOut);
-
-
+router.route("/sign-out").post(verifyJWT, authController.postSignOut);
 
 module.exports = router;

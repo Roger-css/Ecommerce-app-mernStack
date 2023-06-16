@@ -2,7 +2,7 @@ const express = require("express");
 const productController = require("../controllers/product");
 const productModel = require("../models/product");
 const verifyJWT = require("../middleware/VerifyJwt");
-const checkAdmin = require("../middleware/adminChecker");
+const checkAdmin = require("../middleware/adminchecker");
 
 const path = require("path");
 const multer = require("multer");
@@ -27,13 +27,12 @@ router
     upload.array("productPictures"),
     productController.createProduct
   );
-router
-  .route("/get")
-  .get(productController.getProducts)
+router.route("/get").get(productController.getProducts);
 
-  
-/// start of public roots 
-    router.route("/category/:categoryName").get(productController.getProductsByCategory)
-    router.route("/:productId").get(productController.getProductsById)
-/// end of public roots 
+/// start of public roots
+router
+  .route("/category/:categoryName")
+  .get(productController.getProductsByCategory);
+router.route("/:productId").get(productController.getProductsById);
+/// end of public roots
 module.exports = router;
